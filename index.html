@@ -394,10 +394,10 @@ const taquerias = [
   },
   {
     id: "menuderia zaragosa",
-    nombre: "Menudieria zaragosa",
+    nombre: "Menuderia zaragosa",
     desc: "Menú para ordenar cualqquier tipos de menudos desde chicos a grandes.",
     tags: ["Menú", "Pedidos", "WhatsApp"],
-    color: "orange",
+    color: "black",
     url: "tacos-fundadores/" 
       },
   // agrega más cuando quieras:
@@ -426,7 +426,7 @@ function render(){
 
     el.innerHTML = `
       <div class="cardTop">
-        <div class="icon ${t.color || "green"}">🌮</div>
+        <div class="icon ${t.color || "green"}">🐦</div>
         <div style="min-width:0">
           <h3 class="cardTitle">${escHtml(t.nombre)}</h3>
           <p class="cardDesc">${escHtml(t.desc || "")}</p>
