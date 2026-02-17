@@ -2,516 +2,716 @@
 <html lang="es">
 <head>
   <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>VDC Restaurantes — Central</title>
 
   <style>
     :root{
-      --bg:#f3f6f5;
+      --bg:#f6f7f8;
       --card:#ffffff;
       --ink:#0f172a;
       --muted:#64748b;
-      --line:#e5e7eb;
-      --brand:#0a7a3b;
-      --brand2:#0f9a52;
-      --shadow: 0 18px 50px rgba(2,6,23,.10);
-      --r:18px;
+      --line:rgba(15,23,42,.10);
+
+      --brand:#00b14f;         /* vibe Uber Eats */
+      --brandDark:#0a7a3b;
+      --pill:#ecfdf3;
+      --shadow:0 18px 55px rgba(2,6,23,.10);
+      --r:22px;
     }
+
     *{box-sizing:border-box}
+    html,body{height:100%}
     body{
       margin:0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      background:
-        radial-gradient(1200px 520px at 10% -10%, rgba(15,154,82,.16), transparent 60%),
-        radial-gradient(1200px 520px at 90% 0%, rgba(10,122,59,.12), transparent 55%),
-        var(--bg);
       color:var(--ink);
+      background:
+        radial-gradient(1100px 520px at 12% -10%, rgba(0,177,79,.14), transparent 60%),
+        radial-gradient(900px 420px at 92% 0%, rgba(15,23,42,.08), transparent 55%),
+        var(--bg);
     }
 
-    /* Top bar */
+    /* ===== Top bar (Uber-ish) ===== */
     header{
-      position: sticky; top:0; z-index:50;
-      background: rgba(255,255,255,.78);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(15,23,42,.08);
+      position:sticky; top:0; z-index:50;
+      background: rgba(246,247,248,.75);
+      backdrop-filter: blur(12px);
+      border-bottom:1px solid var(--line);
     }
     .top{
-      max-width: 1240px;
-      margin: 0 auto;
-      padding: 14px 16px;
+      max-width: 1200px;
+      margin:0 auto;
+      padding:12px 14px;
       display:flex;
-      gap:14px;
       align-items:center;
-      justify-content:space-between;
-    }
-    .brand{
-      display:flex; gap:12px; align-items:center;
-      min-width: 260px;
-    }
-    .logo{
-      width:40px; height:40px;
-      border-radius: 14px;
-      background: linear-gradient(180deg, var(--brand2), var(--brand));
-      box-shadow: 0 10px 24px rgba(2,6,23,.14);
-      display:grid; place-items:center;
-      color:#fff; font-weight:1000;
-    }
-    .brand h1{
-      margin:0; font-size:16px; line-height:1.15;
-      letter-spacing:.2px;
-    }
-    .brand .sub{
-      font-size:12px; color: var(--muted); font-weight:800;
-      margin-top:2px;
+      gap:12px;
     }
 
-    .searchWrap{
-      flex:1;
-      display:flex;
-      align-items:center;
-      gap:10px;
-      max-width: 640px;
+    .logo{
+      display:flex; align-items:center; gap:10px;
+      min-width: 220px;
     }
+    .mark{
+      width:40px; height:40px;
+      border-radius:14px;
+      background: linear-gradient(180deg, rgba(0,177,79,1), rgba(0,150,70,1));
+      display:grid; place-items:center;
+      color:#fff;
+      font-weight:1000;
+      box-shadow: 0 14px 28px rgba(0,177,79,.20);
+    }
+    .logo .t{
+      display:flex; flex-direction:column; line-height:1.05;
+    }
+    .logo .t b{font-size:14px}
+    .logo .t span{font-size:12px; color:var(--muted); font-weight:800}
+
     .search{
       flex:1;
       display:flex;
       align-items:center;
       gap:10px;
-      border:1px solid rgba(15,23,42,.10);
-      background: rgba(255,255,255,.92);
+      background:#fff;
+      border:1px solid var(--line);
       border-radius: 999px;
-      padding: 10px 12px;
-      box-shadow: 0 12px 30px rgba(2,6,23,.06);
+      padding:10px 14px;
+      box-shadow: 0 14px 38px rgba(2,6,23,.06);
     }
+    .search svg{width:18px;height:18px;opacity:.55}
     .search input{
-      border:none; outline:none; background:transparent;
+      border:none; outline:none;
       width:100%;
       font-size:14px;
-      font-weight:800;
-      color:var(--ink);
     }
     .kbd{
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(15,23,42,.10);
-      color: var(--muted);
-      font-weight:900;
       font-size:12px;
-      background: rgba(255,255,255,.8);
+      color:var(--muted);
+      font-weight:900;
+      border:1px solid var(--line);
+      background: rgba(2,6,23,.02);
+      padding:6px 10px;
+      border-radius:999px;
       white-space:nowrap;
     }
-    .status{
+
+    .okPill{
       display:flex; align-items:center; gap:8px;
-      background: rgba(15,154,82,.10);
-      border:1px solid rgba(15,154,82,.22);
-      color: #0f7a43;
+      padding:10px 12px;
+      border-radius:999px;
+      background: var(--pill);
+      border:1px solid rgba(0,177,79,.25);
       font-weight:1000;
-      padding: 8px 12px;
-      border-radius: 999px;
+      color: #0b5b2d;
       white-space:nowrap;
-      font-size:13px;
+    }
+    .okDot{
+      width:10px; height:10px; border-radius:999px;
+      background: var(--brand);
+      box-shadow: 0 0 0 6px rgba(0,177,79,.12);
     }
 
-    /* Layout */
+    /* ===== Layout ===== */
     .wrap{
-      max-width:1240px;
-      margin: 0 auto;
-      padding: 18px 16px 40px;
-      display:grid;
-      grid-template-columns: 1.35fr .65fr;
-      gap:16px;
-      align-items:start;
-    }
-    @media (max-width: 980px){
-      .wrap{grid-template-columns:1fr}
-      .brand{min-width:auto}
-    }
-
-    .hero{
-      background: linear-gradient(180deg, rgba(15,154,82,.92), rgba(10,122,59,.88));
-      border-radius: 22px;
-      padding: 18px 18px;
-      color:#fff;
-      box-shadow: 0 22px 70px rgba(2,6,23,.14);
-      min-height: 240px;
-      border: 1px solid rgba(255,255,255,.18);
-    }
-    .hero h2{
-      margin:0;
-      font-size: 28px;
-      font-weight: 1000;
-      letter-spacing:.2px;
-    }
-    .hero p{
-      margin:10px 0 0;
-      max-width: 64ch;
-      font-weight:800;
-      opacity:.95;
-      line-height:1.35;
-    }
-
-    .sideCol{
+      max-width:1200px;
+      margin:0 auto;
+      padding:16px 14px 40px;
       display:grid;
       gap:14px;
     }
 
+    .heroGrid{
+      display:grid;
+      grid-template-columns: 1.7fr 1fr;
+      gap:14px;
+      align-items:stretch;
+    }
+    @media (max-width: 980px){
+      .heroGrid{grid-template-columns:1fr}
+      .logo{min-width:auto}
+    }
+
+    .hero{
+      border-radius: var(--r);
+      background: linear-gradient(180deg, rgba(0,177,79,.95), rgba(0,150,70,.92));
+      color:#fff;
+      padding:20px 18px;
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+      min-height: 190px;
+    }
+    .hero:before{
+      content:"";
+      position:absolute; inset:-40px -120px auto auto;
+      width: 520px; height: 520px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), rgba(255,255,255,0) 60%);
+      transform: rotate(18deg);
+      pointer-events:none;
+    }
+    .hero h1{
+      margin:0;
+      font-size:34px;
+      letter-spacing:-.6px;
+    }
+    .hero p{
+      margin:10px 0 0;
+      max-width: 720px;
+      font-weight:800;
+      opacity:.95;
+      line-height:1.25;
+    }
+    .hero .mini{
+      margin-top:14px;
+      display:flex; flex-wrap:wrap; gap:10px;
+    }
+    .chip{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.18);
+      font-weight:1000;
+      font-size:12px;
+    }
+
+    .side{
+      display:grid;
+      gap:14px;
+    }
     .panel{
-      background: rgba(255,255,255,.85);
-      border:1px solid rgba(15,23,42,.10);
-      border-radius: 18px;
-      padding: 14px 14px;
-      box-shadow: 0 14px 40px rgba(2,6,23,.08);
+      background: var(--card);
+      border:1px solid var(--line);
+      border-radius: var(--r);
+      box-shadow: 0 16px 45px rgba(2,6,23,.08);
+      padding:16px 16px;
+      overflow:hidden;
     }
     .panel h3{
       margin:0 0 10px;
-      font-size:14px;
+      font-size:13px;
       color: var(--muted);
-      font-weight: 1000;
       letter-spacing:.2px;
     }
-    .shortcutRow{
+    .quick{
       display:grid;
-      grid-template-columns: repeat(3, minmax(0,1fr));
+      grid-template-columns: repeat(3,1fr);
       gap:10px;
     }
-    .shortcut{
-      border:1px solid rgba(15,23,42,.10);
-      background: rgba(255,255,255,.92);
+    .quick .q{
+      border:1px solid var(--line);
       border-radius: 16px;
-      padding: 12px 12px;
-      box-shadow: 0 12px 26px rgba(2,6,23,.06);
+      padding:12px 12px;
+      background: rgba(2,6,23,.02);
     }
-    .shortcut .t{
-      font-size:12px; color: var(--muted); font-weight: 1000;
-      margin-bottom:6px;
+    .quick .q b{display:block; font-size:12px}
+    .quick .q span{display:block; margin-top:6px; font-weight:1000}
+    .tip{
+      border:1px solid var(--line);
+      border-radius: 18px;
+      padding:14px 14px;
+      background: linear-gradient(180deg, rgba(2,6,23,.02), rgba(2,6,23,0));
     }
-    .shortcut .k{
-      font-size:18px; font-weight: 1000;
+    .tip b{display:block; font-size:12px; color:var(--muted); margin-bottom:6px}
+    .tip p{margin:0; font-weight:1000; line-height:1.25}
+
+    /* ===== Section Title ===== */
+    .secHead{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:12px;
+      margin-top: 6px;
+    }
+    .secHead h2{
+      margin:0;
+      font-size:18px;
+      letter-spacing:-.2px;
+    }
+    .secHead .sub{
+      color:var(--muted);
+      font-weight:900;
+      font-size:12px;
     }
 
-    /* Cards grid */
+    /* ===== Carousel (auto-moving) ===== */
+    .carouselWrap{ position:relative; }
     .cards{
-      margin-top: 16px;
-      display:grid;
-      grid-template-columns: repeat(3, minmax(0,1fr));
+      display:flex;
       gap:16px;
+      overflow:hidden;      /* Uber-ish: no scrollbar */
+      padding: 10px 4px 6px;
+      scroll-behavior:smooth;
+    }
+    /* Gradient fades */
+    .fadeL,.fadeR{
+      position:absolute; top:0; bottom:0;
+      width: 70px;
+      pointer-events:none;
+      z-index: 3;
+    }
+    .fadeL{ left:-2px; background: linear-gradient(90deg, rgba(246,247,248,1), rgba(246,247,248,0)); }
+    .fadeR{ right:-2px; background: linear-gradient(270deg, rgba(246,247,248,1), rgba(246,247,248,0)); }
+
+    /* Restaurant card */
+    .rCard{
+      flex: 0 0 360px;
+      background: var(--card);
+      border:1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: 0 18px 55px rgba(2,6,23,.10);
+      overflow:hidden;
+      position:relative;
     }
     @media (max-width: 980px){
-      .cards{grid-template-columns: repeat(2, minmax(0,1fr));}
+      .rCard{ flex-basis: 340px; }
     }
     @media (max-width: 620px){
-      .cards{grid-template-columns: 1fr;}
+      .cards{ overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling: touch; }
+      .rCard{ flex-basis: 88vw; scroll-snap-align: start; }
+      .fadeL,.fadeR{ display:none; }
     }
 
-    .card{
-      background: rgba(255,255,255,.92);
-      border: 1px solid rgba(15,23,42,.10);
-      border-radius: 20px;
-      box-shadow: var(--shadow);
+    .cover{
+      height: 110px;
+      background: linear-gradient(180deg, rgba(2,6,23,.15), rgba(2,6,23,0)),
+                  radial-gradient(500px 160px at 10% 0%, rgba(0,177,79,.28), transparent 55%),
+                  radial-gradient(500px 160px at 90% 0%, rgba(2,6,23,.10), transparent 55%),
+                  #0b1220;
+    }
+
+    .rBody{ padding:14px 14px 14px; }
+    .rTop{
+      display:flex; gap:12px; align-items:flex-start;
+      margin-top: -32px;
+    }
+    .avatar{
+      width:56px; height:56px;
+      border-radius: 18px;
+      background: #fff;
+      border:1px solid var(--line);
+      box-shadow: 0 18px 40px rgba(2,6,23,.14);
+      display:grid;
+      place-items:center;
+      font-weight:1000;
+      color:#111;
       overflow:hidden;
-      display:flex;
-      flex-direction:column;
-      min-height: 220px;
     }
-    .cardTop{
-      padding: 14px 14px 10px;
-      display:flex;
-      align-items:flex-start;
-      gap:12px;
-    }
-    .icon{
-      width:44px; height:44px;
-      border-radius: 16px;
-      display:grid; place-items:center;
-      color:#fff;
-      font-weight: 1000;
-      box-shadow: 0 14px 26px rgba(2,6,23,.12);
-      flex: 0 0 auto;
-    }
-    .icon.green{background: linear-gradient(180deg, #16a34a, #0a7a3b);}
-    .icon.orange{background: linear-gradient(180deg, #fb923c, #f97316);}
-    .icon.blue{background: linear-gradient(180deg, #60a5fa, #2563eb);}
-    .icon.purple{background: linear-gradient(180deg, #a78bfa, #7c3aed);}
+    .avatar img{width:100%;height:100%;object-fit:cover;display:block}
 
-    .cardTitle{
+    .rInfo{flex:1; min-width:0;}
+    .rName{
       margin:0;
-      font-size:16px;
-      font-weight: 1000;
-      letter-spacing:.2px;
+      font-size:18px;
+      letter-spacing:-.2px;
+      font-weight:1000;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
     }
-    .cardDesc{
+    .rDesc{
       margin:6px 0 0;
       color: var(--muted);
-      font-weight: 850;
-      line-height:1.3;
-      font-size: 13px;
+      font-weight:800;
+      line-height:1.2;
+      font-size:13px;
+      min-height: 32px;
     }
 
     .tags{
-      padding: 0 14px 12px;
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
+      display:flex; flex-wrap:wrap; gap:8px;
+      margin-top:10px;
     }
     .tag{
       font-size:12px;
-      font-weight: 1000;
+      font-weight:1000;
+      padding:7px 10px;
       border-radius: 999px;
-      padding: 7px 10px;
-      border:1px solid rgba(15,23,42,.10);
-      background: rgba(243,246,245,.9);
-      color: #0f7a43;
+      border:1px solid var(--line);
+      background: rgba(2,6,23,.02);
+      color: #111827;
     }
-    .tag.dark{
-      color:#0f172a;
+    .tag.green{
+      background: rgba(0,177,79,.10);
+      border-color: rgba(0,177,79,.20);
+      color: #0b5b2d;
     }
 
-    .cardBtns{
-      margin-top:auto;
-      padding: 12px 14px 14px;
-      display:flex;
-      gap:10px;
+    .rActions{
+      display:flex; gap:10px;
+      margin-top: 12px;
     }
     .btn{
       flex:1;
       border:none;
       cursor:pointer;
-      padding: 12px 14px;
+      padding:12px 14px;
       border-radius: 14px;
-      font-weight: 1000;
-      letter-spacing:.2px;
+      font-weight:1000;
+      font-size:14px;
     }
-    .btn.enter{
+    .btnEnter{
+      background: linear-gradient(180deg, rgba(0,177,79,1), rgba(0,150,70,1));
       color:#fff;
-      background: linear-gradient(180deg, var(--brand2), var(--brand));
-      box-shadow: 0 16px 34px rgba(15,154,82,.26);
+      box-shadow: 0 18px 45px rgba(0,177,79,.20);
     }
-    .btn.home{
-      color:#fff;
-      background: linear-gradient(180deg, rgba(15,23,42,.92), rgba(15,23,42,.86));
-      box-shadow: 0 16px 34px rgba(2,6,23,.18);
-    }
-    .btn:active{transform: translateY(1px)}
-    .mutedSmall{
-      font-size:12px;
-      color: var(--muted);
-      font-weight: 900;
-      padding: 0 14px 14px;
+    .btnEnter:active{transform: translateY(1px)}
+    .btnGhost{
+      background: rgba(2,6,23,.04);
+      border:1px solid var(--line);
+      color:#111827;
     }
 
+    .route{
+      margin-top: 10px;
+      font-size:12px;
+      color: var(--muted);
+      font-weight:900;
+    }
+    .route code{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 11px;
+      background: rgba(2,6,23,.04);
+      border:1px solid var(--line);
+      padding:4px 8px;
+      border-radius: 10px;
+      display:inline-block;
+      max-width: 100%;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      vertical-align: middle;
+    }
+
+    /* Small helper */
+    .hidden{display:none!important}
   </style>
 </head>
 
 <body>
 <header>
   <div class="top">
-    <div class="brand">
-      <div class="logo">VDC</div>
-      <div>
-        <h1>VDC Restaurantes — Central</h1>
-        <div class="sub">Panel de navegación de taquerías</div>
+    <div class="logo">
+      <div class="mark">VDC</div>
+      <div class="t">
+        <b>VDC Restaurantes — Central</b>
+        <span>Panel de navegación de taquerías</span>
       </div>
     </div>
 
-    <div class="searchWrap">
-      <div class="search">
-        <span style="opacity:.7">🔎</span>
-        <input id="q" placeholder="Buscar taquería... (chema, fundadores, pastor, gringa)"/>
-        <span class="kbd">Ctrl / ⌘ + K</span>
-      </div>
+    <div class="search">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="currentColor" stroke-width="2"/>
+        <path d="M16.5 16.5 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <input id="q" placeholder="Buscar taquería… (chema, fundadores, pastor, gringa)"/>
+      <span class="kbd">Ctrl / ⌘ + K</span>
     </div>
 
-    <div class="status">✅ Operación sin fricción</div>
+    <div class="okPill" title="Todo listo para operar">
+      <span class="okDot"></span>
+      Operación sin fricción
+    </div>
   </div>
 </header>
 
 <main class="wrap">
-  <section>
+
+  <section class="heroGrid">
     <div class="hero">
-      <h2>Todo tu catálogo de taquerías en un solo lugar.</h2>
-      <p>
-        Acceso rápido a cada menú para ordenar. Diseñado para operación: limpio, directo y sin perder tiempo.
-      </p>
+      <h1>Todo tu catálogo de taquerías en un solo lugar.</h1>
+      <p>Acceso rápido a cada menú para ordenar. Diseñado para operación: limpio, directo y sin perder tiempo.</p>
+
+      <div class="mini">
+        <div class="chip">⚡ Abrir rápido con Enter</div>
+        <div class="chip">🔎 Buscar por nombre o tag</div>
+        <div class="chip">📲 WhatsApp listo para enviar</div>
+      </div>
     </div>
 
-    <div class="cards" id="cards"></div>
+    <div class="side">
+      <div class="panel">
+        <h3>Atajos rápidos</h3>
+        <div class="quick">
+          <div class="q">
+            <b>Buscar</b>
+            <span>⌘/Ctrl + K</span>
+          </div>
+          <div class="q">
+            <b>Abrir</b>
+            <span>Enter</span>
+          </div>
+          <div class="q">
+            <b>Salir</b>
+            <span>Esc</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>Tip operativo</h3>
+        <div class="tip">
+          <b>Recomendación</b>
+          <p>Mantén esta pestaña fija como “Inicio” en el navegador.</p>
+        </div>
+      </div>
+    </div>
   </section>
 
-  <aside class="sideCol">
-    <div class="panel">
-      <h3>Atajos rápidos</h3>
-      <div class="shortcutRow">
-        <div class="shortcut">
-          <div class="t">Buscar</div>
-          <div class="k">⌘/Ctrl + K</div>
-        </div>
-        <div class="shortcut">
-          <div class="t">Abrir</div>
-          <div class="k">Enter</div>
-        </div>
-        <div class="shortcut">
-          <div class="t">Salir</div>
-          <div class="k">Esc</div>
-        </div>
+  <section>
+    <div class="secHead">
+      <div>
+        <h2>Taquerías</h2>
+        <div class="sub" id="countLbl">0 en catálogo</div>
       </div>
+      <div class="sub">Se mueve solo • estilo Uber Eats</div>
     </div>
 
-    <div class="panel">
-      <h3>Tip operativo</h3>
-      <div style="border:1px solid rgba(15,23,42,.08); background:rgba(255,255,255,.92); border-radius:16px; padding:12px 12px; font-weight:900;">
-        <div style="color:var(--muted); font-size:12px; font-weight:1000; margin-bottom:6px;">Recomendación</div>
-        Mantén esta pestaña fija como <b>“Inicio”</b> en el navegador.
-      </div>
+    <div class="carouselWrap">
+      <div class="fadeL"></div>
+      <div class="fadeR"></div>
+      <div class="cards" id="cards"></div>
     </div>
-  </aside>
+  </section>
+
 </main>
 
 <script>
-/** ===========
- *  TAQUERÍAS
- *  ===========
- *  Opción A (recomendada): que cada menú esté en su carpeta:
- *   /tacos-chema/index.html
- *   /tacos-fundadores/index.html
- *  Entonces url sería: "tacos-chema/" (o "tacos-chema/index.html")
+/** =========================
+ *  CONFIG
+ *  ========================= */
+
+/**
+ * RUTAS:
+ * - Si tu central está en la raíz del repo:  https://tuuser.github.io/tuRepo/
+ * - Y cada taquería está en carpeta:         /tacos-chema/index.html
+ * entonces pon route: "tacos-chema/" o "tacos-chema/index.html"
  */
-const taquerias = [
+const TAQUERIAS = [
   {
-    id: "chema",
-    nombre: "Tacos Paisa Chema",
-    desc: "Menú para ordenar (tacos, gringas, volcanes, tortas, bebidas).",
-    tags: ["Menú", "Pedidos", "WhatsApp"],
-    color: "green",
-    url: "https://marcianoper.github.io/prueba2/" // <-- AJUSTA AQUÍ
+    id:"chema",
+    name:"Tacos Paisa Chema",
+    desc:"Menú para ordenar (tacos, gringas, volcanes, tortas, bebidas).",
+    tags:["Menú","Pedidos","WhatsApp"],
+    route:"tacos-chema/index.html",
+    accent:"#0a7a3b",
+    logoText:"🌮"
+    // logoImg:"assets/chema_logo.png"
   },
   {
-    id: "fundadores",
-    nombre: "Tacos Los Fundadores",
-    desc: "Menú para ordenar (catálogo propio).",
-    tags: ["Menú", "Pedidos", "WhatsApp"],
-    color: "orange",
-    url: "tacos-fundadores/" // <-- AJUSTA AQUÍ
+    id:"fundadores",
+    name:"Tacos Los Fundadores",
+    desc:"Menú para ordenar (catálogo propio).",
+    tags:["Menú","Pedidos","WhatsApp"],
+    route:"tacos-fundadores/index.html",
+    accent:"#f97316",
+    logoText:"🌯"
   },
   {
-    id: "menuderia zaragosa",
-    nombre: "Menuderia zaragosa",
-    desc: "Menú para ordenar cualqquier tipos de menudos desde chicos a grandes.",
-    tags: ["Menú", "Pedidos", "WhatsApp"],
-    color: "black",
-    url: "tacos-fundadores/" 
-      },
-  // agrega más cuando quieras:
-  // { id:"x", nombre:"Tacos ...", desc:"...", tags:["..."], color:"blue", url:"tacos-x/" }
+    id:"zaragoza",
+    name:"Menudería Zaragoza",
+    desc:"Menú para ordenar (menudos chicos y grandes).",
+    tags:["Menú","Pedidos","WhatsApp"],
+    route:"menuderia-zaragoza/index.html",
+    accent:"#111827",
+    logoText:"🥣"
+  }
 ];
 
-const cards = document.getElementById("cards");
-const q = document.getElementById("q");
-let filtered = [...taquerias];
-let activeIndex = 0;
+/** Auto-move */
+const AUTO_MS = 2600;   // velocidad (ms)
+const PAUSE_ON_INTERACT_MS = 4500; // pausa si el usuario toca/scroll
 
-function escHtml(s){
-  return (s||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
+/** =========================
+ *  DOM
+ *  ========================= */
+const cardsEl = document.getElementById("cards");
+const q = document.getElementById("q");
+const countLbl = document.getElementById("countLbl");
+
+/** =========================
+ *  Render Cards
+ *  ========================= */
+function tagHtml(tag){
+  const isGreen = (tag.toLowerCase().includes("whatsapp") || tag.toLowerCase().includes("menú"));
+  return `<span class="tag ${isGreen ? "green":""}">${escapeHtml(tag)}</span>`;
 }
 
-function render(){
-  cards.innerHTML = "";
-  filtered.forEach((t, idx) => {
-    const el = document.createElement("div");
-    el.className = "card";
-    el.tabIndex = 0;
+function cardHtml(t){
+  const badge = (t.logoImg)
+    ? `<div class="avatar"><img src="${t.logoImg}" alt="${escapeHtml(t.name)}"></div>`
+    : `<div class="avatar" style="background: rgba(255,255,255,.95)">${escapeHtml(t.logoText || "VDC")}</div>`;
 
-    const tagHtml = (t.tags||[]).map((x,i)=>(
-      `<span class="tag ${i%2? "dark":""}">${escHtml(x)}</span>`
-    )).join("");
+  return `
+    <article class="rCard card" data-id="${t.id}" data-route="${t.route}" data-name="${(t.name||"").toLowerCase()}">
+      <div class="cover" style="background:
+        linear-gradient(180deg, rgba(2,6,23,.18), rgba(2,6,23,0)),
+        radial-gradient(520px 180px at 12% 0%, ${hexToRgba(t.accent||"#00b14f", .30)}, transparent 58%),
+        radial-gradient(520px 180px at 88% 0%, rgba(2,6,23,.10), transparent 58%),
+        #0b1220;"></div>
 
-    el.innerHTML = `
-      <div class="cardTop">
-        <div class="icon ${t.color || "green"}">🌯</div>
-        <div style="min-width:0">
-          <h3 class="cardTitle">${escHtml(t.nombre)}</h3>
-          <p class="cardDesc">${escHtml(t.desc || "")}</p>
+      <div class="rBody">
+        <div class="rTop">
+          ${badge}
+          <div class="rInfo">
+            <h3 class="rName">${escapeHtml(t.name)}</h3>
+            <p class="rDesc">${escapeHtml(t.desc||"")}</p>
+          </div>
         </div>
+
+        <div class="tags">
+          ${(t.tags||[]).slice(0,4).map(tagHtml).join("")}
+        </div>
+
+        <div class="rActions">
+          <button class="btn btnEnter" data-enter>Entrar</button>
+          <button class="btn btnGhost" data-open>Inicio</button>
+        </div>
+
+        <div class="route">Ruta: <code>${escapeHtml(t.route)}</code></div>
       </div>
+    </article>
+  `;
+}
 
-      <div class="tags">${tagHtml}</div>
+function render(list){
+  cardsEl.innerHTML = list.map(cardHtml).join("");
+  countLbl.textContent = `${list.length} en catálogo`;
 
-      <div class="cardBtns">
-        <button class="btn enter" data-open="${escHtml(t.url)}">Entrar</button>
-        <button class="btn home" data-home="1">Inicio</button>
-      </div>
-
-      <div class="mutedSmall">Ruta: <b>${escHtml(t.url)}</b></div>
-    `;
-
-    el.querySelector('[data-open]').onclick = () => openTaqueria(t.url);
-    el.querySelector('[data-home]').onclick = () => window.scrollTo({top:0, behavior:"smooth"});
-
-    // highlight por teclado
-    if(idx === activeIndex){
-      el.style.outline = "3px solid rgba(15,154,82,.20)";
-      el.style.boxShadow = "0 0 0 6px rgba(15,154,82,.10), var(--shadow)";
-    }
-
-    el.addEventListener("click", ()=> { activeIndex = idx; render(); });
-    el.addEventListener("keydown", (e)=>{
-      if(e.key === "Enter"){ openTaqueria(t.url); }
-    });
-
-    cards.appendChild(el);
+  // Actions
+  cardsEl.querySelectorAll("[data-enter]").forEach(btn=>{
+    btn.onclick = (e)=>{
+      const card = e.target.closest(".rCard");
+      if(!card) return;
+      const route = card.getAttribute("data-route");
+      window.location.href = route;
+    };
   });
 
-  if(filtered.length === 0){
-    cards.innerHTML = `<div style="font-weight:1000;color:var(--muted);padding:10px;">No hay resultados.</div>`;
-  }
+  cardsEl.querySelectorAll("[data-open]").forEach(btn=>{
+    btn.onclick = (e)=>{
+      // "Inicio" puede abrir en nueva pestaña (opcional)
+      const card = e.target.closest(".rCard");
+      if(!card) return;
+      const route = card.getAttribute("data-route");
+      window.open(route, "_blank");
+    };
+  });
 }
 
-function openTaqueria(url){
-  // abre en la misma pestaña
-  window.location.href = url;
-}
-
+/** =========================
+ *  Search
+ *  ========================= */
 function applyFilter(){
   const term = (q.value||"").trim().toLowerCase();
-  filtered = taquerias.filter(t=>{
-    const blob = (t.nombre + " " + (t.desc||"") + " " + (t.tags||[]).join(" ")).toLowerCase();
-    return !term || blob.includes(term);
+  const out = TAQUERIAS.filter(t=>{
+    if(!term) return true;
+    const hay = (t.name||"").toLowerCase().includes(term)
+      || (t.desc||"").toLowerCase().includes(term)
+      || (t.tags||[]).some(x => String(x).toLowerCase().includes(term))
+      || (t.id||"").toLowerCase().includes(term);
+    return hay;
   });
-  activeIndex = 0;
-  render();
+  render(out);
+
+  // Reinicia auto-scroll con el nuevo contenido
+  resetAuto();
 }
 
 q.addEventListener("input", applyFilter);
 
-/* Atajos: Ctrl/⌘+K focus buscador, Esc limpia */
+/** Ctrl/Cmd + K focus */
 document.addEventListener("keydown", (e)=>{
-  const isMac = navigator.platform.toUpperCase().includes("MAC");
-  const kCombo = (isMac ? e.metaKey : e.ctrlKey) && e.key.toLowerCase()==="k";
-  if(kCombo){
+  const isK = (e.key||"").toLowerCase()==="k";
+  if((e.ctrlKey || e.metaKey) && isK){
     e.preventDefault();
     q.focus();
     q.select();
   }
-  if(e.key === "Escape"){
-    if(document.activeElement === q){
-      q.value = "";
-      applyFilter();
-      q.blur();
-    }
-  }
-  // flechas para cambiar selección
-  if(e.key === "ArrowDown"){
-    if(filtered.length){ activeIndex = Math.min(filtered.length-1, activeIndex+1); render(); }
-  }
-  if(e.key === "ArrowUp"){
-    if(filtered.length){ activeIndex = Math.max(0, activeIndex-1); render(); }
-  }
-  // Enter abre la seleccionada si estás en el search
-  if(e.key === "Enter" && document.activeElement === q){
-    if(filtered[activeIndex]) openTaqueria(filtered[activeIndex].url);
-  }
 });
 
-render();
+/** =========================
+ *  Auto-moving carousel (smooth + loop)
+ *  ========================= */
+let timer = null;
+let pausedUntil = 0;
+
+function stepPx(){
+  const first = cardsEl.querySelector(".rCard");
+  if(!first) return 360;
+  const gap = parseFloat(getComputedStyle(cardsEl).gap || "16");
+  return first.getBoundingClientRect().width + gap;
+}
+
+function maxScroll(){
+  return Math.max(0, cardsEl.scrollWidth - cardsEl.clientWidth);
+}
+
+/**
+ * Loop suave:
+ * - avanza por cards
+ * - cuando llega al final, regresa a 0 (suave)
+ */
+function tick(){
+  if(Date.now() < pausedUntil) return;
+  const max = maxScroll();
+  if(max <= 0) return;
+
+  const next = cardsEl.scrollLeft + stepPx();
+
+  if(next >= max - 4){
+    cardsEl.scrollTo({ left: 0, behavior:"smooth" });
+  }else{
+    cardsEl.scrollTo({ left: next, behavior:"smooth" });
+  }
+}
+
+function startAuto(){
+  stopAuto();
+  timer = setInterval(tick, AUTO_MS);
+}
+function stopAuto(){
+  if(timer){ clearInterval(timer); timer = null; }
+}
+function resetAuto(){
+  startAuto();
+}
+
+/* pausa si el usuario interactúa */
+["wheel","touchstart","pointerdown","mouseenter"].forEach(ev=>{
+  cardsEl.addEventListener(ev, ()=>{ pausedUntil = Date.now() + PAUSE_ON_INTERACT_MS; }, {passive:true});
+});
+
+/** =========================
+ *  Helpers
+ *  ========================= */
+function escapeHtml(s){
+  return (s||"")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+function hexToRgba(hex, a){
+  try{
+    let h = String(hex||"").replace("#","").trim();
+    if(h.length===3) h = h.split("").map(x=>x+x).join("");
+    const r = parseInt(h.slice(0,2),16);
+    const g = parseInt(h.slice(2,4),16);
+    const b = parseInt(h.slice(4,6),16);
+    return `rgba(${r},${g},${b},${a})`;
+  }catch(e){
+    return `rgba(0,177,79,${a})`;
+  }
+}
+
+/** =========================
+ *  INIT
+ *  ========================= */
+render(TAQUERIAS);
+startAuto();
 </script>
 </body>
 </html>
