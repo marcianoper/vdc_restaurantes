@@ -7,22 +7,27 @@
 
   <style>
     :root{
-      /* NUEVO TEMA: oscuro + neón */
-      --bg:#05060a;
-      --bg2:#090b13;
-      --card: rgba(255,255,255,.06);
-      --card2: rgba(255,255,255,.08);
-      --ink:#ecf3ff;
-      --muted: rgba(236,243,255,.70);
-      --line: rgba(255,255,255,.10);
+      /* TAQUERÍA TRADICIONAL: rojo + crema + carbón */
+      --bg:#1a0f0c;
+      --bg2:#24130f;
 
-      --brand1:#ff2d55;  /* magenta */
-      --brand2:#ffcc00;  /* amarillo */
-      --cyan:#00d1ff;    /* acento */
-      --green:#19ff7a;   /* precios */
-      --danger:#ff3b30;
+      /* Tarjetas en crema (para que se vea “menú”) */
+      --card:#fff6ec;
+      --card2:#fff1e2;
 
-      --shadow: 0 18px 60px rgba(0,0,0,.50);
+      /* Textos oscuros (sobre crema) */
+      --ink:#2b1a14;
+      --muted:#6a4a3c;
+      --line: rgba(0,0,0,.10);
+
+      /* Marca */
+      --brand1:#8b1e1e;
+      --brand2:#b63a2b;
+      --gold:#d4a373;
+      --green:#2f7d32;
+      --danger:#9b1c1c;
+
+      --shadow: 0 18px 50px rgba(0,0,0,.25);
       --r:18px;
     }
 
@@ -32,9 +37,8 @@
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
       color:var(--ink);
       background:
-        radial-gradient(1100px 520px at 15% -10%, rgba(255,45,85,.22), transparent 55%),
-        radial-gradient(900px 520px at 90% 0%, rgba(0,209,255,.18), transparent 60%),
-        radial-gradient(1200px 600px at 60% 120%, rgba(255,204,0,.14), transparent 60%),
+        radial-gradient(1200px 600px at 20% -10%, rgba(182,58,43,.18), transparent 60%),
+        radial-gradient(1000px 600px at 90% 0%, rgba(212,163,115,.18), transparent 60%),
         linear-gradient(180deg, var(--bg), var(--bg2));
     }
 
@@ -42,10 +46,11 @@
     header{
       position: sticky; top: 0; z-index: 40;
       padding: 12px 14px;
-      background: rgba(10,12,20,.78);
+      background: rgba(26,15,12,.82);
       backdrop-filter: blur(10px);
       border-bottom: 1px solid rgba(255,255,255,.08);
-      box-shadow: 0 12px 36px rgba(0,0,0,.40);
+      box-shadow: 0 12px 36px rgba(0,0,0,.35);
+      color:#fff;
     }
     header .row{
       max-width:1200px;
@@ -70,10 +75,11 @@
       white-space:nowrap;
       overflow:hidden;
       text-overflow:ellipsis;
+      color:#fff;
     }
     .brand .sub{
       font-size:12px;
-      color: rgba(236,243,255,.78);
+      color: rgba(255,255,255,.78);
       font-weight:800;
     }
 
@@ -83,21 +89,22 @@
       gap:8px;
       padding:8px 10px;
       border-radius:999px;
-      border:1px solid rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.14);
       background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
-      box-shadow: 0 14px 34px rgba(0,0,0,.35);
+      box-shadow: 0 14px 34px rgba(0,0,0,.28);
       font-weight:1000;
       font-size:12px;
       white-space:nowrap;
       user-select:none;
+      color:#fff;
     }
     .pill b{font-size:13px}
     .pill .amt{
       padding:4px 8px;
       border-radius:999px;
-      background: rgba(25,255,122,.14);
-      border: 1px solid rgba(25,255,122,.18);
-      color: #b7ffd6;
+      background: rgba(212,163,115,.22);
+      border: 1px solid rgba(212,163,115,.28);
+      color: #fff;
       font-weight:1000;
     }
 
@@ -125,16 +132,14 @@
       overflow:hidden;
       border:1px solid rgba(255,255,255,.10);
       box-shadow: var(--shadow);
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
       position:relative;
+      background: rgba(0,0,0,.25);
     }
     .hero::before{
       content:"";
       position:absolute; inset:0;
       background:
-        radial-gradient(600px 240px at 20% 20%, rgba(255,45,85,.22), transparent 60%),
-        radial-gradient(600px 240px at 80% 30%, rgba(0,209,255,.18), transparent 60%);
+        linear-gradient(180deg, rgba(0,0,0,.15), rgba(0,0,0,.45));
       pointer-events:none;
     }
     .hero img{
@@ -142,7 +147,7 @@
       height: 240px;
       object-fit: cover;
       display:block;
-      filter: contrast(1.05) saturate(1.1);
+      filter: contrast(1.03) saturate(1.05);
     }
     @media (max-width:520px){
       .hero img{height:170px}
@@ -150,7 +155,7 @@
 
     /* CARD */
     .card{
-      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.05));
+      background: linear-gradient(180deg, var(--card), var(--card2));
       border:1px solid rgba(255,255,255,.10);
       border-radius: var(--r);
       box-shadow: var(--shadow);
@@ -162,12 +167,13 @@
       font-size:14px;
       font-weight:1000;
       letter-spacing:.3px;
-      border-bottom:1px solid rgba(255,255,255,.10);
+      border-bottom:1px solid rgba(0,0,0,.08);
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:10px;
-      background: rgba(0,0,0,.10);
+      background: rgba(0,0,0,.03);
+      color: var(--ink);
     }
     .content{padding:14px}
 
@@ -179,13 +185,13 @@
       flex:1;
       padding:12px 12px;
       border-radius:14px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.18);
+      border:1px solid rgba(0,0,0,.12);
+      background: rgba(255,255,255,.75);
       outline:none;
       font-size:14px;
       color: var(--ink);
     }
-    .searchRow input::placeholder{color: rgba(236,243,255,.55)}
+    .searchRow input::placeholder{color: rgba(43,26,20,.55)}
 
     .tabs{
       display:flex;
@@ -194,8 +200,8 @@
       margin: 12px 0 10px;
     }
     .tab{
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.20);
+      border:1px solid rgba(0,0,0,.10);
+      background: rgba(255,255,255,.72);
       padding:10px 14px;
       border-radius: 999px;
       font-weight:1000;
@@ -203,42 +209,35 @@
       cursor:pointer;
       user-select:none;
       letter-spacing:.3px;
-      box-shadow: 0 12px 30px rgba(0,0,0,.28);
+      box-shadow: 0 10px 24px rgba(0,0,0,.10);
       position:relative;
       overflow:hidden;
+      color: var(--ink);
     }
-    .tab::after{
-      content:"";
-      position:absolute; inset:-2px;
-      background: linear-gradient(90deg, rgba(255,45,85,.55), rgba(0,209,255,.45), rgba(255,204,0,.35));
-      opacity:0;
-      transition: .2s ease;
-      filter: blur(12px);
+    .tab:hover{
+      box-shadow: 0 14px 28px rgba(0,0,0,.14);
+      transform: translateY(-1px);
+      transition: .15s ease;
     }
-    .tab:hover::after{opacity:.35}
-    .tab span{position:relative; z-index:2}
     .tab.active{
-      border-color: rgba(255,255,255,.18);
-      background: rgba(255,255,255,.10);
-      box-shadow: 0 0 0 3px rgba(0,209,255,.18), 0 18px 45px rgba(0,0,0,.30);
+      border-color: rgba(139,30,30,.35);
+      background: linear-gradient(180deg, rgba(182,58,43,.14), rgba(255,255,255,.80));
+      box-shadow: 0 0 0 3px rgba(139,30,30,.14), 0 16px 34px rgba(0,0,0,.12);
     }
 
     .sectionTitle{
       margin: 10px 0 10px;
       font-size: 40px;
-      letter-spacing: .6px;
+      letter-spacing: .4px;
       font-weight: 1000;
       line-height:1;
-      background: linear-gradient(90deg, #fff, rgba(255,255,255,.72));
-      -webkit-background-clip:text;
-      background-clip:text;
-      color:transparent;
+      color: var(--ink);
     }
     .divider{
       height: 4px;
       border-radius: 999px;
-      background: linear-gradient(90deg, rgba(255,45,85,.85), rgba(0,209,255,.75), rgba(255,204,0,.75));
-      opacity:.75;
+      background: linear-gradient(90deg, rgba(139,30,30,.92), rgba(182,58,43,.85), rgba(212,163,115,.75));
+      opacity:.95;
       margin: 8px 0 18px;
     }
 
@@ -253,24 +252,24 @@
       .sectionTitle{font-size:32px}
     }
 
-    /* PRODUCT CARD (nuevo look) */
+    /* PRODUCT CARD */
     .prod{
-      background: rgba(0,0,0,.18);
-      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.82);
+      border:1px solid rgba(0,0,0,.10);
       border-radius: 18px;
       overflow:hidden;
       display:grid;
       grid-template-columns: 1fr 1.1fr;
       min-height: 178px;
-      box-shadow: 0 20px 60px rgba(0,0,0,.35);
+      box-shadow: 0 18px 40px rgba(0,0,0,.10);
       position:relative;
     }
     .prod::before{
       content:"";
       position:absolute; inset:0;
       background:
-        radial-gradient(420px 180px at 20% 20%, rgba(255,45,85,.18), transparent 65%),
-        radial-gradient(420px 180px at 80% 50%, rgba(0,209,255,.14), transparent 70%);
+        radial-gradient(420px 180px at 20% 20%, rgba(182,58,43,.10), transparent 65%),
+        radial-gradient(420px 180px at 80% 50%, rgba(212,163,115,.10), transparent 70%);
       pointer-events:none;
     }
     .prodLeft{
@@ -286,6 +285,7 @@
       font-size: 20px;
       margin:0;
       letter-spacing:.2px;
+      color: var(--ink);
     }
     .badge{
       display:inline-flex;
@@ -296,9 +296,9 @@
       border-radius:999px;
       font-size:12px;
       font-weight:1000;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.06);
-      color: rgba(236,243,255,.85);
+      border:1px solid rgba(0,0,0,.10);
+      background: rgba(255,255,255,.70);
+      color: rgba(43,26,20,.92);
     }
     .prodDesc{
       margin:0;
@@ -310,15 +310,15 @@
     .price{
       margin-top:auto;
       font-weight:1000;
-      color: #c6ffd9;
+      color: var(--muted);
       font-size: 14px;
     }
     .price b{
       display:block;
-      font-size: 32px;
+      font-size: 30px;
       letter-spacing:.2px;
       color: var(--green);
-      text-shadow: 0 0 18px rgba(25,255,122,.18);
+      text-shadow: none;
     }
 
     .prodRight{
@@ -336,9 +336,9 @@
       height: 94px;
       border-radius: 16px;
       overflow:hidden;
-      background: #0b1220;
-      box-shadow: 0 18px 46px rgba(0,0,0,.45);
-      border: 1px solid rgba(255,255,255,.10);
+      background: #2a1612;
+      box-shadow: 0 14px 34px rgba(0,0,0,.16);
+      border: 1px solid rgba(0,0,0,.10);
     }
     .prodImg img{
       width:100%;
@@ -347,26 +347,29 @@
       display:block;
     }
 
-    /* BOTÓN AGREGAR (neón) */
-    .btnAdd{
+    /* BOTONES */
+    .btnAdd,
+    .stickyBtn{
       border:none;
       cursor:pointer;
-      padding: 10px 18px;
+      padding: 12px 18px;
       border-radius: 999px;
       font-weight: 1000;
-      color:#0b0c10;
-      background: linear-gradient(180deg, #ffcc00, #ff9f0a);
-      box-shadow: 0 14px 30px rgba(255,204,0,.28), 0 0 0 2px rgba(255,204,0,.12);
+      color:#fff;
+      background: linear-gradient(180deg, var(--brand2), var(--brand1));
+      box-shadow: 0 12px 28px rgba(139,30,30,.30);
       font-size: 15px;
       min-width: 150px;
     }
-    .btnAdd:active{transform: translateY(1px)}
-    .btnAdd:focus{outline: 3px solid rgba(0,209,255,.25)}
+    .btnAdd:active,
+    .stickyBtn:active{transform: translateY(1px)}
+    .btnAdd:focus,
+    .stickyBtn:focus{outline: 3px solid rgba(182,58,43,.18)}
 
     /* CART */
     .cartLine{
       display:flex; justify-content:space-between; gap:10px; align-items:flex-start;
-      border-bottom:1px dashed rgba(255,255,255,.14);
+      border-bottom:1px dashed rgba(0,0,0,.16);
       padding:10px 0;
     }
     .cartLine:last-child{border-bottom:none}
@@ -375,8 +378,8 @@
     .mini{
       width:32px; height:32px;
       border-radius:12px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.18);
+      border:1px solid rgba(0,0,0,.12);
+      background: rgba(255,255,255,.80);
       cursor:pointer;
       font-weight:1000;
       color: var(--ink);
@@ -384,31 +387,31 @@
     .mini:active{transform: translateY(1px)}
     label{
       display:block; font-size:12px; font-weight:1000; margin:10px 0 6px;
-      color: rgba(236,243,255,.82);
+      color: rgba(43,26,20,.92);
     }
     input, textarea, select{
       width:100%;
       padding:12px 12px;
-      border:1px solid rgba(255,255,255,.12);
+      border:1px solid rgba(0,0,0,.12);
       border-radius:14px;
       font-size:14px;
       outline:none;
-      background: rgba(0,0,0,.18);
+      background: rgba(255,255,255,.78);
       color: var(--ink);
     }
     textarea{min-height:90px; resize:vertical}
-    input::placeholder, textarea::placeholder{color: rgba(236,243,255,.55)}
+    input::placeholder, textarea::placeholder{color: rgba(43,26,20,.55)}
 
     .totalRow{
       display:flex; justify-content:space-between; align-items:center;
       padding-top:12px; margin-top:12px;
-      border-top:1px solid rgba(255,255,255,.12);
+      border-top:1px solid rgba(0,0,0,.10);
       font-size:14px;
       font-weight:1000;
     }
     .totalRow strong{
       font-size:18px;
-      color: #c6ffd9;
+      color: var(--green);
     }
 
     /* STICKY BAR */
@@ -418,10 +421,10 @@
       z-index: 25;
       margin-top: 12px;
       border-radius: 16px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(10,12,20,.80);
+      border:1px solid rgba(0,0,0,.10);
+      background: rgba(255,246,236,.92);
       backdrop-filter: blur(10px);
-      box-shadow: 0 18px 70px rgba(0,0,0,.55);
+      box-shadow: 0 18px 60px rgba(0,0,0,.18);
       display:flex;
       align-items:center;
       justify-content:space-between;
@@ -431,28 +434,18 @@
     .stickyBar .left{
       display:flex; align-items:center; gap:10px;
       font-weight:1000;
+      color: var(--ink);
     }
     .stickyBar .amount{
       font-size:18px;
       letter-spacing:.2px;
       color: var(--green);
-      text-shadow: 0 0 18px rgba(25,255,122,.18);
-    }
-    .stickyBtn{
-      border:none;
-      cursor:pointer;
-      padding: 12px 16px;
-      border-radius: 14px;
-      font-weight: 1000;
-      color:#0b0c10;
-      background: linear-gradient(180deg, #ffcc00, #ff9f0a);
-      box-shadow: 0 14px 30px rgba(255,204,0,.25);
-      min-width: 160px;
+      text-shadow: none;
     }
     .btnGhost{
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      color:#fff;
+      border:1px solid rgba(0,0,0,.12);
+      background: rgba(255,255,255,.70);
+      color: var(--ink);
       padding: 10px 12px;
       border-radius: 14px;
       font-weight: 1000;
@@ -462,7 +455,7 @@
     /* MODAL */
     .backdrop{
       position:fixed; inset:0;
-      background:rgba(0,0,0,.68);
+      background:rgba(0,0,0,.55);
       display:none;
       align-items:center;
       justify-content:center;
@@ -471,23 +464,22 @@
     }
     .modal{
       width:min(820px, 100%);
-      background: rgba(10,12,20,.92);
-      backdrop-filter: blur(10px);
+      background: linear-gradient(180deg, var(--card), var(--card2));
       border-radius:18px;
       overflow:hidden;
-      border:1px solid rgba(255,255,255,.12);
-      box-shadow: 0 40px 120px rgba(0,0,0,.60);
+      border:1px solid rgba(0,0,0,.12);
+      box-shadow: 0 40px 120px rgba(0,0,0,.35);
     }
     .modalHead{
       padding:14px 16px;
-      border-bottom:1px solid rgba(255,255,255,.10);
+      border-bottom:1px solid rgba(0,0,0,.10);
       display:flex; justify-content:space-between; align-items:center; gap:10px;
-      background: rgba(255,255,255,.04);
+      background: rgba(0,0,0,.03);
     }
-    .modalHead h3{margin:0; font-size:15px}
+    .modalHead h3{margin:0; font-size:15px; color: var(--ink)}
     .closeX{
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
+      border:1px solid rgba(0,0,0,.14);
+      background: rgba(255,255,255,.75);
       border-radius:12px;
       width:40px; height:40px;
       cursor:pointer;
@@ -495,21 +487,21 @@
       color: var(--ink);
     }
     .optGroup{
-      border:1px solid rgba(255,255,255,.10);
+      border:1px solid rgba(0,0,0,.10);
       border-radius:16px;
       padding:12px 12px;
       margin-top:10px;
-      background: rgba(255,255,255,.04);
+      background: rgba(255,255,255,.75);
     }
     .optTitle{
       display:flex; align-items:center; justify-content:space-between; gap:10px;
     }
-    .optTitle b{font-size:13px}
+    .optTitle b{font-size:13px; color: var(--ink)}
     .optTitle span{font-size:12px; color:var(--muted); font-weight:900}
     .optList{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px}
     .opt{
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.18);
+      border:1px solid rgba(0,0,0,.12);
+      background: rgba(255,255,255,.85);
       padding:8px 10px;
       border-radius:999px;
       font-size:13px;
@@ -519,21 +511,40 @@
       color: var(--ink);
     }
     .opt.active{
-      border-color: rgba(0,209,255,.55);
-      box-shadow:0 0 0 3px rgba(0,209,255,.18);
+      border-color: rgba(139,30,30,.45);
+      box-shadow:0 0 0 3px rgba(139,30,30,.14);
     }
     .footerBtns{
       display:flex;
       gap:10px;
       padding:14px 16px;
-      border-top:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
+      border-top:1px solid rgba(0,0,0,.10);
+      background: rgba(0,0,0,.03);
     }
     .footerBtns button{flex:1}
+    .btnDark{
+      border:none;
+      cursor:pointer;
+      padding:12px 14px;
+      border-radius: 14px;
+      font-weight:1000;
+      color:#fff;
+      background: linear-gradient(180deg, var(--brand2), var(--brand1));
+      box-shadow: 0 12px 28px rgba(139,30,30,.28);
+    }
+    .btnLight{
+      border:1px solid rgba(0,0,0,.12);
+      background: rgba(255,255,255,.75);
+      color: var(--ink);
+      padding:12px 14px;
+      border-radius: 14px;
+      font-weight:1000;
+      cursor:pointer;
+    }
 
     .stepsBackdrop{
       position:fixed; inset:0;
-      background:rgba(0,0,0,.68);
+      background:rgba(0,0,0,.55);
       display:none;
       align-items:center;
       justify-content:center;
@@ -542,21 +553,20 @@
     }
     .steps{
       width:min(760px, 100%);
-      background: rgba(10,12,20,.92);
-      backdrop-filter: blur(10px);
+      background: linear-gradient(180deg, var(--card), var(--card2));
       border-radius: 18px;
       overflow:hidden;
-      border:1px solid rgba(255,255,255,.12);
-      box-shadow: 0 40px 120px rgba(0,0,0,.60);
+      border:1px solid rgba(0,0,0,.12);
+      box-shadow: 0 40px 120px rgba(0,0,0,.35);
     }
     .stepsHead{
       padding:14px 16px;
       display:flex; justify-content:space-between; align-items:center; gap:10px;
-      border-bottom:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
+      border-bottom:1px solid rgba(0,0,0,.10);
+      background: rgba(0,0,0,.03);
     }
     .stepsHead .t{display:flex; flex-direction:column; gap:4px;}
-    .stepsHead .t b{font-size:16px}
+    .stepsHead .t b{font-size:16px; color: var(--ink)}
     .stepsHead .t span{font-size:12px; color:var(--muted); font-weight:900}
     .stepsBody{padding:14px 16px}
     .stepRow{display:grid; grid-template-columns:1fr 1fr; gap:10px}
@@ -564,28 +574,8 @@
     .stepsFoot{
       display:flex; gap:10px;
       padding:14px 16px;
-      border-top:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
-    }
-
-    .btnDark{
-      border:none;
-      cursor:pointer;
-      padding:12px 14px;
-      border-radius: 14px;
-      font-weight:1000;
-      color:#0b0c10;
-      background: linear-gradient(180deg, #00d1ff, #2f7cff);
-      box-shadow: 0 14px 32px rgba(0,209,255,.18);
-    }
-    .btnLight{
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      color: var(--ink);
-      padding:12px 14px;
-      border-radius: 14px;
-      font-weight:1000;
-      cursor:pointer;
+      border-top:1px solid rgba(0,0,0,.10);
+      background: rgba(0,0,0,.03);
     }
 
     .note{
@@ -593,10 +583,10 @@
       color: var(--muted);
       font-weight:900;
       line-height:1.35;
-      background: rgba(255,255,255,.04);
+      background: rgba(255,255,255,.70);
       padding:10px 12px;
       border-radius:14px;
-      border:1px solid rgba(255,255,255,.10);
+      border:1px solid rgba(0,0,0,.10);
       margin-top:12px;
     }
   </style>
@@ -739,23 +729,20 @@ const WHATSAPP_TAQ = "524621872594"; // 52 + número sin +
 const IMG_BASE = "";
 
 /** =========================
- *  CATALOGO (YA ADAPTADO)
- *  - Quité VOLCANES y GRINGAS
- *  - Dejé TACOS, ALAMBRES, BEBIDAS, EXTRAS
- *  - Combos reales
+ *  CATALOGO
  *  ========================= */
 const catalogo = [
-  // COMBOS (adaptados)
+  // COMBOS
   {id:"combo_tacos_bebida", cat:"COMBOS", name:"Combo Taquero", price:75, desc:"3 tacos (lengua/pastor/chorizo) + bebida.", mods:true, img:"combo_tacos_bebida.png"},
   {id:"combo_alambre_bebida", cat:"COMBOS", name:"Combo Alambre", price:115, desc:"1 alambre (mixto o pastor) + bebida.", mods:true, img:"combo_alambre_bebida.png"},
   {id:"combo_pareja", cat:"COMBOS", name:"Paquete para 2", price:210, desc:"6 tacos + 2 bebidas. Para compartir bien.", mods:true, img:"combo_pareja.png"},
 
-  // TACOS (solo 3)
+  // TACOS
   {id:"taco_lengua",  cat:"TACOS", name:"Taco de lengua",  price:18, desc:"Tortilla a elegir. Lengua bien servida.", mods:true, img:"taco_lengua.jpeg"},
   {id:"taco_pastor",  cat:"TACOS", name:"Taco al pastor",  price:18, desc:"Clásico pastor, con/sin piña.", mods:true, img:"taco_pastor.jpeg"},
   {id:"taco_chorizo", cat:"TACOS", name:"Taco de chorizo", price:18, desc:"Bien doradito, con salsa.", mods:true, img:"taco_chorizo.jpeg"},
 
-  // ALAMBRES (2)
+  // ALAMBRES
   {id:"alambre_mixto",  cat:"ALAMBRES", name:"Alambre mixto",  price:95, desc:"Queso + mixto. Perfecto para el hambre.", mods:true, img:"alambre_mixto.jpeg"},
   {id:"alambre_pastor", cat:"ALAMBRES", name:"Alambre al pastor", price:95, desc:"Queso + pastor. El consentido.", mods:true, img:"alambre_pastor.jpeg"},
 
@@ -772,9 +759,7 @@ const catalogo = [
 const CATS = ["COMBOS","TACOS","ALAMBRES","BEBIDAS","EXTRAS"];
 
 /** =========================
- *  MODIFICADORES (ajustados a tu menú)
- *  - Carne SOLO: Lengua, Pastor, Chorizo
- *  - En combos: eliges carne base o alambre
+ *  MODIFICADORES
  *  ========================= */
 const MODS = {
   carne: { title:"Carne", type:"single", required:true,
@@ -800,7 +785,6 @@ const MODS = {
 function modsPara(item){
   if(!item.mods) return [];
 
-  // combos: depende del combo
   if(item.cat === "COMBOS"){
     if(item.id === "combo_tacos_bebida") return ["carne","tortilla","conSin","salsas","bebida"];
     if(item.id === "combo_alambre_bebida") return ["alambreTipo","conSin","salsas","bebida"];
@@ -808,12 +792,8 @@ function modsPara(item){
     return ["bebida"];
   }
 
-  // tacos
   if(item.cat === "TACOS") return ["tortilla","conSin","salsas"];
-
-  // alambres
   if(item.cat === "ALAMBRES") return ["conSin","salsas"];
-
   return [];
 }
 
@@ -1086,18 +1066,15 @@ backdrop.addEventListener("click", (e)=>{ if(e.target===backdrop) closeModal(); 
 mAdd.onclick = ()=>{
   if(!currentItem || !draft) return;
 
-  // Reglas especiales: combos piden carne/alambre según el caso
   const err = validateRequired(currentItem, draft.mods);
   if(err){ alert(err); return; }
 
-  // Auto-completar carne para tacos cuando no hay selector carne (porque el taco ya define carne)
   if(currentItem.cat==="TACOS"){
     if(currentItem.id==="taco_lengua")  draft.mods["carne"]="Lengua";
     if(currentItem.id==="taco_pastor")  draft.mods["carne"]="Pastor";
     if(currentItem.id==="taco_chorizo") draft.mods["carne"]="Chorizo";
   }
 
-  // Auto-completar alambreTipo para alambres
   if(currentItem.cat==="ALAMBRES"){
     if(currentItem.id==="alambre_mixto")  draft.mods["alambreTipo"]="Mixto";
     if(currentItem.id==="alambre_pastor") draft.mods["alambreTipo"]="Pastor";
@@ -1361,7 +1338,7 @@ function buildWhatsAppText(){
   }
 
   lines.push(``);
-  lines.push(`${form.nombre}, tu pedido va en camino de la gloria 🌮✨`);
+  lines.push(`${form.nombre}, tu pedido queda listo 🌮`);
   return lines.join("\n");
 }
 
@@ -1375,8 +1352,6 @@ btnBack.onclick = ()=>{ if(step>1){ step--; renderStep(); } };
 btnNext.onclick = ()=>{
   const err = stepValidate();
   if(err){ alert(err); return; }
-
-  const canal = canalEl.value;
 
   if(step===1){ step=2; renderStep(); return; }
   if(step===2){ step=3; renderStep(); return; }
