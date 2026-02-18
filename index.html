@@ -125,7 +125,7 @@
       box-shadow: 0 0 0 6px rgba(31,107,42,.12);
     }
 
-    /* ===== UberEats-like category bar ===== */
+    /* ===== UberEats-like category bar (más interactiva) ===== */
     .catsBar{
       max-width: 1240px;
       margin:0 auto;
@@ -134,16 +134,26 @@
       align-items:center;
       gap:10px;
     }
-    .cats{
+
+    .catsWrap{
+      position:relative;
       flex:1;
+      min-width: 0;
+    }
+
+    .cats{
       display:flex;
       gap:10px;
       overflow:auto;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
-      padding-bottom: 2px;
+      padding: 2px 0 6px;
+      scroll-behavior:smooth;
+      scroll-snap-type: x mandatory;
+      overscroll-behavior-x: contain;
     }
     .cats::-webkit-scrollbar{display:none}
+
     .catBtn{
       flex:0 0 auto;
       display:flex;
@@ -160,6 +170,7 @@
       user-select:none;
       transition: transform .06s ease, filter .12s ease, background .12s ease;
       white-space:nowrap;
+      scroll-snap-align: start;
     }
     .catBtn:active{transform: translateY(1px)}
     .catIcon{
@@ -180,6 +191,37 @@
       background: rgba(255,255,255,.14);
       border-color: rgba(255,255,255,.22);
     }
+
+    /* sombras laterales para indicar scroll */
+    .catsFadeL,.catsFadeR{
+      position:absolute; top:-2px; bottom:-2px;
+      width: 60px;
+      pointer-events:none;
+      z-index: 3;
+      transition: opacity .15s ease;
+    }
+    .catsFadeL{ left:-2px; background: linear-gradient(90deg, rgba(251,242,226,1), rgba(251,242,226,0)); opacity:0; }
+    .catsFadeR{ right:-2px; background: linear-gradient(270deg, rgba(251,242,226,1), rgba(251,242,226,0)); opacity:1; }
+
+    /* botones flecha (desktop) */
+    .catsNav{
+      width:40px; height:40px;
+      border-radius: 999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.62);
+      box-shadow: var(--shadow2);
+      cursor:pointer;
+      display:grid; place-items:center;
+      font-weight:1000;
+      color: rgba(59,42,31,.90);
+      transition: transform .06s ease, filter .12s ease, opacity .12s ease;
+      user-select:none;
+    }
+    .catsNav:active{transform: translateY(1px)}
+    .catsNav:hover{filter: brightness(1.03)}
+    .catsNav[disabled]{opacity:.35; cursor:default; filter:none}
+    .catsNav svg{width:18px;height:18px}
+
     .catHint{
       font-size:12px;
       font-weight:900;
@@ -332,6 +374,7 @@
     }
     @media (max-width: 700px){
       .rCard{ flex-basis: 86vw; }
+      .catsNav{ display:none; }
     }
 
     .cover{
@@ -457,7 +500,7 @@
         <path d="M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="currentColor" stroke-width="2"/>
         <path d="M16.5 16.5 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
       </svg>
-      <input id="q" placeholder="Buscar… (chema, fundadores, zaragoza, carnicería, mayoreo)"/>
+      <input id="q" placeholder="Buscar… (taquería, pizza, sushi, bebidas, mayoreo)"/>
       <span class="kbd">Ctrl / ⌘ + K</span>
     </div>
 
@@ -469,24 +512,60 @@
 
   <!-- ===== Barra de categorías tipo Uber Eats ===== -->
   <div class="catsBar">
-    <div class="cats" id="cats">
-      <button class="catBtn active" data-cat="all">
-        <span class="catIcon">🏠</span> Todo
-      </button>
-      <button class="catBtn" data-cat="taquerias">
-        <span class="catIcon">🌮</span> Taquerías
-      </button>
-      <button class="catBtn" data-cat="menuderias">
-        <span class="catIcon">🥣</span> Menuderías
-      </button>
-      <button class="catBtn" data-cat="carniceria">
-        <span class="catIcon">🥩</span> Carnicería
-      </button>
-      <button class="catBtn" data-cat="mayoreo">
-        <span class="catIcon">📦</span> Venta Mayoreo
-      </button>
+    <button class="catsNav" id="catsPrev" aria-label="Anterior">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M15 6 9 12l6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+
+    <div class="catsWrap">
+      <div class="catsFadeL" id="catsFadeL"></div>
+      <div class="catsFadeR" id="catsFadeR"></div>
+
+      <div class="cats" id="cats">
+        <button class="catBtn active" data-cat="all">
+          <span class="catIcon">🏠</span> Todo
+        </button>
+
+        <button class="catBtn" data-cat="taquerias">
+          <span class="catIcon">🌮</span> Taquerías
+        </button>
+        <button class="catBtn" data-cat="menuderias">
+          <span class="catIcon">🥣</span> Menuderías
+        </button>
+        <button class="catBtn" data-cat="carniceria">
+          <span class="catIcon">🥩</span> Carnicería
+        </button>
+        <button class="catBtn" data-cat="mayoreo">
+          <span class="catIcon">📦</span> Venta Mayoreo
+        </button>
+
+        <!-- NUEVAS CATEGORÍAS -->
+        <button class="catBtn" data-cat="alitas">
+          <span class="catIcon">🍗</span> Alitas
+        </button>
+        <button class="catBtn" data-cat="pizza">
+          <span class="catIcon">🍕</span> Pizza
+        </button>
+        <button class="catBtn" data-cat="carne_asada">
+          <span class="catIcon">🔥</span> Carne Asada
+        </button>
+        <button class="catBtn" data-cat="sushi">
+          <span class="catIcon">🍣</span> Sushi
+        </button>
+        <button class="catBtn" data-cat="bebidas">
+          <span class="catIcon">🥤</span> Bebidas
+        </button>
+      </div>
     </div>
-    <div class="catHint">Tip: elige categoría para filtrar</div>
+
+    <button class="catsNav" id="catsNext" aria-label="Siguiente">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M9 6 15 12l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+
+    <div class="catHint">Tip: desliza la barra • o usa ← →</div>
   </div>
 </header>
 
@@ -500,6 +579,7 @@
       <div class="chip">🔎 Busca por nombre o tag</div>
       <div class="chip">📲 WhatsApp listo para enviar</div>
       <div class="chip">🧭 Barra tipo Uber Eats</div>
+      <div class="chip">🫰 La barra se mueve sola</div>
     </div>
   </section>
 
@@ -567,6 +647,81 @@
     </div>
   </section>
 
+  <!-- ===== ALITAS ===== -->
+  <section class="sec" data-sec="alitas">
+    <div class="secHead">
+      <div class="left">
+        <h2>🍗 Alitas <span class="pill" id="count_alitas">0</span></h2>
+        <div class="sub">Alitas, boneless, combos y extras</div>
+      </div>
+      <div class="sub">Se mueve solo • estilo panel</div>
+    </div>
+    <div class="carouselWrap">
+      <div class="fadeL"></div><div class="fadeR"></div>
+      <div class="cards" id="cards_alitas"></div>
+    </div>
+  </section>
+
+  <!-- ===== PIZZA ===== -->
+  <section class="sec" data-sec="pizza">
+    <div class="secHead">
+      <div class="left">
+        <h2>🍕 Pizza <span class="pill" id="count_pizza">0</span></h2>
+        <div class="sub">Pizzas, rebanadas, promo y bebidas</div>
+      </div>
+      <div class="sub">Se mueve solo • estilo panel</div>
+    </div>
+    <div class="carouselWrap">
+      <div class="fadeL"></div><div class="fadeR"></div>
+      <div class="cards" id="cards_pizza"></div>
+    </div>
+  </section>
+
+  <!-- ===== CARNE ASADA ===== -->
+  <section class="sec" data-sec="carne_asada">
+    <div class="secHead">
+      <div class="left">
+        <h2>🔥 Carne Asada <span class="pill" id="count_carne_asada">0</span></h2>
+        <div class="sub">Parrilla, tacos, papas, salsas</div>
+      </div>
+      <div class="sub">Se mueve solo • estilo panel</div>
+    </div>
+    <div class="carouselWrap">
+      <div class="fadeL"></div><div class="fadeR"></div>
+      <div class="cards" id="cards_carne_asada"></div>
+    </div>
+  </section>
+
+  <!-- ===== SUSHI ===== -->
+  <section class="sec" data-sec="sushi">
+    <div class="secHead">
+      <div class="left">
+        <h2>🍣 Sushi <span class="pill" id="count_sushi">0</span></h2>
+        <div class="sub">Rollos, bowls, combos y bebidas</div>
+      </div>
+      <div class="sub">Se mueve solo • estilo panel</div>
+    </div>
+    <div class="carouselWrap">
+      <div class="fadeL"></div><div class="fadeR"></div>
+      <div class="cards" id="cards_sushi"></div>
+    </div>
+  </section>
+
+  <!-- ===== BEBIDAS ===== -->
+  <section class="sec" data-sec="bebidas">
+    <div class="secHead">
+      <div class="left">
+        <h2>🥤 Bebidas <span class="pill" id="count_bebidas">0</span></h2>
+        <div class="sub">Aguas, refrescos, jugos, café</div>
+      </div>
+      <div class="sub">Se mueve solo • estilo panel</div>
+    </div>
+    <div class="carouselWrap">
+      <div class="fadeL"></div><div class="fadeR"></div>
+      <div class="cards" id="cards_bebidas"></div>
+    </div>
+  </section>
+
 </main>
 
 <script>
@@ -626,6 +781,63 @@ const CATALOG = {
       logoText:"📦",
       flavor:"hot"
     }
+  ],
+
+  /* ===== NUEVAS ===== */
+  alitas: [
+    {
+      id:"alitas_demo",
+      name:"Alitas (demo)",
+      desc:"Ejemplo: alitas, boneless, papas, salsas.",
+      tags:["Alitas","Combos","Pedidos"],
+      route:"#",
+      logoText:"🍗",
+      flavor:"hot"
+    }
+  ],
+  pizza: [
+    {
+      id:"pizza_demo",
+      name:"Pizza (demo)",
+      desc:"Ejemplo: pizzas, promo 2x1, rebanadas.",
+      tags:["Pizza","Promos","Pedidos"],
+      route:"#",
+      logoText:"🍕",
+      flavor:"cool"
+    }
+  ],
+  carne_asada: [
+    {
+      id:"asada_demo",
+      name:"Carne Asada (demo)",
+      desc:"Ejemplo: parrilladas, tacos, papas, salsas.",
+      tags:["Parrilla","Tacos","Pedidos"],
+      route:"#",
+      logoText:"🔥",
+      flavor:"hot"
+    }
+  ],
+  sushi: [
+    {
+      id:"sushi_demo",
+      name:"Sushi (demo)",
+      desc:"Ejemplo: rollos, bowls, combos.",
+      tags:["Sushi","Combos","Pedidos"],
+      route:"#",
+      logoText:"🍣",
+      flavor:"cool"
+    }
+  ],
+  bebidas: [
+    {
+      id:"bebidas_demo",
+      name:"Bebidas (demo)",
+      desc:"Ejemplo: aguas, refrescos, jugos, café.",
+      tags:["Bebidas","Extras","Pedidos"],
+      route:"#",
+      logoText:"🥤",
+      flavor:"cool"
+    }
   ]
 };
 
@@ -641,7 +853,13 @@ const sections = [
   { key:"taquerias",  secEl: document.querySelector('[data-sec="taquerias"]'),  el: document.getElementById("cards_taquerias"),  count: document.getElementById("count_taquerias") },
   { key:"menuderias", secEl: document.querySelector('[data-sec="menuderias"]'), el: document.getElementById("cards_menuderias"), count: document.getElementById("count_menuderias") },
   { key:"carniceria", secEl: document.querySelector('[data-sec="carniceria"]'), el: document.getElementById("cards_carniceria"), count: document.getElementById("count_carniceria") },
-  { key:"mayoreo",    secEl: document.querySelector('[data-sec="mayoreo"]'),    el: document.getElementById("cards_mayoreo"),    count: document.getElementById("count_mayoreo") }
+  { key:"mayoreo",    secEl: document.querySelector('[data-sec="mayoreo"]'),    el: document.getElementById("cards_mayoreo"),    count: document.getElementById("count_mayoreo") },
+
+  { key:"alitas",      secEl: document.querySelector('[data-sec="alitas"]'),      el: document.getElementById("cards_alitas"),      count: document.getElementById("count_alitas") },
+  { key:"pizza",       secEl: document.querySelector('[data-sec="pizza"]'),       el: document.getElementById("cards_pizza"),       count: document.getElementById("count_pizza") },
+  { key:"carne_asada", secEl: document.querySelector('[data-sec="carne_asada"]'), el: document.getElementById("cards_carne_asada"), count: document.getElementById("count_carne_asada") },
+  { key:"sushi",       secEl: document.querySelector('[data-sec="sushi"]'),       el: document.getElementById("cards_sushi"),       count: document.getElementById("count_sushi") },
+  { key:"bebidas",     secEl: document.querySelector('[data-sec="bebidas"]'),     el: document.getElementById("cards_bebidas"),     count: document.getElementById("count_bebidas") }
 ];
 
 /** =========================
@@ -713,7 +931,6 @@ function renderAll(filteredCatalog){
     const list = filteredCatalog[sec.key] || [];
     renderSection(sec, list);
 
-    // mostrar/ocultar sección según categoría activa
     const shouldShow = (activeCategory === "all") || (activeCategory === sec.key);
     sec.secEl.classList.toggle("hidden", !shouldShow);
 
@@ -730,7 +947,6 @@ function applyFilter(){
   const out = {};
   Object.keys(CATALOG).forEach(k=>{
     out[k] = (CATALOG[k]||[]).filter(item=>{
-      // si hay categoría activa, filtra catálogo visualmente por sección (la sección se oculta)
       if(!term) return true;
       const hay =
         (item.name||"").toLowerCase().includes(term) ||
@@ -763,8 +979,17 @@ document.addEventListener("keydown", (e)=>{
 });
 
 /** =========================
- *  Barra de categorías
+ *  Barra de categorías (con scroll + flechas + auto)
  *  ========================= */
+const catsEl = document.getElementById("cats");
+const catsPrev = document.getElementById("catsPrev");
+const catsNext = document.getElementById("catsNext");
+const catsFadeL = document.getElementById("catsFadeL");
+const catsFadeR = document.getElementById("catsFadeR");
+
+let catsAutoTimer = null;
+let catsPausedUntil = 0;
+
 function setActiveCat(cat){
   activeCategory = cat;
 
@@ -772,16 +997,89 @@ function setActiveCat(cat){
     b.classList.toggle("active", b.getAttribute("data-cat") === cat);
   });
 
-  // opcional: al cambiar categoría, sube al hero
-  // window.scrollTo({top:0, behavior:"smooth"});
-
-  applyFilter(); // re-render con categoría aplicada (oculta secciones)
+  applyFilter();
 }
 
-document.getElementById("cats").addEventListener("click", (e)=>{
+catsEl.addEventListener("click", (e)=>{
   const btn = e.target.closest(".catBtn");
   if(!btn) return;
   setActiveCat(btn.getAttribute("data-cat"));
+
+  // pequeño “focus” visual: centrar el chip seleccionado
+  centerChip(btn);
+});
+
+function maxScrollX(el){
+  return Math.max(0, el.scrollWidth - el.clientWidth);
+}
+
+function updateCatsUI(){
+  const max = maxScrollX(catsEl);
+  const x = catsEl.scrollLeft;
+
+  catsPrev.disabled = x <= 2;
+  catsNext.disabled = x >= max - 2;
+
+  catsFadeL.style.opacity = (x > 8) ? "1" : "0";
+  catsFadeR.style.opacity = (x < max - 8) ? "1" : "0";
+}
+
+function catsStep(){
+  // usa tamaño aproximado de 3 chips
+  const first = catsEl.querySelector(".catBtn");
+  const gap = parseFloat(getComputedStyle(catsEl).gap || "10");
+  const w = first ? first.getBoundingClientRect().width : 140;
+  return (w + gap) * 2.3;
+}
+
+function scrollCatsBy(dx){
+  catsEl.scrollTo({ left: catsEl.scrollLeft + dx, behavior:"smooth" });
+}
+
+catsPrev.addEventListener("click", ()=> scrollCatsBy(-catsStep()));
+catsNext.addEventListener("click", ()=> scrollCatsBy(catsStep()));
+
+catsEl.addEventListener("scroll", updateCatsUI, {passive:true});
+window.addEventListener("resize", updateCatsUI);
+
+function centerChip(btn){
+  const rect = btn.getBoundingClientRect();
+  const parentRect = catsEl.getBoundingClientRect();
+  const offset = (rect.left - parentRect.left) - (parentRect.width/2 - rect.width/2);
+  catsEl.scrollTo({ left: catsEl.scrollLeft + offset, behavior:"smooth" });
+}
+
+/* Auto-scroll suave de la barra (se pausa con interacción) */
+const CATS_AUTO_MS = 2600;
+const CATS_PAUSE_MS = 5200;
+
+function catsTick(){
+  if(Date.now() < catsPausedUntil) return;
+  const max = maxScrollX(catsEl);
+  if(max <= 0) return;
+
+  const next = catsEl.scrollLeft + catsStep();
+  if(next >= max - 6){
+    catsEl.scrollTo({left: 0, behavior:"smooth"});
+  }else{
+    catsEl.scrollTo({left: next, behavior:"smooth"});
+  }
+}
+
+function startCatsAuto(){
+  stopCatsAuto();
+  catsAutoTimer = setInterval(catsTick, CATS_AUTO_MS);
+}
+function stopCatsAuto(){
+  if(catsAutoTimer){
+    clearInterval(catsAutoTimer);
+    catsAutoTimer = null;
+  }
+}
+["wheel","touchstart","pointerdown","mouseenter"].forEach(ev=>{
+  catsEl.addEventListener(ev, ()=>{
+    catsPausedUntil = Date.now() + CATS_PAUSE_MS;
+  }, {passive:true});
 });
 
 /** =========================
@@ -805,7 +1103,6 @@ function tick(key){
   const cardsEl = sec?.el;
   if(!cardsEl) return;
 
-  // si la sección está oculta, no animar
   if(sec.secEl.classList.contains("hidden")) return;
 
   const state = auto[key];
@@ -867,6 +1164,8 @@ function escapeHtml(s){
  *  ========================= */
 sections.forEach(sec=> bindPause(sec.key, sec.el));
 renderAll(CATALOG);
+updateCatsUI();
+startCatsAuto();
 </script>
 </body>
 </html>
