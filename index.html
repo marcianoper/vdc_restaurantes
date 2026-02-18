@@ -8,18 +8,18 @@
   <style>
     :root{
       /* ===== TEMA MODESTO CREMA + CAFÉ ===== */
-      --bg:#f3e7d4;             /* crema */
-      --bg2:#efe0c9;            /* crema más cálido */
-      --paper:#fbf2e2;          /* papel */
-      --card:#fff7ea;           /* tarjeta */
+      --bg:#f3e7d4;
+      --bg2:#efe0c9;
+      --paper:#fbf2e2;
+      --card:#fff7ea;
       --line:rgba(59,42,31,.14);
 
-      --ink:#3b2a1f;            /* café oscuro */
-      --muted:#6e5646;          /* café suave */
+      --ink:#3b2a1f;
+      --muted:#6e5646;
 
-      --brand:#3b2a1f;          /* café (principal) */
-      --brand2:#c98a1e;         /* dorado sobrio */
-      --ok:#1f6b2a;             /* verde sobrio */
+      --brand:#3b2a1f;
+      --brand2:#c98a1e;
+      --ok:#1f6b2a;
 
       --shadow: 0 18px 50px rgba(32,24,16,.18);
       --shadow2: 0 10px 24px rgba(32,24,16,.14);
@@ -41,7 +41,7 @@
     /* ===== Top bar ===== */
     header{
       position:sticky; top:0; z-index:50;
-      background: rgba(251,242,226,.84);
+      background: rgba(251,242,226,.86);
       backdrop-filter: blur(12px);
       border-bottom:1px solid var(--line);
       box-shadow: 0 12px 26px rgba(32,24,16,.10);
@@ -49,7 +49,7 @@
     .top{
       max-width: 1240px;
       margin:0 auto;
-      padding:12px 14px;
+      padding:12px 14px 10px;
       display:flex;
       align-items:center;
       gap:12px;
@@ -86,6 +86,7 @@
       border-radius: 999px;
       padding:10px 12px;
       box-shadow: var(--shadow2);
+      min-width: 240px;
     }
     .search svg{width:18px;height:18px;opacity:.9;color:var(--muted)}
     .search input{
@@ -122,6 +123,72 @@
       width:10px; height:10px; border-radius:999px;
       background: var(--ok);
       box-shadow: 0 0 0 6px rgba(31,107,42,.12);
+    }
+
+    /* ===== UberEats-like category bar ===== */
+    .catsBar{
+      max-width: 1240px;
+      margin:0 auto;
+      padding: 8px 14px 12px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .cats{
+      flex:1;
+      display:flex;
+      gap:10px;
+      overflow:auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding-bottom: 2px;
+    }
+    .cats::-webkit-scrollbar{display:none}
+    .catBtn{
+      flex:0 0 auto;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 14px;
+      border-radius: 999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.62);
+      box-shadow: 0 10px 22px rgba(32,24,16,.10);
+      cursor:pointer;
+      font-weight:1000;
+      color: rgba(59,42,31,.92);
+      user-select:none;
+      transition: transform .06s ease, filter .12s ease, background .12s ease;
+      white-space:nowrap;
+    }
+    .catBtn:active{transform: translateY(1px)}
+    .catIcon{
+      width:34px; height:34px;
+      border-radius: 999px;
+      display:grid; place-items:center;
+      background: rgba(201,138,30,.14);
+      border: 1px solid rgba(201,138,30,.22);
+      font-size:18px;
+    }
+    .catBtn.active{
+      background: rgba(59,42,31,.90);
+      border-color: rgba(59,42,31,.70);
+      color:#fff;
+      box-shadow: 0 18px 40px rgba(32,24,16,.18);
+    }
+    .catBtn.active .catIcon{
+      background: rgba(255,255,255,.14);
+      border-color: rgba(255,255,255,.22);
+    }
+    .catHint{
+      font-size:12px;
+      font-weight:900;
+      color: rgba(110,86,70,.85);
+      border:1px dashed rgba(59,42,31,.20);
+      background: rgba(255,255,255,.35);
+      padding:10px 12px;
+      border-radius: 14px;
+      white-space:nowrap;
     }
 
     /* ===== Layout ===== */
@@ -257,11 +324,14 @@
       overflow:hidden;
       scroll-snap-align: start;
     }
-    @media (max-width: 700px){
-      .rCard{ flex-basis: 86vw; }
+    @media (max-width: 920px){
       .brand{min-width:auto}
       .status{display:none}
       .kbd{display:none}
+      .catHint{display:none}
+    }
+    @media (max-width: 700px){
+      .rCard{ flex-basis: 86vw; }
     }
 
     .cover{
@@ -377,8 +447,8 @@
     <div class="brand">
       <div class="mark">VDC</div>
       <div class="t">
-        <b>Central de Restaurantes</b>
-        <span>Panel de navegación (menús + pedidos)</span>
+        <b>Central de Servicios</b>
+        <span>Menús + pedidos + mayoreo</span>
       </div>
     </div>
 
@@ -387,7 +457,7 @@
         <path d="M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="currentColor" stroke-width="2"/>
         <path d="M16.5 16.5 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
       </svg>
-      <input id="q" placeholder="Buscar… (chema, fundadores, zaragoza, pastor, menudo)"/>
+      <input id="q" placeholder="Buscar… (chema, fundadores, zaragoza, carnicería, mayoreo)"/>
       <span class="kbd">Ctrl / ⌘ + K</span>
     </div>
 
@@ -396,22 +466,45 @@
       Operación lista
     </div>
   </div>
+
+  <!-- ===== Barra de categorías tipo Uber Eats ===== -->
+  <div class="catsBar">
+    <div class="cats" id="cats">
+      <button class="catBtn active" data-cat="all">
+        <span class="catIcon">🏠</span> Todo
+      </button>
+      <button class="catBtn" data-cat="taquerias">
+        <span class="catIcon">🌮</span> Taquerías
+      </button>
+      <button class="catBtn" data-cat="menuderias">
+        <span class="catIcon">🥣</span> Menuderías
+      </button>
+      <button class="catBtn" data-cat="carniceria">
+        <span class="catIcon">🥩</span> Carnicería
+      </button>
+      <button class="catBtn" data-cat="mayoreo">
+        <span class="catIcon">📦</span> Venta Mayoreo
+      </button>
+    </div>
+    <div class="catHint">Tip: elige categoría para filtrar</div>
+  </div>
 </header>
 
 <main class="wrap">
 
   <section class="hero">
-    <h1>Panel Central de Restaurantes</h1>
-    <p>Entra a cada negocio en segundos. Menús listos para ordenar, diseñado para que la operación fluya sin fricción.</p>
+    <h1>Panel Central de Servicios</h1>
+    <p>Elige una categoría arriba y entra a cada negocio en segundos. Todo listo para ordenar y operar.</p>
     <div class="mini">
       <div class="chip">⚡ Enter abre el primer resultado</div>
       <div class="chip">🔎 Busca por nombre o tag</div>
       <div class="chip">📲 WhatsApp listo para enviar</div>
+      <div class="chip">🧭 Barra tipo Uber Eats</div>
     </div>
   </section>
 
   <!-- ===== TAQUERÍAS ===== -->
-  <section class="sec">
+  <section class="sec" data-sec="taquerias">
     <div class="secHead">
       <div class="left">
         <h2>🌮 Taquerías <span class="pill" id="count_taquerias">0</span></h2>
@@ -427,7 +520,7 @@
   </section>
 
   <!-- ===== MENUDERÍAS ===== -->
-  <section class="sec">
+  <section class="sec" data-sec="menuderias">
     <div class="secHead">
       <div class="left">
         <h2>🥣 Menuderías <span class="pill" id="count_menuderias">0</span></h2>
@@ -442,11 +535,27 @@
     </div>
   </section>
 
-  <!-- ===== CARNES MAYOREO ===== -->
-  <section class="sec">
+  <!-- ===== CARNICERÍA ===== -->
+  <section class="sec" data-sec="carniceria">
     <div class="secHead">
       <div class="left">
-        <h2>🥩 Carnes por Mayoreo <span class="pill" id="count_mayoreo">0</span></h2>
+        <h2>🥩 Carnicería <span class="pill" id="count_carniceria">0</span></h2>
+        <div class="sub">Catálogos de carne, cortes y pedidos</div>
+      </div>
+      <div class="sub">Se mueve solo • estilo panel</div>
+    </div>
+
+    <div class="carouselWrap">
+      <div class="fadeL"></div><div class="fadeR"></div>
+      <div class="cards" id="cards_carniceria"></div>
+    </div>
+  </section>
+
+  <!-- ===== MAYOREO ===== -->
+  <section class="sec" data-sec="mayoreo">
+    <div class="secHead">
+      <div class="left">
+        <h2>📦 Venta Mayoreo <span class="pill" id="count_mayoreo">0</span></h2>
         <div class="sub">Accesos a compra y pedidos por volumen</div>
       </div>
       <div class="sub">Se mueve solo • estilo panel</div>
@@ -496,14 +605,25 @@ const CATALOG = {
       flavor:"cool"
     }
   ],
+  carniceria: [
+    {
+      id:"carnes_cvc",
+      name:"Carnicería CVC",
+      desc:"Catálogo de cortes y pedidos (ejemplo).",
+      tags:["Catálogo","Pedidos","WhatsApp"],
+      route:"#",
+      logoText:"🥩",
+      flavor:"cool"
+    }
+  ],
   mayoreo: [
     {
-      id:"cvc",
-      name:"Carnes y Vísceras del Centro",
+      id:"cvc_mayoreo",
+      name:"Carnes y Vísceras del Centro — Mayoreo",
       desc:"Acceso a pedidos por volumen (vísceras, cajas, inventario).",
       tags:["Mayoreo","Pedidos","Operación"],
       route:"carnes-mayoreo/index.html",
-      logoText:"🥩",
+      logoText:"📦",
       flavor:"hot"
     }
   ]
@@ -518,10 +638,16 @@ const PAUSE_ON_INTERACT_MS = 4500;
 const q = document.getElementById("q");
 
 const sections = [
-  { key:"taquerias", el: document.getElementById("cards_taquerias"), count: document.getElementById("count_taquerias") },
-  { key:"menuderias", el: document.getElementById("cards_menuderias"), count: document.getElementById("count_menuderias") },
-  { key:"mayoreo", el: document.getElementById("cards_mayoreo"), count: document.getElementById("count_mayoreo") }
+  { key:"taquerias",  secEl: document.querySelector('[data-sec="taquerias"]'),  el: document.getElementById("cards_taquerias"),  count: document.getElementById("count_taquerias") },
+  { key:"menuderias", secEl: document.querySelector('[data-sec="menuderias"]'), el: document.getElementById("cards_menuderias"), count: document.getElementById("count_menuderias") },
+  { key:"carniceria", secEl: document.querySelector('[data-sec="carniceria"]'), el: document.getElementById("cards_carniceria"), count: document.getElementById("count_carniceria") },
+  { key:"mayoreo",    secEl: document.querySelector('[data-sec="mayoreo"]'),    el: document.getElementById("cards_mayoreo"),    count: document.getElementById("count_mayoreo") }
 ];
+
+/** =========================
+ *  Estado de filtros
+ *  ========================= */
+let activeCategory = "all";
 
 /** =========================
  *  Render
@@ -584,13 +710,19 @@ function renderSection(sec, list){
 
 function renderAll(filteredCatalog){
   sections.forEach(sec=>{
-    renderSection(sec, filteredCatalog[sec.key] || []);
+    const list = filteredCatalog[sec.key] || [];
+    renderSection(sec, list);
+
+    // mostrar/ocultar sección según categoría activa
+    const shouldShow = (activeCategory === "all") || (activeCategory === sec.key);
+    sec.secEl.classList.toggle("hidden", !shouldShow);
+
     resetAuto(sec.key);
   });
 }
 
 /** =========================
- *  Search (global)
+ *  Search + Category filter
  *  ========================= */
 function applyFilter(){
   const term = (q.value||"").trim().toLowerCase();
@@ -598,6 +730,7 @@ function applyFilter(){
   const out = {};
   Object.keys(CATALOG).forEach(k=>{
     out[k] = (CATALOG[k]||[]).filter(item=>{
+      // si hay categoría activa, filtra catálogo visualmente por sección (la sección se oculta)
       if(!term) return true;
       const hay =
         (item.name||"").toLowerCase().includes(term) ||
@@ -613,21 +746,42 @@ function applyFilter(){
 
 q.addEventListener("input", applyFilter);
 
-/** Ctrl/Cmd + K focus */
+/** Ctrl/Cmd + K focus + Enter abre primer resultado visible */
 document.addEventListener("keydown", (e)=>{
   const isK = (e.key||"").toLowerCase()==="k";
   if((e.ctrlKey || e.metaKey) && isK){
     e.preventDefault();
-    q.focus();
-    q.select();
+    q.focus(); q.select();
   }
-  // Enter abre primer resultado visible
   if(e.key === "Enter" && document.activeElement === q){
-    const first = document.querySelector(".rCard");
+    const visibleSection = sections.find(s => !s.secEl.classList.contains("hidden"));
+    const first = visibleSection?.el?.querySelector(".rCard") || document.querySelector(".rCard");
     if(first){
       window.location.href = first.getAttribute("data-route");
     }
   }
+});
+
+/** =========================
+ *  Barra de categorías
+ *  ========================= */
+function setActiveCat(cat){
+  activeCategory = cat;
+
+  document.querySelectorAll(".catBtn").forEach(b=>{
+    b.classList.toggle("active", b.getAttribute("data-cat") === cat);
+  });
+
+  // opcional: al cambiar categoría, sube al hero
+  // window.scrollTo({top:0, behavior:"smooth"});
+
+  applyFilter(); // re-render con categoría aplicada (oculta secciones)
+}
+
+document.getElementById("cats").addEventListener("click", (e)=>{
+  const btn = e.target.closest(".catBtn");
+  if(!btn) return;
+  setActiveCat(btn.getAttribute("data-cat"));
 });
 
 /** =========================
@@ -647,8 +801,12 @@ function maxScroll(cardsEl){
 }
 
 function tick(key){
-  const cardsEl = sections.find(s=>s.key===key)?.el;
+  const sec = sections.find(s=>s.key===key);
+  const cardsEl = sec?.el;
   if(!cardsEl) return;
+
+  // si la sección está oculta, no animar
+  if(sec.secEl.classList.contains("hidden")) return;
 
   const state = auto[key];
   if(!state) return;
