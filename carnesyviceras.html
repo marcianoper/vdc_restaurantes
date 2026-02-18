@@ -3,105 +3,101 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Catálogo Mayoreo — Carnicería (VDC)</title>
+  <title>Catálogo — Carnicería Mayoreo</title>
 
   <style>
     :root{
-      /* TEMA PRO (claro premium) */
+      /* TEMA CARNICERÍA MAYOREO: limpio + premium + verde */
       --bg:#f6f7fb;
-      --paper:#ffffff;
+      --bg2:#eef2f7;
       --card:#ffffff;
       --ink:#0f172a;
       --muted:#64748b;
       --line:rgba(15,23,42,.10);
 
-      --brand:#0a7a3b;     /* verde CVC */
-      --brand2:#0f9a52;    /* verde acento */
-      --gold:#caa25a;      /* toque premium */
-      --danger:#b91c1c;
-
+      --brand:#0a7a3b;
+      --brand2:#0f9a52;
+      --gold:#caa25a;
+      --green:#166534;
       --shadow: 0 18px 55px rgba(2,6,23,.10);
-      --shadow2: 0 10px 24px rgba(2,6,23,.08);
       --r:18px;
     }
 
     *{box-sizing:border-box}
-    html,body{height:100%}
     body{
       margin:0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
       color:var(--ink);
       background:
-        radial-gradient(1200px 520px at 15% -10%, rgba(15,154,82,.12), transparent 60%),
-        radial-gradient(900px 420px at 95% 0%, rgba(202,162,90,.12), transparent 55%),
-        var(--bg);
+        radial-gradient(1200px 520px at 12% -10%, rgba(15,154,82,.12), transparent 60%),
+        radial-gradient(1000px 520px at 90% 0%, rgba(202,162,90,.10), transparent 60%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
     }
 
-    /* ===== Top Bar ===== */
+    /* TOP BAR */
     header{
-      position:sticky; top:0; z-index:40;
-      background: rgba(246,247,251,.78);
-      backdrop-filter: blur(12px);
-      border-bottom:1px solid var(--line);
+      position: sticky; top: 0; z-index: 40;
+      padding: 12px 14px;
+      background: rgba(246,247,251,.86);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+      box-shadow: 0 10px 26px rgba(2,6,23,.08);
     }
-    .top{
+    header .row{
       max-width:1200px;
       margin:0 auto;
-      padding:12px 14px;
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:12px;
     }
     .brand{
-      display:flex; align-items:center; gap:10px; min-width:0;
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+      line-height:1.05;
+      min-width:0;
     }
-    .mark{
-      width:44px; height:44px;
-      border-radius:16px;
-      background: linear-gradient(180deg, var(--brand2), var(--brand));
-      box-shadow: 0 14px 28px rgba(15,154,82,.18);
-      display:grid; place-items:center;
-      color:#fff; font-weight:1000;
-      letter-spacing:.5px;
-    }
-    .btxt{display:flex;flex-direction:column;gap:2px;min-width:0}
-    .btxt b{
-      font-size:14px; letter-spacing:-.2px;
-      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-      text-align:left;
-    }
-    .btxt span{
-      font-size:12px; color:var(--muted); font-weight:900;
-      text-align:left;
-    }
-
-    .rightPills{display:flex; gap:10px; align-items:center}
-    .pill{
-      display:flex; align-items:center; gap:10px;
-      padding:10px 12px;
-      border-radius:999px;
-      background: #fff;
-      border:1px solid var(--line);
-      box-shadow: var(--shadow2);
+    .brand h1{
+      margin:0;
+      font-size:16px;
+      letter-spacing:.2px;
       font-weight:1000;
       white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
     }
-    .pill .dot{
-      width:10px;height:10px;border-radius:999px;
-      background: var(--brand2);
-      box-shadow: 0 0 0 6px rgba(15,154,82,.12);
+    .brand .sub{
+      font-size:12px;
+      color: var(--muted);
+      font-weight:900;
     }
+
+    .pill{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.62));
+      box-shadow: 0 12px 28px rgba(2,6,23,.08);
+      font-weight:1000;
+      font-size:12px;
+      white-space:nowrap;
+      user-select:none;
+    }
+    .pill b{font-size:13px}
     .pill .amt{
-      padding:6px 10px;
+      padding:4px 8px;
       border-radius:999px;
       background: rgba(15,154,82,.10);
-      border:1px solid rgba(15,154,82,.18);
-      color:#0b5b2d;
+      border: 1px solid rgba(15,154,82,.16);
+      color: #14532d;
       font-weight:1000;
     }
 
-    /* ===== Layout ===== */
+    /* LAYOUT */
     .wrap{
       max-width:1200px;
       margin:0 auto;
@@ -109,449 +105,516 @@
       display:grid;
       gap:14px;
     }
-    .hero{
-      border-radius: 22px;
-      background: linear-gradient(180deg, rgba(255,255,255,1), rgba(255,255,255,.92));
-      border:1px solid var(--line);
-      box-shadow: var(--shadow);
-      padding:18px 16px;
-      display:grid;
-      grid-template-columns: 1.6fr 1fr;
-      gap:14px;
-      align-items:center;
-      overflow:hidden;
-      position:relative;
-    }
-    .hero:before{
-      content:"";
-      position:absolute; inset:-60px -120px auto auto;
-      width:520px; height:520px; border-radius:50%;
-      background: radial-gradient(circle at 30% 30%, rgba(15,154,82,.18), rgba(15,154,82,0) 60%);
-      pointer-events:none;
-    }
-    @media (max-width: 980px){ .hero{grid-template-columns:1fr} }
-
-    .hero h1{
-      margin:0;
-      font-size:28px;
-      letter-spacing:-.6px;
-      text-align:left;
-    }
-    .hero p{
-      margin:8px 0 0;
-      color:var(--muted);
-      font-weight:900;
-      line-height:1.25;
-      max-width: 700px;
-      text-align:left;
-    }
-    .chips{display:flex; flex-wrap:wrap; gap:10px; margin-top:12px}
-    .chip{
-      display:inline-flex; align-items:center; gap:8px;
-      padding:8px 12px;
-      border-radius:999px;
-      background: rgba(15,154,82,.10);
-      border:1px solid rgba(15,154,82,.18);
-      color:#0b5b2d;
-      font-weight:1000;
-      font-size:12px;
-    }
-    .heroCard{
-      background: #fff;
-      border:1px solid var(--line);
-      border-radius: 18px;
-      box-shadow: var(--shadow2);
-      padding:14px;
-    }
-    .heroCard b{display:block; font-size:12px; color:var(--muted); letter-spacing:.2px}
-    .heroCard .big{
-      margin-top:8px;
-      font-weight:1000;
-      font-size:16px;
-      line-height:1.2;
-      text-align:left;
-    }
-    .heroCard .small{
-      margin-top:10px;
-      color:var(--muted);
-      font-weight:900;
-      font-size:12px;
-      line-height:1.25;
-      text-align:left;
-    }
-
     .grid{
       display:grid;
-      grid-template-columns: 1.6fr 1fr;
+      grid-template-columns: 1.55fr .95fr;
       gap:14px;
       align-items:start;
     }
-    @media (max-width: 980px){ .grid{grid-template-columns:1fr} }
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr}
+    }
 
+    /* HERO */
+    .hero{
+      border-radius: 22px;
+      overflow:hidden;
+      border:1px solid var(--line);
+      box-shadow: var(--shadow);
+      background: linear-gradient(180deg, rgba(255,255,255,.85), rgba(255,255,255,.60));
+      position:relative;
+    }
+    .hero::before{
+      content:"";
+      position:absolute; inset:0;
+      background:
+        radial-gradient(650px 260px at 20% 20%, rgba(15,154,82,.10), transparent 60%),
+        radial-gradient(650px 260px at 80% 30%, rgba(202,162,90,.10), transparent 60%);
+      pointer-events:none;
+    }
+    .heroTop{
+      padding:18px 16px;
+      display:flex; align-items:flex-end; justify-content:space-between; gap:12px;
+      position:relative; z-index:2;
+    }
+    .heroTop .left{
+      display:flex; flex-direction:column; gap:8px;
+    }
+    .heroTitle{
+      margin:0;
+      font-size:26px;
+      letter-spacing:-.6px;
+      font-weight:1100;
+    }
+    .heroDesc{
+      margin:0;
+      color: var(--muted);
+      font-weight:900;
+      line-height:1.25;
+      max-width: 720px;
+    }
+    .badgeRow{display:flex; flex-wrap:wrap; gap:10px; margin-top:4px}
+    .chip{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.70);
+      border:1px solid var(--line);
+      font-weight:1000;
+      font-size:12px;
+      color: #0f172a;
+    }
+    .heroImg{
+      width:100%;
+      height: 220px;
+      object-fit: cover;
+      display:block;
+      filter: contrast(1.02) saturate(1.02);
+    }
+    @media (max-width:520px){
+      .heroImg{height:160px}
+      .heroTitle{font-size:22px}
+    }
+
+    /* CARD */
     .card{
-      background: var(--card);
+      background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.70));
       border:1px solid var(--line);
       border-radius: var(--r);
       box-shadow: var(--shadow);
       overflow:hidden;
     }
-    .cardHead{
-      padding:14px 14px;
+    .card h2{
+      margin:0;
+      padding:14px 14px 10px;
+      font-size:14px;
+      font-weight:1000;
+      letter-spacing:.3px;
       border-bottom:1px solid var(--line);
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:10px;
-      background: linear-gradient(180deg, rgba(15,154,82,.06), rgba(15,154,82,0));
-    }
-    .cardHead h2{
-      margin:0;
-      font-size:14px;
-      letter-spacing:.2px;
-      font-weight:1000;
-      text-align:left;
-    }
-    .cardHead .sub{
-      font-size:12px;
-      color:var(--muted);
-      font-weight:900;
-      text-align:right;
+      background: rgba(255,255,255,.65);
     }
     .content{padding:14px}
 
-    /* ===== Category Blocks ===== */
-    .blocks{
-      display:grid;
-      grid-template-columns: repeat(3, minmax(0,1fr));
-      gap:10px;
-      margin-bottom:12px;
-    }
-    @media (max-width: 700px){ .blocks{grid-template-columns:1fr} }
-    .blk{
-      border:1px solid var(--line);
-      border-radius: 16px;
-      padding:12px;
-      background: rgba(2,6,23,.02);
-      cursor:pointer;
-      user-select:none;
-      transition:.15s ease;
-      text-align:center;
-      font-weight:1000;
-    }
-    .blk small{display:block; margin-top:6px; color:var(--muted); font-weight:900}
-    .blk.active{
-      background: rgba(15,154,82,.10);
-      border-color: rgba(15,154,82,.25);
-      box-shadow: 0 0 0 3px rgba(15,154,82,.14);
-    }
-
-    /* ===== Search ===== */
+    /* SEARCH + TABS */
     .searchRow{
-      display:flex; gap:10px; align-items:center;
-      margin-bottom:12px;
+      display:flex; gap:10px; align-items:center; margin-top:12px;
     }
     .searchRow input{
-      width:100%;
-      border:1px solid var(--line);
-      border-radius: 14px;
+      flex:1;
       padding:12px 12px;
-      background:#fff;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.78);
       outline:none;
       font-size:14px;
+      color: var(--ink);
+    }
+    .searchRow input::placeholder{color: rgba(100,116,139,.85)}
+
+    .tabs{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin: 12px 0 10px;
+    }
+    .tab{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.78);
+      padding:10px 14px;
+      border-radius: 999px;
+      font-weight:1000;
+      font-size:13px;
+      cursor:pointer;
+      user-select:none;
+      letter-spacing:.2px;
+      box-shadow: 0 10px 22px rgba(2,6,23,.08);
+    }
+    .tab.active{
+      border-color: rgba(15,154,82,.32);
+      background: rgba(15,154,82,.10);
+      box-shadow: 0 0 0 3px rgba(15,154,82,.12), 0 14px 28px rgba(2,6,23,.10);
     }
 
-    /* ===== Product Grid ===== */
+    .sectionTitle{
+      margin: 10px 0 8px;
+      font-size: 34px;
+      letter-spacing: .4px;
+      font-weight: 1100;
+      line-height:1;
+      color: #0f172a;
+      text-align:left;
+    }
+    .divider{
+      height: 4px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(15,154,82,.92), rgba(202,162,90,.88));
+      opacity:.85;
+      margin: 8px 0 18px;
+    }
+
+    /* PRODUCT GRID */
     .items{
       display:grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap:12px;
+      gap:14px;
     }
-    @media (max-width: 640px){ .items{grid-template-columns:1fr} }
+    @media (max-width: 620px){
+      .items{grid-template-columns:1fr}
+      .sectionTitle{font-size:28px}
+    }
 
+    /* PRODUCT CARD */
     .prod{
+      background: rgba(255,255,255,.75);
       border:1px solid var(--line);
       border-radius: 18px;
       overflow:hidden;
-      background:#fff;
-      box-shadow: var(--shadow2);
       display:grid;
-      grid-template-columns: 120px 1fr;
-      min-height: 120px;
-    }
-    .pImg{
-      background: linear-gradient(180deg, rgba(15,154,82,.10), rgba(15,154,82,0));
+      grid-template-columns: 1fr 1.05fr;
+      min-height: 178px;
+      box-shadow: 0 16px 44px rgba(2,6,23,.10);
       position:relative;
     }
-    .pImg img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      display:block;
+    .prod::before{
+      content:"";
+      position:absolute; inset:0;
+      background:
+        radial-gradient(460px 200px at 15% 20%, rgba(15,154,82,.08), transparent 65%),
+        radial-gradient(460px 200px at 85% 55%, rgba(202,162,90,.08), transparent 70%);
+      pointer-events:none;
     }
-    .pBody{
-      padding:12px 12px;
+    .prodLeft{
+      padding:14px 14px 12px;
       display:flex;
       flex-direction:column;
-      gap:6px;
-      text-align:left;
+      gap:8px;
+      position:relative;
+      z-index:2;
     }
-    .pName{
+    .prodName{
+      font-weight:1100;
+      font-size: 18px;
       margin:0;
-      font-size:16px;
-      font-weight:1000;
-      letter-spacing:-.2px;
-    }
-    .pDesc{
-      margin:0;
-      color:var(--muted);
-      font-weight:900;
-      font-size:12px;
-      line-height:1.25;
-      min-height: 30px;
-    }
-    .pMeta{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      margin-top:auto;
+      letter-spacing:.2px;
     }
     .badge{
-      font-size:12px;
-      font-weight:1000;
-      padding:7px 10px;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      width:max-content;
+      padding:6px 10px;
       border-radius:999px;
-      background: rgba(202,162,90,.12);
-      border:1px solid rgba(202,162,90,.20);
-      color:#6b4e1e;
-      white-space:nowrap;
+      font-size:12px;
+      font-weight:1100;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.82);
+      color: #0f172a;
     }
+    .prodDesc{
+      margin:0;
+      color: var(--muted);
+      font-weight:900;
+      line-height:1.25;
+      font-size:13px;
+    }
+    .price{
+      margin-top:auto;
+      font-weight:1100;
+      color: #14532d;
+      font-size: 13px;
+    }
+    .price b{
+      display:block;
+      font-size: 30px;
+      letter-spacing:.2px;
+      color: var(--green);
+      text-shadow: 0 0 18px rgba(15,154,82,.12);
+    }
+
+    .prodRight{
+      position:relative;
+      z-index:2;
+      padding:12px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      gap:10px;
+    }
+    .prodImg{
+      width: 100%;
+      height: 96px;
+      border-radius: 16px;
+      overflow:hidden;
+      background: #eef2f7;
+      box-shadow: 0 14px 34px rgba(2,6,23,.12);
+      border: 1px solid var(--line);
+    }
+    .prodImg img{
+      width:100%;
+      height:100%;
+      object-fit: cover;
+      display:block;
+    }
+
+    /* BOTÓN AGREGAR */
     .btnAdd{
       border:none;
       cursor:pointer;
-      padding:10px 12px;
-      border-radius: 14px;
-      font-weight:1000;
-      background: linear-gradient(180deg, var(--brand2), var(--brand));
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-weight: 1100;
       color:#fff;
-      box-shadow: 0 12px 28px rgba(15,154,82,.18);
-      white-space:nowrap;
+      background: linear-gradient(180deg, var(--brand2), var(--brand));
+      box-shadow: 0 14px 30px rgba(15,154,82,.18);
+      font-size: 15px;
+      min-width: 150px;
     }
     .btnAdd:active{transform: translateY(1px)}
 
-    /* ===== Cart ===== */
-    label{
-      display:block;
-      font-size:12px;
-      color:var(--muted);
-      font-weight:1000;
-      margin:10px 0 6px;
-      text-align:left;
-    }
-    input, select, textarea{
-      width:100%;
-      border:1px solid var(--line);
-      border-radius: 14px;
-      padding:12px 12px;
-      outline:none;
-      font-size:14px;
-      background:#fff;
-      color:var(--ink);
-    }
-    textarea{min-height:90px; resize:vertical}
+    /* CART */
     .cartLine{
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
+      display:flex; justify-content:space-between; gap:10px; align-items:flex-start;
+      border-bottom:1px dashed rgba(15,23,42,.20);
       padding:10px 0;
-      border-bottom:1px dashed rgba(15,23,42,.18);
     }
     .cartLine:last-child{border-bottom:none}
+    .muted{color: var(--muted)}
     .qtyRow{display:flex; gap:6px; align-items:center}
     .mini{
-      width:34px; height:34px;
+      width:32px; height:32px;
       border-radius:12px;
       border:1px solid var(--line);
-      background: rgba(2,6,23,.02);
+      background: rgba(255,255,255,.78);
       cursor:pointer;
-      font-weight:1000;
+      font-weight:1100;
+      color: var(--ink);
     }
     .mini:active{transform: translateY(1px)}
-    .muted{color:var(--muted); font-weight:900}
+    label{
+      display:block; font-size:12px; font-weight:1100; margin:10px 0 6px;
+      color: rgba(15,23,42,.86);
+    }
+    input, textarea, select{
+      width:100%;
+      padding:12px 12px;
+      border:1px solid var(--line);
+      border-radius:14px;
+      font-size:14px;
+      outline:none;
+      background: rgba(255,255,255,.78);
+      color: var(--ink);
+    }
+    textarea{min-height:90px; resize:vertical}
+    input::placeholder, textarea::placeholder{color: rgba(100,116,139,.85)}
 
     .totalRow{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      padding-top:12px;
-      margin-top:12px;
-      border-top:1px solid var(--line);
-      font-weight:1000;
+      display:flex; justify-content:space-between; align-items:center;
+      padding-top:12px; margin-top:12px;
+      border-top:1px solid rgba(15,23,42,.18);
+      font-size:14px;
+      font-weight:1100;
     }
-    .totalRow strong{font-size:18px; color:var(--brand)}
+    .totalRow strong{
+      font-size:18px;
+      color: #14532d;
+    }
 
-    .actions{
+    /* STICKY BAR */
+    .stickyBar{
+      position: sticky;
+      bottom: 12px;
+      z-index: 25;
+      margin-top: 12px;
+      border-radius: 16px;
+      border:1px solid rgba(15,23,42,.14);
+      background: rgba(246,247,251,.92);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 16px 60px rgba(2,6,23,.12);
       display:flex;
+      align-items:center;
+      justify-content:space-between;
       gap:10px;
-      margin-top:12px;
+      padding: 10px 10px 10px 12px;
+    }
+    .stickyBar .left{
+      display:flex; align-items:center; gap:10px;
+      font-weight:1100;
+    }
+    .stickyBar .amount{
+      font-size:18px;
+      letter-spacing:.2px;
+      color: var(--green);
+    }
+    .stickyBtn{
+      border:none;
+      cursor:pointer;
+      padding: 12px 16px;
+      border-radius: 14px;
+      font-weight: 1100;
+      color:#fff;
+      background: linear-gradient(180deg, var(--brand2), var(--brand));
+      box-shadow: 0 14px 30px rgba(15,154,82,.18);
+      min-width: 160px;
     }
     .btnGhost{
-      flex:1;
-      border:1px solid var(--line);
-      background: rgba(2,6,23,.02);
-      color:var(--ink);
+      border:1px solid rgba(15,23,42,.14);
+      background: rgba(255,255,255,.82);
+      color:#0f172a;
+      padding: 10px 12px;
       border-radius: 14px;
-      padding:12px 12px;
-      font-weight:1000;
+      font-weight: 1100;
       cursor:pointer;
-    }
-    .btnMain{
-      flex:1.2;
-      border:none;
-      border-radius: 14px;
-      padding:12px 12px;
-      font-weight:1000;
-      cursor:pointer;
-      background: linear-gradient(180deg, var(--brand2), var(--brand));
-      color:#fff;
-      box-shadow: 0 14px 34px rgba(15,154,82,.18);
     }
 
-    /* ===== Modal (unidad + nota) ===== */
+    /* MODAL (unidad/nota) */
     .backdrop{
       position:fixed; inset:0;
-      background: rgba(2,6,23,.62);
+      background:rgba(0,0,0,.55);
       display:none;
       align-items:center;
       justify-content:center;
       padding:16px;
-      z-index:80;
+      z-index:60;
     }
     .modal{
       width:min(820px, 100%);
-      background:#fff;
+      background: rgba(255,255,255,.96);
+      backdrop-filter: blur(10px);
       border-radius:18px;
       overflow:hidden;
-      border:1px solid var(--line);
-      box-shadow: 0 40px 120px rgba(0,0,0,.35);
+      border:1px solid rgba(15,23,42,.14);
+      box-shadow: 0 40px 120px rgba(0,0,0,.40);
     }
-    .mHead{
+    .modalHead{
       padding:14px 16px;
-      border-bottom:1px solid var(--line);
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      background: linear-gradient(180deg, rgba(15,154,82,.08), rgba(15,154,82,0));
+      border-bottom:1px solid rgba(15,23,42,.12);
+      display:flex; justify-content:space-between; align-items:center; gap:10px;
+      background: rgba(255,255,255,.75);
     }
-    .mHead b{font-size:14px}
+    .modalHead h3{margin:0; font-size:15px}
     .closeX{
-      width:40px;height:40px;
+      border:1px solid rgba(15,23,42,.14);
+      background: rgba(255,255,255,.85);
       border-radius:12px;
-      border:1px solid var(--line);
-      background: rgba(2,6,23,.02);
+      width:40px; height:40px;
       cursor:pointer;
-      font-weight:1000;
+      font-weight:1100;
+      color: var(--ink);
     }
-    .mBody{padding:14px 16px}
-    .mFoot{
+    .footerBtns{
+      display:flex;
+      gap:10px;
       padding:14px 16px;
-      border-top:1px solid var(--line);
-      display:flex; gap:10px;
-      background: rgba(2,6,23,.02);
+      border-top:1px solid rgba(15,23,42,.12);
+      background: rgba(255,255,255,.75);
     }
-    .mFoot button{flex:1}
-    .hint{
+    .footerBtns button{flex:1}
+
+    .btnDark{
+      border:none;
+      cursor:pointer;
+      padding:12px 14px;
+      border-radius: 14px;
+      font-weight:1100;
+      color:#fff;
+      background: linear-gradient(180deg, var(--brand2), var(--brand));
+      box-shadow: 0 14px 32px rgba(15,154,82,.18);
+    }
+    .btnLight{
+      border:1px solid rgba(15,23,42,.14);
+      background: rgba(255,255,255,.85);
+      color: #0f172a;
+      padding:12px 14px;
+      border-radius: 14px;
+      font-weight:1100;
+      cursor:pointer;
+    }
+
+    .note{
       font-size:12px;
-      color:var(--muted);
+      color: var(--muted);
       font-weight:900;
-      line-height:1.25;
-      margin-top:8px;
+      line-height:1.35;
+      background: rgba(255,255,255,.78);
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(15,23,42,.12);
+      margin-top:12px;
     }
   </style>
 </head>
 
 <body>
 <header>
-  <div class="top">
+  <div class="row">
     <div class="brand">
-      <div class="mark">VDC</div>
-      <div class="btxt">
-        <b>Catálogo Mayoreo — Carnicería</b>
-        <span>Pedido por WhatsApp • piezas / cajas / kilos</span>
-      </div>
+      <h1>🥩 Catálogo — Carnicería Mayoreo</h1>
+      <div class="sub">Piezas completas • cajas • kilos • pedido rápido por WhatsApp</div>
     </div>
-
-    <div class="rightPills">
-      <div class="pill" id="cartPill" title="Carrito">
-        <span class="dot"></span>
-        <span>Carrito</span>
-        <span class="amt" id="pillAmt">0</span>
-      </div>
-    </div>
+    <div class="pill" id="cartPill">🛒 <b>0</b> <span class="amt" id="pillTotal">$0.00</span></div>
   </div>
 </header>
 
-<main class="wrap">
-  <section class="hero">
-    <div>
-      <h1>Mayoreo sin fricción: selecciona, arma el pedido y manda WhatsApp.</h1>
-      <p>Catálogo pensado para operación: bloques por giro (Taquerías / Menuderías / Carnes Mayoreo). Aquí estás en <b>Carnes por Mayoreo</b>.</p>
-      <div class="chips">
-        <div class="chip">✅ Nombres = archivos de imagen</div>
-        <div class="chip">📦 Piezas / Cajas / Kg</div>
-        <div class="chip">⚡ Pedido listo en 1 minuto</div>
-      </div>
-    </div>
+<div class="wrap">
 
-    <div class="heroCard">
-      <b>Tip operativo</b>
-      <div class="big">Usa “Unidad” por producto para evitar confusiones (pza/caja/kg).</div>
-      <div class="small">Ejemplo: <b>Caja Washington</b> → Unidad: <b>caja</b> • Cantidad: <b>10</b>.</div>
+  <div class="hero">
+    <div class="heroTop">
+      <div class="left">
+        <div class="heroTitle">Mayoreo sin fricción.</div>
+        <p class="heroDesc">Selecciona producto, define unidad (pza/caja/kg) y envía el pedido por WhatsApp en segundos.</p>
+        <div class="badgeRow">
+          <div class="chip">✅ Nombres = archivos de imagen</div>
+          <div class="chip">📦 Caja / 🧱 Pza / ⚖️ Kg</div>
+          <div class="chip">⚡ Pedido listo</div>
+        </div>
+      </div>
+      <div class="chip" title="Horario sugerido">⏱️ Abierto hoy</div>
     </div>
-  </section>
+    <!-- Hero opcional: pon un archivo "hero_carniceria.jpg" o cambia el nombre -->
+    <img class="heroImg" src="hero_carniceria.jpg" alt="Carnicería Mayoreo">
+  </div>
 
   <div class="grid">
+
     <!-- CATÁLOGO -->
     <section class="card">
-      <div class="cardHead">
-        <h2 style="text-align:left">Panel central</h2>
-        <div class="sub" id="countLbl">0 productos</div>
-      </div>
-
+      <h2>Catálogo <span class="muted" style="font-size:12px;font-weight:900">elige y agrega</span></h2>
       <div class="content">
-        <!-- BLOQUES (como pediste) -->
-        <div class="blocks" id="blocks">
-          <div class="blk" data-block="taquerias">Taquerías<small>menús / combos</small></div>
-          <div class="blk" data-block="menuderias">Menuderías<small>platos / litros</small></div>
-          <div class="blk active" data-block="mayoreo">Carnes por mayoreo<small>piezas / cajas</small></div>
-        </div>
 
         <div class="searchRow">
-          <input id="q" placeholder="Buscar producto… (cabeza, pata, caja, tripa, etc.)"/>
+          <input id="q" placeholder="Buscar (cabeza, pata, caja, tripa, etc.)..."/>
+        </div>
+
+        <div class="tabs" id="tabs"></div>
+
+        <div id="sectionHdr">
+          <div class="sectionTitle" id="sectionTitle">MAYOREO</div>
+          <div class="divider"></div>
         </div>
 
         <div class="items" id="items"></div>
 
-        <div class="hint">
-          Nota: Las imágenes deben estar en la misma carpeta que este HTML, con estos nombres EXACTOS:
-          <b>bofe</b>, <b>cabezaderes</b>, <b>cajaazul</b>, <b>cajawas</b>, <b>canadian</b>, <b>corazon</b>, <b>cuajo</b>, <b>higado</b>, <b>libroderes</b>, <b>panzaderes</b>, <b>patablanca</b>, <b>patamorena</b>, <b>teleco</b>, <b>tripaderastro</b>, <b>tripaderes</b>.
+        <div class="note">
+          Tip: La unidad te evita broncas. Ejemplo: <b>Cabeza</b> → unidad <b>pza</b>. <b>Caja Washington</b> → unidad <b>caja</b>. <b>Bofe</b> → unidad <b>kg</b>.
         </div>
+
       </div>
     </section>
 
     <!-- CARRITO -->
     <aside class="card">
-      <div class="cardHead">
-        <h2 style="text-align:left">Tu pedido (mayoreo)</h2>
-        <div class="sub" id="cartSub">0 líneas</div>
-      </div>
-
+      <h2>Tu pedido (mayoreo)</h2>
       <div class="content">
-        <label>Cliente / Negocio</label>
-        <input id="cliente" placeholder="Ej. Taquería Los Fundadores / Menudería Zaragoza"/>
 
-        <label>Teléfono (para confirmar)</label>
+        <label>Cliente / Negocio</label>
+        <input id="cliente" placeholder="Ej. Taquería / Menudería / Distribuidor"/>
+
+        <label>Teléfono</label>
         <input id="tel" placeholder="Ej. 4621234567"/>
 
         <label>Canal</label>
@@ -573,32 +636,39 @@
           <strong id="total">$0.00</strong>
         </div>
 
-        <div class="actions">
-          <button class="btnGhost" id="btnClear">Vaciar</button>
-          <button class="btnMain" id="btnSend">Enviar WhatsApp</button>
+        <div class="stickyBar">
+          <div class="left">
+            <span style="opacity:.9">🧾</span>
+            <span class="amount" id="barTotal">$0.00</span>
+          </div>
+          <div style="display:flex; gap:8px; align-items:center">
+            <button class="btnGhost" id="btnClear">Vaciar</button>
+            <button class="stickyBtn" id="btnSend">ENVIAR WHATSAPP</button>
+          </div>
         </div>
 
-        <div class="hint">
-          *El total es referencial si manejas precios variables por cliente.*  
-          Si quieres, después lo conectamos a Supabase para jalar precio por cliente.
+        <div class="note">
+          *Si manejas precios por cliente, deja los precios en $0 y lo usamos solo como catálogo/pedido.*
         </div>
+
       </div>
     </aside>
+
   </div>
-</main>
+</div>
 
 <!-- MODAL UNIDAD/NOTA -->
 <div class="backdrop" id="backdrop">
   <div class="modal">
-    <div class="mHead">
+    <div class="modalHead">
       <div>
-        <b id="mTitle">Producto</b>
-        <div class="hint" id="mHint" style="margin:4px 0 0 0">Define unidad y nota</div>
+        <h3 id="mTitle">Producto</h3>
+        <div class="muted" id="mSub" style="font-size:12px;font-weight:900">Define unidad y nota</div>
       </div>
       <button class="closeX" id="mClose">✕</button>
     </div>
 
-    <div class="mBody">
+    <div class="content" id="mBody">
       <label>Unidad</label>
       <select id="mUnidad">
         <option value="pza">Pieza</option>
@@ -607,53 +677,58 @@
       </select>
 
       <label>Nota (opcional)</label>
-      <input id="mNota" placeholder="Ej. 'completa', 'en 4', 'sin lengua', etc."/>
-
-      <div class="hint">
-        Sugerencia: usa <b>pza</b> para cabeza/pata, <b>caja</b> para cajas de menudo, y <b>kg</b> para vísceras por kilo.
+      <input id="mNota" placeholder="Ej. completa / sin lengua / en 4 / etc.">
+      <div class="note" style="margin-top:10px">
+        Sugerencia: <b>pza</b> para cabeza/pata, <b>caja</b> para cajas, <b>kg</b> para vísceras por kilo.
       </div>
     </div>
 
-    <div class="mFoot">
-      <button class="btnGhost" id="mCancel">Cancelar</button>
-      <button class="btnMain" id="mAdd">Agregar</button>
+    <div class="footerBtns">
+      <button class="btnLight" id="mCancel">Cancelar</button>
+      <button class="btnDark" id="mAdd">Agregar al carrito</button>
     </div>
   </div>
 </div>
 
 <script>
 /** =========================
- * CONFIG
- * ========================= */
-const WHATSAPP_DESTINO = "524621872594"; // tu número destino (52 + sin +)
-const IMG_BASE = ""; // si usas carpeta assets/, pon: "assets/"
+ *  CONFIG
+ *  ========================= */
+const NEGOCIO_NOMBRE = "Carnicería Mayoreo";
+const WHATSAPP_DESTINO = "524621872594"; // 52 + número sin +
+const IMG_BASE = "";
 
 /**
- * IMPORTANTE:
- * - Los nombres de archivo deben ser EXACTOS como los pediste (sin espacios).
- * - Si tus archivos tienen extensión .png/.jpg/.jpeg distinta, cámbiala aquí.
- *   (Yo respeté tu listado: algunos parecen PNG/JPG/JPEG)
+ * CATALOGO (nombres de imagen = tus archivos)
+ * OJO: aquí respeté lo que mostraste:
+ * - bofe.jpg
+ * - canadian.jpg
+ * - cajaazul.jpeg
+ * - cajawas.jpeg
+ * - patablanca.jpeg
+ * y el resto .png
+ * Si alguna extensión no coincide, cámbiala aquí.
  */
 const catalogo = [
-  // MAYOREO (con imagen = nombre del archivo)
-  { id:"cabezaderes",  cat:"MAYOREO", name:"Cabeza de res (completa)",    price:0, unitHint:"pza", desc:"Pieza completa. Ideal para taquería.", img:"cabezaderes.png" },
-  { id:"patablanca",   cat:"MAYOREO", name:"Pata blanca (completa)",      price:0, unitHint:"pza", desc:"Pata completa. Para proceso/menudo.", img:"patablanca.jpeg" },
-  { id:"patamorena",   cat:"MAYOREO", name:"Pata morena (completa)",      price:0, unitHint:"pza", desc:"Pata completa. Mayoreo.", img:"patamorena.png" },
+  // MAYOREO (piezas/kg)
+  {id:"cabezaderes",  cat:"MAYOREO", name:"Cabeza de res (completa)",  price:0, desc:"Pieza completa.",        unitHint:"pza", img:"cabezaderes.png"},
+  {id:"patablanca",   cat:"MAYOREO", name:"Pata blanca (completa)",    price:0, desc:"Pieza completa.",        unitHint:"pza", img:"patablanca.jpeg"},
+  {id:"patamorena",   cat:"MAYOREO", name:"Pata morena (completa)",    price:0, desc:"Pieza completa.",        unitHint:"pza", img:"patamorena.png"},
 
-  { id:"bofe",         cat:"MAYOREO", name:"Bofe",                        price:0, unitHint:"kg",  desc:"Mayoreo por kg o pieza.", img:"bofe.jpg" },
-  { id:"corazon",      cat:"MAYOREO", name:"Corazón",                     price:0, unitHint:"kg",  desc:"Mayoreo por kg o pieza.", img:"corazon.png" },
-  { id:"higado",       cat:"MAYOREO", name:"Hígado",                      price:0, unitHint:"kg",  desc:"Mayoreo por kg o pieza.", img:"higado.png" },
-  { id:"cuajo",        cat:"MAYOREO", name:"Cuajo",                       price:0, unitHint:"kg",  desc:"Mayoreo por kg o pieza.", img:"cuajo.png" },
-  { id:"teleco",       cat:"MAYOREO", name:"Teleco",                      price:0, unitHint:"kg",  desc:"Mayoreo por kg o pieza.", img:"teleco.png" },
-  { id:"libroderes",   cat:"MAYOREO", name:"Libro de res",                price:0, unitHint:"kg",  desc:"Mayoreo por kg o pieza.", img:"libroderes.png" },
-  { id:"panzaderes",   cat:"MAYOREO", name:"Panza de res",                price:0, unitHint:"kg",  desc:"Para menudo / proceso.", img:"panzaderes.png" },
-  { id:"tripaderes",   cat:"MAYOREO", name:"Tripa de res",                price:0, unitHint:"kg",  desc:"Mayoreo por kg.", img:"tripaderes.png" },
-  { id:"tripaderastro",cat:"MAYOREO", name:"Tripa de rastro",             price:0, unitHint:"kg",  desc:"Mayoreo por kg.", img:"tripaderastro.png" },
+  {id:"bofe",         cat:"MAYOREO", name:"Bofe",                      price:0, desc:"Mayoreo por kg.",        unitHint:"kg",  img:"bofe.jpg"},
+  {id:"corazon",      cat:"MAYOREO", name:"Corazón",                   price:0, desc:"Mayoreo por kg.",        unitHint:"kg",  img:"corazon.png"},
+  {id:"higado",       cat:"MAYOREO", name:"Hígado",                    price:0, desc:"Mayoreo por kg.",        unitHint:"kg",  img:"higado.png"},
+  {id:"cuajo",        cat:"MAYOREO", name:"Cuajo",                     price:0, desc:"Mayoreo por kg.",        unitHint:"kg",  img:"cuajo.png"},
+  {id:"teleco",       cat:"MAYOREO", name:"Teleco",                    price:0, desc:"Mayoreo por kg.",        unitHint:"kg",  img:"teleco.png"},
+  {id:"libroderes",   cat:"MAYOREO", name:"Libro de res",              price:0, desc:"Mayoreo por kg.",        unitHint:"kg",  img:"libroderes.png"},
+  {id:"panzaderes",   cat:"MAYOREO", name:"Panza de res",              price:0, desc:"Mayoreo por kg.",        unitHint:"kg",  img:"panzaderes.png"},
+  {id:"tripaderes",   cat:"MAYOREO", name:"Tripa de res",              price:0, desc:"Mayoreo por kg.",        unitHint:"kg",  img:"tripaderes.png"},
+  {id:"tripaderastro",cat:"MAYOREO", name:"Tripa de rastro",           price:0, desc:"Mayoreo por kg.",        unitHint:"kg",  img:"tripaderastro.png"},
 
-  // CAJAS (en tu imagen aparecen como archivos)
-  { id:"cajaazul",     cat:"CAJAS",   name:"Caja (Azul)",                  price:0, unitHint:"caja", desc:"Caja para mayoreo.", img:"cajaazul.jpeg" },
-  { id:"cajawas",      cat:"CAJAS",   name:"Caja Washington",              price:0, unitHint:"caja", desc:"Caja para mayoreo.", img:"cajawas.jpeg" },
-  { id:"canadian",     cat:"CAJAS",   name:"Caja Canadian",                price:0, unitHint:"caja", desc:"Caja para mayoreo.", img:"canadian.jpg" }
+  // CAJAS
+  {id:"cajaazul",     cat:"CAJAS",   name:"Caja Azul",                 price:0, desc:"Caja mayoreo.",          unitHint:"caja", img:"cajaazul.jpeg"},
+  {id:"cajawas",      cat:"CAJAS",   name:"Caja Washington",           price:0, desc:"Caja mayoreo.",          unitHint:"caja", img:"cajawas.jpeg"},
+  {id:"canadian",     cat:"CAJAS",   name:"Caja Canadian",             price:0, desc:"Caja mayoreo.",          unitHint:"caja", img:"canadian.jpg"},
 ];
 
 const CATS = ["MAYOREO","CAJAS"];
@@ -666,151 +741,163 @@ function money(n){
   return "$" + v.toFixed(2);
 }
 function escapeHtml(s){
-  return (s||"")
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
+  return (s||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
+}
+function cleanWA(text){
+  return (text || "")
+    .replace(/\uFFFD/g, "")
+    .replace(/\r\n/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+function phoneOnly(p){ return String(p||"").replace(/\D/g,""); }
+
+/** =========================
+ * UI TABS + ITEMS
+ * ========================= */
+const tabs = document.getElementById("tabs");
+const itemsBox = document.getElementById("items");
+const sectionTitle = document.getElementById("sectionTitle");
+const q = document.getElementById("q");
+
+let activeCat = CATS[0];
+
+function renderTabs(){
+  tabs.innerHTML = "";
+  CATS.forEach(c=>{
+    const el = document.createElement("div");
+    el.className = "tab" + (c===activeCat ? " active":"");
+    el.textContent = c;
+    el.onclick = ()=>{ activeCat=c; renderTabs(); renderItems(); };
+    tabs.appendChild(el);
+  });
 }
 
-/** =========================
- * BLOQUES (solo UI)
- * ========================= */
-const blocksEl = document.getElementById("blocks");
-blocksEl.querySelectorAll(".blk").forEach(b=>{
-  b.addEventListener("click", ()=>{
-    blocksEl.querySelectorAll(".blk").forEach(x=>x.classList.remove("active"));
-    b.classList.add("active");
-    // aquí solo estamos en mayoreo; si quieres, luego linkeamos a taquerías/menuderías
-    if(b.dataset.block !== "mayoreo"){
-      alert("Este bloque es solo UI. Si quieres, lo conecto a su página correspondiente.");
-    }
-  });
-});
-
-/** =========================
- * UI CATÁLOGO
- * ========================= */
-const itemsEl = document.getElementById("items");
-const qEl = document.getElementById("q");
-const countLbl = document.getElementById("countLbl");
-
-function badgeFor(item){
-  return item.cat === "CAJAS" ? "📦 Caja" : "🥩 Mayoreo";
+function badgeFor(it){
+  return it.cat==="CAJAS" ? "📦 Caja" : "🥩 Mayoreo";
 }
 
 function renderItems(){
-  const term = (qEl.value||"").trim().toLowerCase();
+  sectionTitle.textContent = activeCat;
+
+  const term = (q.value||"").trim().toLowerCase();
   const list = catalogo.filter(x=>{
-    if(!term) return true;
-    return (x.name||"").toLowerCase().includes(term)
-      || (x.desc||"").toLowerCase().includes(term)
-      || (x.id||"").toLowerCase().includes(term)
-      || (x.cat||"").toLowerCase().includes(term);
+    const inCat = x.cat===activeCat;
+    const inSearch = !term || (
+      x.name.toLowerCase().includes(term) ||
+      (x.desc||"").toLowerCase().includes(term) ||
+      (x.id||"").toLowerCase().includes(term)
+    );
+    return inCat && inSearch;
   });
 
-  countLbl.textContent = `${list.length} productos`;
-  itemsEl.innerHTML = "";
-
+  itemsBox.innerHTML = "";
   list.forEach(it=>{
-    const el = document.createElement("div");
-    el.className = "prod";
-    el.innerHTML = `
-      <div class="pImg">
-        <img src="${IMG_BASE + it.img}" alt="${escapeHtml(it.id)}">
+    const card = document.createElement("div");
+    card.className = "prod";
+    card.innerHTML = `
+      <div class="prodLeft">
+        <div class="badge">${badgeFor(it)} • sug: ${escapeHtml(it.unitHint)}</div>
+        <h3 class="prodName">${escapeHtml(it.name)}</h3>
+        <p class="prodDesc">${escapeHtml(it.desc || "")}</p>
+        <div class="price">MXN <b>${money(it.price)}</b></div>
       </div>
-      <div class="pBody">
-        <h3 class="pName">${escapeHtml(it.name)}</h3>
-        <p class="pDesc">${escapeHtml(it.desc || "")}</p>
-        <div class="pMeta">
-          <span class="badge">${badgeFor(it)} • sug: ${escapeHtml(it.unitHint)}</span>
-          <button class="btnAdd" data-id="${escapeHtml(it.id)}">Agregar</button>
+      <div class="prodRight">
+        <div class="prodImg">
+          <img src="${IMG_BASE + it.img}" alt="${escapeHtml(it.id)}">
         </div>
+        <button class="btnAdd">Agregar</button>
       </div>
     `;
-    el.querySelector("button").onclick = ()=> openModal(it);
-    itemsEl.appendChild(el);
+    card.querySelector("button").onclick = ()=> openModal(it);
+    itemsBox.appendChild(card);
   });
 
   if(list.length===0){
-    itemsEl.innerHTML = `<div class="muted" style="font-weight:1000">No hay resultados.</div>`;
+    itemsBox.innerHTML = `<div class="muted" style="font-weight:1000">No hay resultados.</div>`;
   }
 }
-qEl.addEventListener("input", renderItems);
+q.addEventListener("input", renderItems);
 
 /** =========================
  * CARRITO
  * ========================= */
 let cart = []; // {key,id,name,qty,unit,note,price}
-const cartEl = document.getElementById("cart");
-const totalEl = document.getElementById("total");
-const cartSub = document.getElementById("cartSub");
-const pillAmt = document.getElementById("pillAmt");
 
-function buildKey(it, unit, note){
-  return `${it.id}|${unit}|${note||""}`;
+const cartBox = document.getElementById("cart");
+const totalEl = document.getElementById("total");
+const cartPill = document.getElementById("cartPill");
+const pillTotal = document.getElementById("pillTotal");
+const barTotal = document.getElementById("barTotal");
+
+function cartCount(){ return cart.reduce((a,x)=>a + x.qty, 0); }
+function cartTotal(){ return cart.reduce((a,x)=>a + x.qty*(Number(x.price)||0), 0); }
+
+function buildKey(item, unit, note){
+  return `${item.id}|${unit}|${note||""}`;
 }
-function cartCount(){
-  return cart.reduce((a,x)=>a + x.qty, 0);
-}
-function cartTotal(){
-  return cart.reduce((a,x)=>a + (x.qty * (Number(x.price)||0)), 0);
-}
+
 function renderCart(){
-  pillAmt.textContent = String(cartCount());
-  cartSub.textContent = `${cart.length} líneas`;
-  totalEl.textContent = money(cartTotal());
+  const count = cartCount();
+  const tot = cartTotal();
+
+  cartPill.innerHTML = `🛒 <b>${count}</b> <span class="amt">${money(tot)}</span>`;
+  pillTotal.textContent = money(tot);
+  totalEl.textContent = money(tot);
+  barTotal.textContent = money(tot);
 
   if(cart.length===0){
-    cartEl.innerHTML = `<div class="muted">Aún no agregas nada.</div>`;
+    cartBox.innerHTML = `<div class="muted" style="font-weight:1000">Aún no agregas nada 😄</div>`;
     return;
   }
 
-  cartEl.innerHTML = "";
+  cartBox.innerHTML = "";
   cart.forEach((line, idx)=>{
-    const row = document.createElement("div");
-    row.className = "cartLine";
-    row.innerHTML = `
-      <div style="min-width:0; text-align:left">
-        <div style="font-weight:1000">${escapeHtml(line.name)}</div>
-        <div class="muted" style="font-size:12px; margin-top:4px">Unidad: <b>${escapeHtml(line.unit)}</b>${line.note?` • Nota: ${escapeHtml(line.note)}`:""}</div>
+    const wrap = document.createElement("div");
+    wrap.className = "cartLine";
+    const lineTotal = line.qty*(Number(line.price)||0);
+    wrap.innerHTML = `
+      <div style="min-width:0">
+        <div style="font-weight:1100;font-size:14px">${escapeHtml(line.name)}
+          <span class="muted" style="font-weight:1100">(${line.unit})</span>
+        </div>
+        ${line.note ? `<div class="muted" style="font-size:12px; margin-top:4px; font-weight:900">Nota: ${escapeHtml(line.note)}</div>` : ``}
       </div>
       <div style="text-align:right">
         <div class="qtyRow">
           <button class="mini" data-act="dec">−</button>
-          <div style="min-width:28px; text-align:center; font-weight:1000">${line.qty}</div>
+          <div style="min-width:24px; text-align:center; font-weight:1100">${line.qty}</div>
           <button class="mini" data-act="inc">+</button>
         </div>
-        <button class="mini" style="margin-top:8px; width:100%" title="Quitar">✕</button>
+        <div style="margin-top:6px; font-weight:1100">${money(lineTotal)}</div>
+        <button class="mini" style="margin-top:8px;width:100%;height:34px;border-radius:12px;font-weight:1100">✕</button>
       </div>
     `;
-    row.querySelector('[data-act="dec"]').onclick = ()=>{ line.qty=Math.max(1,line.qty-1); renderCart(); };
-    row.querySelector('[data-act="inc"]').onclick = ()=>{ line.qty+=1; renderCart(); };
-    row.querySelector('.mini:last-child').onclick = ()=>{ cart.splice(idx,1); renderCart(); };
-    cartEl.appendChild(row);
+    wrap.querySelector('[data-act="dec"]').onclick = ()=>{ line.qty=Math.max(1,line.qty-1); renderCart(); };
+    wrap.querySelector('[data-act="inc"]').onclick = ()=>{ line.qty+=1; renderCart(); };
+    wrap.querySelector('.mini:last-child').onclick = ()=>{ cart.splice(idx,1); renderCart(); };
+    cartBox.appendChild(wrap);
   });
 }
 
 /** =========================
- * MODAL (unidad + nota)
+ * MODAL UNIDAD/NOTA
  * ========================= */
 const backdrop = document.getElementById("backdrop");
 const mTitle = document.getElementById("mTitle");
 const mUnidad = document.getElementById("mUnidad");
 const mNota = document.getElementById("mNota");
 const mClose = document.getElementById("mClose");
-const mCancel = document.getElementById("mCancel");
-const mAdd = document.getElementById("mAdd");
+const mCancel= document.getElementById("mCancel");
+const mAdd   = document.getElementById("mAdd");
 
 let currentItem = null;
 
-function openModal(it){
-  currentItem = it;
-  mTitle.textContent = `${it.name}`;
+function openModal(item){
+  currentItem = item;
+  mTitle.textContent = `${item.name} — ${money(item.price)}`;
   mNota.value = "";
-  // preselección sugerida
-  mUnidad.value = (it.unitHint || "pza");
+  mUnidad.value = item.unitHint || "pza";
   backdrop.style.display = "flex";
 }
 function closeModal(){
@@ -825,8 +912,8 @@ mAdd.onclick = ()=>{
   if(!currentItem) return;
   const unit = mUnidad.value;
   const note = (mNota.value||"").trim();
-
   const key = buildKey(currentItem, unit, note);
+
   const existing = cart.find(x=>x.key===key);
   if(existing) existing.qty += 1;
   else{
@@ -847,30 +934,21 @@ mAdd.onclick = ()=>{
 /** =========================
  * WHATSAPP
  * ========================= */
-function cleanPhone(p){
-  return String(p||"").replace(/\D/g,"");
-}
-function cleanWA(text){
-  return (text || "")
-    .replace(/\uFFFD/g, "")
-    .replace(/\r\n/g, "\n")
-    .replace(/\n{3,}/g, "\n\n")
-    .trim();
-}
 function buildWhatsAppText(){
   const cliente = (document.getElementById("cliente").value||"").trim() || "Cliente";
-  const tel = cleanPhone(document.getElementById("tel").value||"");
+  const tel = phoneOnly(document.getElementById("tel").value||"");
   const canal = document.getElementById("canal").value;
   const dir = (document.getElementById("dir").value||"").trim();
   const notas = (document.getElementById("notas").value||"").trim();
   const folio = String(Date.now()).slice(-6);
 
   const lines = [];
-  lines.push(`*Pedido Mayoreo — Carnicería*`);
+  lines.push(`*${NEGOCIO_NOMBRE}*`);
+  lines.push(`Pedido Mayoreo:`);
   lines.push(`Cliente: *${cliente}*`);
+  if(tel) lines.push(`Tel: *+52${tel}*`);
   lines.push(`Folio: *${folio}*`);
-  if(tel) lines.push(`Contacto: *+52${tel}*`);
-  lines.push(`Canal: *${canal==="envio"?"Envío a domicilio":"Pasar a recoger"}*`);
+  lines.push(`Canal: *${canal==="envio"?"Envío":"Recoger"}*`);
 
   if(canal==="envio"){
     lines.push(``);
@@ -884,16 +962,31 @@ function buildWhatsAppText(){
     lines.push(`- ${x.qty} ${x.unit} • ${x.name}${x.note?` (Nota: ${x.note})`:""}`);
   });
   lines.push(`--------------------------`);
+  lines.push(`Total (referencia): *${money(cartTotal())}*`);
 
   if(notas){
     lines.push(``);
-    lines.push(`Notas generales: ${notas}`);
+    lines.push(`Notas: ${notas}`);
   }
 
   lines.push(``);
   lines.push(`Gracias. Quedo pendiente de confirmación ✅`);
   return lines.join("\n");
 }
+
+document.getElementById("btnSend").onclick = ()=>{
+  if(cart.length===0){ alert("Agrega productos al carrito primero 😄"); return; }
+  const canal = document.getElementById("canal").value;
+  if(canal==="envio"){
+    const dir = (document.getElementById("dir").value||"").trim();
+    if(!dir){
+      if(!confirm("No pusiste dirección. ¿Enviar de todos modos?")) return;
+    }
+  }
+  const text = cleanWA(buildWhatsAppText());
+  const url = `https://wa.me/${WHATSAPP_DESTINO}?text=${encodeURIComponent(text)}`;
+  window.open(url, "_blank");
+};
 
 document.getElementById("btnClear").onclick = ()=>{
   if(confirm("¿Vaciar carrito?")){
@@ -902,29 +995,13 @@ document.getElementById("btnClear").onclick = ()=>{
   }
 };
 
-document.getElementById("btnSend").onclick = ()=>{
-  if(cart.length===0){
-    alert("Agrega productos al carrito primero.");
-    return;
-  }
-  const canal = document.getElementById("canal").value;
-  if(canal==="envio"){
-    const dir = (document.getElementById("dir").value||"").trim();
-    if(!dir){
-      if(!confirm("No pusiste dirección. ¿Enviar de todos modos?")) return;
-    }
-  }
-
-  const text = cleanWA(buildWhatsAppText());
-  const url = `https://wa.me/${WHATSAPP_DESTINO}?text=${encodeURIComponent(text)}`;
-  window.open(url, "_blank");
-};
-
 /** =========================
  * INIT
  * ========================= */
+renderTabs();
 renderItems();
 renderCart();
 </script>
+
 </body>
 </html>
