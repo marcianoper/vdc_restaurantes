@@ -1,0 +1,930 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Catálogo Mayoreo — Carnicería (VDC)</title>
+
+  <style>
+    :root{
+      /* TEMA PRO (claro premium) */
+      --bg:#f6f7fb;
+      --paper:#ffffff;
+      --card:#ffffff;
+      --ink:#0f172a;
+      --muted:#64748b;
+      --line:rgba(15,23,42,.10);
+
+      --brand:#0a7a3b;     /* verde CVC */
+      --brand2:#0f9a52;    /* verde acento */
+      --gold:#caa25a;      /* toque premium */
+      --danger:#b91c1c;
+
+      --shadow: 0 18px 55px rgba(2,6,23,.10);
+      --shadow2: 0 10px 24px rgba(2,6,23,.08);
+      --r:18px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--ink);
+      background:
+        radial-gradient(1200px 520px at 15% -10%, rgba(15,154,82,.12), transparent 60%),
+        radial-gradient(900px 420px at 95% 0%, rgba(202,162,90,.12), transparent 55%),
+        var(--bg);
+    }
+
+    /* ===== Top Bar ===== */
+    header{
+      position:sticky; top:0; z-index:40;
+      background: rgba(246,247,251,.78);
+      backdrop-filter: blur(12px);
+      border-bottom:1px solid var(--line);
+    }
+    .top{
+      max-width:1200px;
+      margin:0 auto;
+      padding:12px 14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px; min-width:0;
+    }
+    .mark{
+      width:44px; height:44px;
+      border-radius:16px;
+      background: linear-gradient(180deg, var(--brand2), var(--brand));
+      box-shadow: 0 14px 28px rgba(15,154,82,.18);
+      display:grid; place-items:center;
+      color:#fff; font-weight:1000;
+      letter-spacing:.5px;
+    }
+    .btxt{display:flex;flex-direction:column;gap:2px;min-width:0}
+    .btxt b{
+      font-size:14px; letter-spacing:-.2px;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+      text-align:left;
+    }
+    .btxt span{
+      font-size:12px; color:var(--muted); font-weight:900;
+      text-align:left;
+    }
+
+    .rightPills{display:flex; gap:10px; align-items:center}
+    .pill{
+      display:flex; align-items:center; gap:10px;
+      padding:10px 12px;
+      border-radius:999px;
+      background: #fff;
+      border:1px solid var(--line);
+      box-shadow: var(--shadow2);
+      font-weight:1000;
+      white-space:nowrap;
+    }
+    .pill .dot{
+      width:10px;height:10px;border-radius:999px;
+      background: var(--brand2);
+      box-shadow: 0 0 0 6px rgba(15,154,82,.12);
+    }
+    .pill .amt{
+      padding:6px 10px;
+      border-radius:999px;
+      background: rgba(15,154,82,.10);
+      border:1px solid rgba(15,154,82,.18);
+      color:#0b5b2d;
+      font-weight:1000;
+    }
+
+    /* ===== Layout ===== */
+    .wrap{
+      max-width:1200px;
+      margin:0 auto;
+      padding:14px;
+      display:grid;
+      gap:14px;
+    }
+    .hero{
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(255,255,255,1), rgba(255,255,255,.92));
+      border:1px solid var(--line);
+      box-shadow: var(--shadow);
+      padding:18px 16px;
+      display:grid;
+      grid-template-columns: 1.6fr 1fr;
+      gap:14px;
+      align-items:center;
+      overflow:hidden;
+      position:relative;
+    }
+    .hero:before{
+      content:"";
+      position:absolute; inset:-60px -120px auto auto;
+      width:520px; height:520px; border-radius:50%;
+      background: radial-gradient(circle at 30% 30%, rgba(15,154,82,.18), rgba(15,154,82,0) 60%);
+      pointer-events:none;
+    }
+    @media (max-width: 980px){ .hero{grid-template-columns:1fr} }
+
+    .hero h1{
+      margin:0;
+      font-size:28px;
+      letter-spacing:-.6px;
+      text-align:left;
+    }
+    .hero p{
+      margin:8px 0 0;
+      color:var(--muted);
+      font-weight:900;
+      line-height:1.25;
+      max-width: 700px;
+      text-align:left;
+    }
+    .chips{display:flex; flex-wrap:wrap; gap:10px; margin-top:12px}
+    .chip{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      background: rgba(15,154,82,.10);
+      border:1px solid rgba(15,154,82,.18);
+      color:#0b5b2d;
+      font-weight:1000;
+      font-size:12px;
+    }
+    .heroCard{
+      background: #fff;
+      border:1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow2);
+      padding:14px;
+    }
+    .heroCard b{display:block; font-size:12px; color:var(--muted); letter-spacing:.2px}
+    .heroCard .big{
+      margin-top:8px;
+      font-weight:1000;
+      font-size:16px;
+      line-height:1.2;
+      text-align:left;
+    }
+    .heroCard .small{
+      margin-top:10px;
+      color:var(--muted);
+      font-weight:900;
+      font-size:12px;
+      line-height:1.25;
+      text-align:left;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.6fr 1fr;
+      gap:14px;
+      align-items:start;
+    }
+    @media (max-width: 980px){ .grid{grid-template-columns:1fr} }
+
+    .card{
+      background: var(--card);
+      border:1px solid var(--line);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .cardHead{
+      padding:14px 14px;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      background: linear-gradient(180deg, rgba(15,154,82,.06), rgba(15,154,82,0));
+    }
+    .cardHead h2{
+      margin:0;
+      font-size:14px;
+      letter-spacing:.2px;
+      font-weight:1000;
+      text-align:left;
+    }
+    .cardHead .sub{
+      font-size:12px;
+      color:var(--muted);
+      font-weight:900;
+      text-align:right;
+    }
+    .content{padding:14px}
+
+    /* ===== Category Blocks ===== */
+    .blocks{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap:10px;
+      margin-bottom:12px;
+    }
+    @media (max-width: 700px){ .blocks{grid-template-columns:1fr} }
+    .blk{
+      border:1px solid var(--line);
+      border-radius: 16px;
+      padding:12px;
+      background: rgba(2,6,23,.02);
+      cursor:pointer;
+      user-select:none;
+      transition:.15s ease;
+      text-align:center;
+      font-weight:1000;
+    }
+    .blk small{display:block; margin-top:6px; color:var(--muted); font-weight:900}
+    .blk.active{
+      background: rgba(15,154,82,.10);
+      border-color: rgba(15,154,82,.25);
+      box-shadow: 0 0 0 3px rgba(15,154,82,.14);
+    }
+
+    /* ===== Search ===== */
+    .searchRow{
+      display:flex; gap:10px; align-items:center;
+      margin-bottom:12px;
+    }
+    .searchRow input{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius: 14px;
+      padding:12px 12px;
+      background:#fff;
+      outline:none;
+      font-size:14px;
+    }
+
+    /* ===== Product Grid ===== */
+    .items{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap:12px;
+    }
+    @media (max-width: 640px){ .items{grid-template-columns:1fr} }
+
+    .prod{
+      border:1px solid var(--line);
+      border-radius: 18px;
+      overflow:hidden;
+      background:#fff;
+      box-shadow: var(--shadow2);
+      display:grid;
+      grid-template-columns: 120px 1fr;
+      min-height: 120px;
+    }
+    .pImg{
+      background: linear-gradient(180deg, rgba(15,154,82,.10), rgba(15,154,82,0));
+      position:relative;
+    }
+    .pImg img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+    .pBody{
+      padding:12px 12px;
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      text-align:left;
+    }
+    .pName{
+      margin:0;
+      font-size:16px;
+      font-weight:1000;
+      letter-spacing:-.2px;
+    }
+    .pDesc{
+      margin:0;
+      color:var(--muted);
+      font-weight:900;
+      font-size:12px;
+      line-height:1.25;
+      min-height: 30px;
+    }
+    .pMeta{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-top:auto;
+    }
+    .badge{
+      font-size:12px;
+      font-weight:1000;
+      padding:7px 10px;
+      border-radius:999px;
+      background: rgba(202,162,90,.12);
+      border:1px solid rgba(202,162,90,.20);
+      color:#6b4e1e;
+      white-space:nowrap;
+    }
+    .btnAdd{
+      border:none;
+      cursor:pointer;
+      padding:10px 12px;
+      border-radius: 14px;
+      font-weight:1000;
+      background: linear-gradient(180deg, var(--brand2), var(--brand));
+      color:#fff;
+      box-shadow: 0 12px 28px rgba(15,154,82,.18);
+      white-space:nowrap;
+    }
+    .btnAdd:active{transform: translateY(1px)}
+
+    /* ===== Cart ===== */
+    label{
+      display:block;
+      font-size:12px;
+      color:var(--muted);
+      font-weight:1000;
+      margin:10px 0 6px;
+      text-align:left;
+    }
+    input, select, textarea{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius: 14px;
+      padding:12px 12px;
+      outline:none;
+      font-size:14px;
+      background:#fff;
+      color:var(--ink);
+    }
+    textarea{min-height:90px; resize:vertical}
+    .cartLine{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      padding:10px 0;
+      border-bottom:1px dashed rgba(15,23,42,.18);
+    }
+    .cartLine:last-child{border-bottom:none}
+    .qtyRow{display:flex; gap:6px; align-items:center}
+    .mini{
+      width:34px; height:34px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background: rgba(2,6,23,.02);
+      cursor:pointer;
+      font-weight:1000;
+    }
+    .mini:active{transform: translateY(1px)}
+    .muted{color:var(--muted); font-weight:900}
+
+    .totalRow{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding-top:12px;
+      margin-top:12px;
+      border-top:1px solid var(--line);
+      font-weight:1000;
+    }
+    .totalRow strong{font-size:18px; color:var(--brand)}
+
+    .actions{
+      display:flex;
+      gap:10px;
+      margin-top:12px;
+    }
+    .btnGhost{
+      flex:1;
+      border:1px solid var(--line);
+      background: rgba(2,6,23,.02);
+      color:var(--ink);
+      border-radius: 14px;
+      padding:12px 12px;
+      font-weight:1000;
+      cursor:pointer;
+    }
+    .btnMain{
+      flex:1.2;
+      border:none;
+      border-radius: 14px;
+      padding:12px 12px;
+      font-weight:1000;
+      cursor:pointer;
+      background: linear-gradient(180deg, var(--brand2), var(--brand));
+      color:#fff;
+      box-shadow: 0 14px 34px rgba(15,154,82,.18);
+    }
+
+    /* ===== Modal (unidad + nota) ===== */
+    .backdrop{
+      position:fixed; inset:0;
+      background: rgba(2,6,23,.62);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:16px;
+      z-index:80;
+    }
+    .modal{
+      width:min(820px, 100%);
+      background:#fff;
+      border-radius:18px;
+      overflow:hidden;
+      border:1px solid var(--line);
+      box-shadow: 0 40px 120px rgba(0,0,0,.35);
+    }
+    .mHead{
+      padding:14px 16px;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      background: linear-gradient(180deg, rgba(15,154,82,.08), rgba(15,154,82,0));
+    }
+    .mHead b{font-size:14px}
+    .closeX{
+      width:40px;height:40px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background: rgba(2,6,23,.02);
+      cursor:pointer;
+      font-weight:1000;
+    }
+    .mBody{padding:14px 16px}
+    .mFoot{
+      padding:14px 16px;
+      border-top:1px solid var(--line);
+      display:flex; gap:10px;
+      background: rgba(2,6,23,.02);
+    }
+    .mFoot button{flex:1}
+    .hint{
+      font-size:12px;
+      color:var(--muted);
+      font-weight:900;
+      line-height:1.25;
+      margin-top:8px;
+    }
+  </style>
+</head>
+
+<body>
+<header>
+  <div class="top">
+    <div class="brand">
+      <div class="mark">VDC</div>
+      <div class="btxt">
+        <b>Catálogo Mayoreo — Carnicería</b>
+        <span>Pedido por WhatsApp • piezas / cajas / kilos</span>
+      </div>
+    </div>
+
+    <div class="rightPills">
+      <div class="pill" id="cartPill" title="Carrito">
+        <span class="dot"></span>
+        <span>Carrito</span>
+        <span class="amt" id="pillAmt">0</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <div>
+      <h1>Mayoreo sin fricción: selecciona, arma el pedido y manda WhatsApp.</h1>
+      <p>Catálogo pensado para operación: bloques por giro (Taquerías / Menuderías / Carnes Mayoreo). Aquí estás en <b>Carnes por Mayoreo</b>.</p>
+      <div class="chips">
+        <div class="chip">✅ Nombres = archivos de imagen</div>
+        <div class="chip">📦 Piezas / Cajas / Kg</div>
+        <div class="chip">⚡ Pedido listo en 1 minuto</div>
+      </div>
+    </div>
+
+    <div class="heroCard">
+      <b>Tip operativo</b>
+      <div class="big">Usa “Unidad” por producto para evitar confusiones (pza/caja/kg).</div>
+      <div class="small">Ejemplo: <b>Caja Washington</b> → Unidad: <b>caja</b> • Cantidad: <b>10</b>.</div>
+    </div>
+  </section>
+
+  <div class="grid">
+    <!-- CATÁLOGO -->
+    <section class="card">
+      <div class="cardHead">
+        <h2 style="text-align:left">Panel central</h2>
+        <div class="sub" id="countLbl">0 productos</div>
+      </div>
+
+      <div class="content">
+        <!-- BLOQUES (como pediste) -->
+        <div class="blocks" id="blocks">
+          <div class="blk" data-block="taquerias">Taquerías<small>menús / combos</small></div>
+          <div class="blk" data-block="menuderias">Menuderías<small>platos / litros</small></div>
+          <div class="blk active" data-block="mayoreo">Carnes por mayoreo<small>piezas / cajas</small></div>
+        </div>
+
+        <div class="searchRow">
+          <input id="q" placeholder="Buscar producto… (cabeza, pata, caja, tripa, etc.)"/>
+        </div>
+
+        <div class="items" id="items"></div>
+
+        <div class="hint">
+          Nota: Las imágenes deben estar en la misma carpeta que este HTML, con estos nombres EXACTOS:
+          <b>bofe</b>, <b>cabezaderes</b>, <b>cajaazul</b>, <b>cajawas</b>, <b>canadian</b>, <b>corazon</b>, <b>cuajo</b>, <b>higado</b>, <b>libroderes</b>, <b>panzaderes</b>, <b>patablanca</b>, <b>patamorena</b>, <b>teleco</b>, <b>tripaderastro</b>, <b>tripaderes</b>.
+        </div>
+      </div>
+    </section>
+
+    <!-- CARRITO -->
+    <aside class="card">
+      <div class="cardHead">
+        <h2 style="text-align:left">Tu pedido (mayoreo)</h2>
+        <div class="sub" id="cartSub">0 líneas</div>
+      </div>
+
+      <div class="content">
+        <label>Cliente / Negocio</label>
+        <input id="cliente" placeholder="Ej. Taquería Los Fundadores / Menudería Zaragoza"/>
+
+        <label>Teléfono (para confirmar)</label>
+        <input id="tel" placeholder="Ej. 4621234567"/>
+
+        <label>Canal</label>
+        <select id="canal">
+          <option value="recoger">Pasar a recoger</option>
+          <option value="envio">Envío a domicilio</option>
+        </select>
+
+        <label>Dirección (si es envío)</label>
+        <textarea id="dir" placeholder="Calle, número, colonia, referencias..."></textarea>
+
+        <label>Notas generales</label>
+        <textarea id="notas" placeholder="Ej. 'Cabeza en 4', 'Pata en rodajas', 'Entrega 9:30am'"></textarea>
+
+        <div id="cart"></div>
+
+        <div class="totalRow">
+          <span>Total (referencia)</span>
+          <strong id="total">$0.00</strong>
+        </div>
+
+        <div class="actions">
+          <button class="btnGhost" id="btnClear">Vaciar</button>
+          <button class="btnMain" id="btnSend">Enviar WhatsApp</button>
+        </div>
+
+        <div class="hint">
+          *El total es referencial si manejas precios variables por cliente.*  
+          Si quieres, después lo conectamos a Supabase para jalar precio por cliente.
+        </div>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<!-- MODAL UNIDAD/NOTA -->
+<div class="backdrop" id="backdrop">
+  <div class="modal">
+    <div class="mHead">
+      <div>
+        <b id="mTitle">Producto</b>
+        <div class="hint" id="mHint" style="margin:4px 0 0 0">Define unidad y nota</div>
+      </div>
+      <button class="closeX" id="mClose">✕</button>
+    </div>
+
+    <div class="mBody">
+      <label>Unidad</label>
+      <select id="mUnidad">
+        <option value="pza">Pieza</option>
+        <option value="caja">Caja</option>
+        <option value="kg">Kg</option>
+      </select>
+
+      <label>Nota (opcional)</label>
+      <input id="mNota" placeholder="Ej. 'completa', 'en 4', 'sin lengua', etc."/>
+
+      <div class="hint">
+        Sugerencia: usa <b>pza</b> para cabeza/pata, <b>caja</b> para cajas de menudo, y <b>kg</b> para vísceras por kilo.
+      </div>
+    </div>
+
+    <div class="mFoot">
+      <button class="btnGhost" id="mCancel">Cancelar</button>
+      <button class="btnMain" id="mAdd">Agregar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/** =========================
+ * CONFIG
+ * ========================= */
+const WHATSAPP_DESTINO = "524621872594"; // tu número destino (52 + sin +)
+const IMG_BASE = ""; // si usas carpeta assets/, pon: "assets/"
+
+/**
+ * IMPORTANTE:
+ * - Los nombres de archivo deben ser EXACTOS como los pediste (sin espacios).
+ * - Si tus archivos tienen extensión .png/.jpg/.jpeg distinta, cámbiala aquí.
+ *   (Yo respeté tu listado: algunos parecen PNG/JPG/JPEG)
+ */
+const catalogo = [
+  // MAYOREO (con imagen = nombre del archivo)
+  { id:"cabezaderes",  cat:"MAYOREO", name:"Cabeza de res (completa)",    price:0, unitHint:"pza", desc:"Pieza completa. Ideal para taquería.", img:"cabezaderes.png" },
+  { id:"patablanca",   cat:"MAYOREO", name:"Pata blanca (completa)",      price:0, unitHint:"pza", desc:"Pata completa. Para proceso/menudo.", img:"patablanca.jpeg" },
+  { id:"patamorena",   cat:"MAYOREO", name:"Pata morena (completa)",      price:0, unitHint:"pza", desc:"Pata completa. Mayoreo.", img:"patamorena.png" },
+
+  { id:"bofe",         cat:"MAYOREO", name:"Bofe",                        price:0, unitHint:"kg",  desc:"Mayoreo por kg o pieza.", img:"bofe.jpg" },
+  { id:"corazon",      cat:"MAYOREO", name:"Corazón",                     price:0, unitHint:"kg",  desc:"Mayoreo por kg o pieza.", img:"corazon.png" },
+  { id:"higado",       cat:"MAYOREO", name:"Hígado",                      price:0, unitHint:"kg",  desc:"Mayoreo por kg o pieza.", img:"higado.png" },
+  { id:"cuajo",        cat:"MAYOREO", name:"Cuajo",                       price:0, unitHint:"kg",  desc:"Mayoreo por kg o pieza.", img:"cuajo.png" },
+  { id:"teleco",       cat:"MAYOREO", name:"Teleco",                      price:0, unitHint:"kg",  desc:"Mayoreo por kg o pieza.", img:"teleco.png" },
+  { id:"libroderes",   cat:"MAYOREO", name:"Libro de res",                price:0, unitHint:"kg",  desc:"Mayoreo por kg o pieza.", img:"libroderes.png" },
+  { id:"panzaderes",   cat:"MAYOREO", name:"Panza de res",                price:0, unitHint:"kg",  desc:"Para menudo / proceso.", img:"panzaderes.png" },
+  { id:"tripaderes",   cat:"MAYOREO", name:"Tripa de res",                price:0, unitHint:"kg",  desc:"Mayoreo por kg.", img:"tripaderes.png" },
+  { id:"tripaderastro",cat:"MAYOREO", name:"Tripa de rastro",             price:0, unitHint:"kg",  desc:"Mayoreo por kg.", img:"tripaderastro.png" },
+
+  // CAJAS (en tu imagen aparecen como archivos)
+  { id:"cajaazul",     cat:"CAJAS",   name:"Caja (Azul)",                  price:0, unitHint:"caja", desc:"Caja para mayoreo.", img:"cajaazul.jpeg" },
+  { id:"cajawas",      cat:"CAJAS",   name:"Caja Washington",              price:0, unitHint:"caja", desc:"Caja para mayoreo.", img:"cajawas.jpeg" },
+  { id:"canadian",     cat:"CAJAS",   name:"Caja Canadian",                price:0, unitHint:"caja", desc:"Caja para mayoreo.", img:"canadian.jpg" }
+];
+
+const CATS = ["MAYOREO","CAJAS"];
+
+/** =========================
+ * HELPERS
+ * ========================= */
+function money(n){
+  const v = Number(n||0);
+  return "$" + v.toFixed(2);
+}
+function escapeHtml(s){
+  return (s||"")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+/** =========================
+ * BLOQUES (solo UI)
+ * ========================= */
+const blocksEl = document.getElementById("blocks");
+blocksEl.querySelectorAll(".blk").forEach(b=>{
+  b.addEventListener("click", ()=>{
+    blocksEl.querySelectorAll(".blk").forEach(x=>x.classList.remove("active"));
+    b.classList.add("active");
+    // aquí solo estamos en mayoreo; si quieres, luego linkeamos a taquerías/menuderías
+    if(b.dataset.block !== "mayoreo"){
+      alert("Este bloque es solo UI. Si quieres, lo conecto a su página correspondiente.");
+    }
+  });
+});
+
+/** =========================
+ * UI CATÁLOGO
+ * ========================= */
+const itemsEl = document.getElementById("items");
+const qEl = document.getElementById("q");
+const countLbl = document.getElementById("countLbl");
+
+function badgeFor(item){
+  return item.cat === "CAJAS" ? "📦 Caja" : "🥩 Mayoreo";
+}
+
+function renderItems(){
+  const term = (qEl.value||"").trim().toLowerCase();
+  const list = catalogo.filter(x=>{
+    if(!term) return true;
+    return (x.name||"").toLowerCase().includes(term)
+      || (x.desc||"").toLowerCase().includes(term)
+      || (x.id||"").toLowerCase().includes(term)
+      || (x.cat||"").toLowerCase().includes(term);
+  });
+
+  countLbl.textContent = `${list.length} productos`;
+  itemsEl.innerHTML = "";
+
+  list.forEach(it=>{
+    const el = document.createElement("div");
+    el.className = "prod";
+    el.innerHTML = `
+      <div class="pImg">
+        <img src="${IMG_BASE + it.img}" alt="${escapeHtml(it.id)}">
+      </div>
+      <div class="pBody">
+        <h3 class="pName">${escapeHtml(it.name)}</h3>
+        <p class="pDesc">${escapeHtml(it.desc || "")}</p>
+        <div class="pMeta">
+          <span class="badge">${badgeFor(it)} • sug: ${escapeHtml(it.unitHint)}</span>
+          <button class="btnAdd" data-id="${escapeHtml(it.id)}">Agregar</button>
+        </div>
+      </div>
+    `;
+    el.querySelector("button").onclick = ()=> openModal(it);
+    itemsEl.appendChild(el);
+  });
+
+  if(list.length===0){
+    itemsEl.innerHTML = `<div class="muted" style="font-weight:1000">No hay resultados.</div>`;
+  }
+}
+qEl.addEventListener("input", renderItems);
+
+/** =========================
+ * CARRITO
+ * ========================= */
+let cart = []; // {key,id,name,qty,unit,note,price}
+const cartEl = document.getElementById("cart");
+const totalEl = document.getElementById("total");
+const cartSub = document.getElementById("cartSub");
+const pillAmt = document.getElementById("pillAmt");
+
+function buildKey(it, unit, note){
+  return `${it.id}|${unit}|${note||""}`;
+}
+function cartCount(){
+  return cart.reduce((a,x)=>a + x.qty, 0);
+}
+function cartTotal(){
+  return cart.reduce((a,x)=>a + (x.qty * (Number(x.price)||0)), 0);
+}
+function renderCart(){
+  pillAmt.textContent = String(cartCount());
+  cartSub.textContent = `${cart.length} líneas`;
+  totalEl.textContent = money(cartTotal());
+
+  if(cart.length===0){
+    cartEl.innerHTML = `<div class="muted">Aún no agregas nada.</div>`;
+    return;
+  }
+
+  cartEl.innerHTML = "";
+  cart.forEach((line, idx)=>{
+    const row = document.createElement("div");
+    row.className = "cartLine";
+    row.innerHTML = `
+      <div style="min-width:0; text-align:left">
+        <div style="font-weight:1000">${escapeHtml(line.name)}</div>
+        <div class="muted" style="font-size:12px; margin-top:4px">Unidad: <b>${escapeHtml(line.unit)}</b>${line.note?` • Nota: ${escapeHtml(line.note)}`:""}</div>
+      </div>
+      <div style="text-align:right">
+        <div class="qtyRow">
+          <button class="mini" data-act="dec">−</button>
+          <div style="min-width:28px; text-align:center; font-weight:1000">${line.qty}</div>
+          <button class="mini" data-act="inc">+</button>
+        </div>
+        <button class="mini" style="margin-top:8px; width:100%" title="Quitar">✕</button>
+      </div>
+    `;
+    row.querySelector('[data-act="dec"]').onclick = ()=>{ line.qty=Math.max(1,line.qty-1); renderCart(); };
+    row.querySelector('[data-act="inc"]').onclick = ()=>{ line.qty+=1; renderCart(); };
+    row.querySelector('.mini:last-child').onclick = ()=>{ cart.splice(idx,1); renderCart(); };
+    cartEl.appendChild(row);
+  });
+}
+
+/** =========================
+ * MODAL (unidad + nota)
+ * ========================= */
+const backdrop = document.getElementById("backdrop");
+const mTitle = document.getElementById("mTitle");
+const mUnidad = document.getElementById("mUnidad");
+const mNota = document.getElementById("mNota");
+const mClose = document.getElementById("mClose");
+const mCancel = document.getElementById("mCancel");
+const mAdd = document.getElementById("mAdd");
+
+let currentItem = null;
+
+function openModal(it){
+  currentItem = it;
+  mTitle.textContent = `${it.name}`;
+  mNota.value = "";
+  // preselección sugerida
+  mUnidad.value = (it.unitHint || "pza");
+  backdrop.style.display = "flex";
+}
+function closeModal(){
+  backdrop.style.display = "none";
+  currentItem = null;
+}
+mClose.onclick = closeModal;
+mCancel.onclick = closeModal;
+backdrop.addEventListener("click", (e)=>{ if(e.target===backdrop) closeModal(); });
+
+mAdd.onclick = ()=>{
+  if(!currentItem) return;
+  const unit = mUnidad.value;
+  const note = (mNota.value||"").trim();
+
+  const key = buildKey(currentItem, unit, note);
+  const existing = cart.find(x=>x.key===key);
+  if(existing) existing.qty += 1;
+  else{
+    cart.push({
+      key,
+      id: currentItem.id,
+      name: currentItem.name,
+      qty: 1,
+      unit,
+      note,
+      price: currentItem.price || 0
+    });
+  }
+  closeModal();
+  renderCart();
+};
+
+/** =========================
+ * WHATSAPP
+ * ========================= */
+function cleanPhone(p){
+  return String(p||"").replace(/\D/g,"");
+}
+function cleanWA(text){
+  return (text || "")
+    .replace(/\uFFFD/g, "")
+    .replace(/\r\n/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+function buildWhatsAppText(){
+  const cliente = (document.getElementById("cliente").value||"").trim() || "Cliente";
+  const tel = cleanPhone(document.getElementById("tel").value||"");
+  const canal = document.getElementById("canal").value;
+  const dir = (document.getElementById("dir").value||"").trim();
+  const notas = (document.getElementById("notas").value||"").trim();
+  const folio = String(Date.now()).slice(-6);
+
+  const lines = [];
+  lines.push(`*Pedido Mayoreo — Carnicería*`);
+  lines.push(`Cliente: *${cliente}*`);
+  lines.push(`Folio: *${folio}*`);
+  if(tel) lines.push(`Contacto: *+52${tel}*`);
+  lines.push(`Canal: *${canal==="envio"?"Envío a domicilio":"Pasar a recoger"}*`);
+
+  if(canal==="envio"){
+    lines.push(``);
+    lines.push(`Dirección:`);
+    lines.push(dir || "(pendiente)");
+  }
+
+  lines.push(``);
+  lines.push(`--------------------------`);
+  cart.forEach(x=>{
+    lines.push(`- ${x.qty} ${x.unit} • ${x.name}${x.note?` (Nota: ${x.note})`:""}`);
+  });
+  lines.push(`--------------------------`);
+
+  if(notas){
+    lines.push(``);
+    lines.push(`Notas generales: ${notas}`);
+  }
+
+  lines.push(``);
+  lines.push(`Gracias. Quedo pendiente de confirmación ✅`);
+  return lines.join("\n");
+}
+
+document.getElementById("btnClear").onclick = ()=>{
+  if(confirm("¿Vaciar carrito?")){
+    cart = [];
+    renderCart();
+  }
+};
+
+document.getElementById("btnSend").onclick = ()=>{
+  if(cart.length===0){
+    alert("Agrega productos al carrito primero.");
+    return;
+  }
+  const canal = document.getElementById("canal").value;
+  if(canal==="envio"){
+    const dir = (document.getElementById("dir").value||"").trim();
+    if(!dir){
+      if(!confirm("No pusiste dirección. ¿Enviar de todos modos?")) return;
+    }
+  }
+
+  const text = cleanWA(buildWhatsAppText());
+  const url = `https://wa.me/${WHATSAPP_DESTINO}?text=${encodeURIComponent(text)}`;
+  window.open(url, "_blank");
+};
+
+/** =========================
+ * INIT
+ * ========================= */
+renderItems();
+renderCart();
+</script>
+</body>
+</html>
