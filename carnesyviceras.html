@@ -7,21 +7,21 @@
 
   <style>
     :root{
-      /* TEMA MAYOREO: acero + verde (industrial) */
-      --bg:#0b1220;
-      --bg2:#0a0f1a;
-      --card: rgba(255,255,255,.06);
-      --card2: rgba(255,255,255,.08);
-      --ink:#e9f1ff;
-      --muted: rgba(233,241,255,.70);
-      --line: rgba(255,255,255,.10);
+      /* TEMA: rojo + crema (carnicería) */
+      --bg:#f7efe6;          /* crema */
+      --bg2:#f3e7d4;         /* crema oscuro */
+      --card:#fff7ea;        /* tarjeta */
+      --card2:#ffffff;
+      --ink:#3b2a1f;         /* café texto */
+      --muted:#6e5646;       /* café suave */
+      --line:rgba(59,42,31,.15);
 
-      --brand:#22c55e;   /* verde */
-      --brand2:#16a34a;  /* verde oscuro */
-      --cyan:#38bdf8;    /* acento */
-      --warn:#f59e0b;
+      --brand:#b91c1c;       /* rojo */
+      --brand2:#991b1b;      /* rojo oscuro */
+      --gold:#c98a1e;        /* acento dorado */
+      --warn:#b77712;
 
-      --shadow: 0 18px 60px rgba(0,0,0,.55);
+      --shadow: 0 18px 50px rgba(32,24,16,.18);
       --r:18px;
     }
 
@@ -31,9 +31,8 @@
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
       color:var(--ink);
       background:
-        radial-gradient(1100px 520px at 15% -10%, rgba(34,197,94,.20), transparent 55%),
-        radial-gradient(900px 520px at 92% 0%, rgba(56,189,248,.16), transparent 60%),
-        radial-gradient(1200px 700px at 55% 120%, rgba(245,158,11,.10), transparent 60%),
+        radial-gradient(1200px 520px at 15% -10%, rgba(185,28,28,.16), transparent 55%),
+        radial-gradient(900px 520px at 92% 0%, rgba(201,138,30,.14), transparent 60%),
         linear-gradient(180deg, var(--bg), var(--bg2));
     }
 
@@ -41,10 +40,10 @@
     header{
       position: sticky; top: 0; z-index: 50;
       padding: 12px 14px;
-      background: rgba(10,14,24,.78);
+      background: rgba(251,242,226,.88);
       backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(255,255,255,.08);
-      box-shadow: 0 12px 36px rgba(0,0,0,.45);
+      border-bottom: 1px solid rgba(59,42,31,.12);
+      box-shadow: 0 10px 26px rgba(32,24,16,.14);
     }
     header .row{
       max-width:1200px;
@@ -72,7 +71,7 @@
     }
     .brand .sub{
       font-size:12px;
-      color: rgba(233,241,255,.78);
+      color: rgba(59,42,31,.70);
       font-weight:800;
     }
 
@@ -82,9 +81,9 @@
       gap:8px;
       padding:8px 10px;
       border-radius:999px;
-      border:1px solid rgba(255,255,255,.10);
-      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
-      box-shadow: 0 14px 34px rgba(0,0,0,.35);
+      border:1px solid rgba(59,42,31,.14);
+      background: linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,.75));
+      box-shadow: 0 14px 34px rgba(32,24,16,.12);
       font-weight:1000;
       font-size:12px;
       white-space:nowrap;
@@ -94,9 +93,9 @@
     .pill .amt{
       padding:4px 8px;
       border-radius:999px;
-      background: rgba(34,197,94,.14);
-      border: 1px solid rgba(34,197,94,.18);
-      color: #b8ffcf;
+      background: rgba(185,28,28,.10);
+      border: 1px solid rgba(185,28,28,.18);
+      color: #8a1212;
       font-weight:1000;
     }
 
@@ -118,13 +117,34 @@
       .grid{grid-template-columns:1fr}
     }
 
+    /* BANNER */
+    .banner{
+      border-radius: 22px;
+      overflow:hidden;
+      border:1px solid rgba(59,42,31,.12);
+      box-shadow: var(--shadow);
+      background: #fff;
+      position:relative;
+    }
+    .banner img{
+      width:100%;
+      height: 230px;
+      object-fit: cover;
+      display:block;
+      filter: contrast(1.03) saturate(1.05);
+    }
+    @media (max-width:520px){
+      .banner img{height:160px}
+    }
+
     /* HERO */
     .hero{
       border-radius: 22px;
       overflow:hidden;
-      border:1px solid rgba(255,255,255,.10);
+      border:1px solid rgba(59,42,31,.12);
       box-shadow: var(--shadow);
-      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.72));
       position:relative;
       padding:16px;
     }
@@ -132,8 +152,8 @@
       content:"";
       position:absolute; inset:0;
       background:
-        radial-gradient(720px 260px at 18% 22%, rgba(34,197,94,.18), transparent 60%),
-        radial-gradient(720px 260px at 82% 34%, rgba(56,189,248,.14), transparent 60%);
+        radial-gradient(720px 260px at 18% 22%, rgba(185,28,28,.12), transparent 60%),
+        radial-gradient(720px 260px at 82% 34%, rgba(201,138,30,.14), transparent 60%);
       pointer-events:none;
     }
     .heroTop{
@@ -149,7 +169,7 @@
     }
     .hero p{
       margin:8px 0 0;
-      color: rgba(233,241,255,.78);
+      color: rgba(59,42,31,.75);
       font-weight:850;
       max-width: 760px;
       line-height:1.3;
@@ -161,30 +181,30 @@
       display:inline-flex; align-items:center; gap:8px;
       padding:8px 12px;
       border-radius: 999px;
-      background: rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.75);
+      border:1px solid rgba(59,42,31,.12);
       font-weight:1000;
       font-size:12px;
-      color: rgba(233,241,255,.90);
-      box-shadow: 0 12px 30px rgba(0,0,0,.25);
+      color: rgba(59,42,31,.92);
+      box-shadow: 0 12px 26px rgba(32,24,16,.10);
     }
-    .chip strong{color:#d6ffe6}
+    .chip strong{color:#7a0f0f}
     .heroNote{
       position:relative; z-index:2;
       margin-top:12px;
       font-size:12px;
-      color: rgba(233,241,255,.75);
+      color: rgba(59,42,31,.74);
       font-weight:850;
       padding:10px 12px;
       border-radius:14px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.18);
+      border:1px solid rgba(59,42,31,.12);
+      background: rgba(255,255,255,.70);
     }
 
     /* CARD */
     .card{
-      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.05));
-      border:1px solid rgba(255,255,255,.10);
+      background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.75));
+      border:1px solid rgba(59,42,31,.12);
       border-radius: var(--r);
       box-shadow: var(--shadow);
       overflow:hidden;
@@ -195,12 +215,12 @@
       font-size:14px;
       font-weight:1000;
       letter-spacing:.3px;
-      border-bottom:1px solid rgba(255,255,255,.10);
+      border-bottom:1px solid rgba(59,42,31,.12);
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:10px;
-      background: rgba(0,0,0,.12);
+      background: rgba(255,255,255,.70);
     }
     .content{padding:14px}
 
@@ -212,13 +232,13 @@
       flex:1;
       padding:12px 12px;
       border-radius:14px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.18);
+      border:1px solid rgba(59,42,31,.14);
+      background: rgba(255,255,255,.85);
       outline:none;
       font-size:14px;
       color: var(--ink);
     }
-    .searchRow input::placeholder{color: rgba(233,241,255,.55)}
+    .searchRow input::placeholder{color: rgba(59,42,31,.45)}
 
     .tabs{
       display:flex;
@@ -227,8 +247,8 @@
       margin: 12px 0 10px;
     }
     .tab{
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.20);
+      border:1px solid rgba(59,42,31,.14);
+      background: rgba(255,255,255,.75);
       padding:10px 14px;
       border-radius: 999px;
       font-weight:1000;
@@ -236,14 +256,14 @@
       cursor:pointer;
       user-select:none;
       letter-spacing:.3px;
-      box-shadow: 0 12px 30px rgba(0,0,0,.28);
+      box-shadow: 0 12px 24px rgba(32,24,16,.10);
       position:relative;
       overflow:hidden;
     }
     .tab::after{
       content:"";
       position:absolute; inset:-2px;
-      background: linear-gradient(90deg, rgba(34,197,94,.45), rgba(56,189,248,.35));
+      background: linear-gradient(90deg, rgba(185,28,28,.38), rgba(201,138,30,.30));
       opacity:0;
       transition: .2s ease;
       filter: blur(12px);
@@ -251,9 +271,9 @@
     .tab:hover::after{opacity:.35}
     .tab span{position:relative; z-index:2}
     .tab.active{
-      border-color: rgba(255,255,255,.18);
-      background: rgba(255,255,255,.10);
-      box-shadow: 0 0 0 3px rgba(34,197,94,.16), 0 18px 45px rgba(0,0,0,.30);
+      border-color: rgba(185,28,28,.28);
+      background: rgba(255,255,255,.92);
+      box-shadow: 0 0 0 3px rgba(185,28,28,.10), 0 18px 40px rgba(32,24,16,.12);
     }
 
     .sectionTitle{
@@ -262,7 +282,7 @@
       letter-spacing: .6px;
       font-weight: 1100;
       line-height:1;
-      background: linear-gradient(90deg, #fff, rgba(255,255,255,.72));
+      background: linear-gradient(90deg, #3b2a1f, rgba(59,42,31,.75));
       -webkit-background-clip:text;
       background-clip:text;
       color:transparent;
@@ -270,8 +290,8 @@
     .divider{
       height: 4px;
       border-radius: 999px;
-      background: linear-gradient(90deg, rgba(34,197,94,.85), rgba(56,189,248,.75));
-      opacity:.75;
+      background: linear-gradient(90deg, rgba(185,28,28,.85), rgba(201,138,30,.75));
+      opacity:.85;
       margin: 8px 0 18px;
     }
 
@@ -288,22 +308,22 @@
 
     /* PRODUCT CARD */
     .prod{
-      background: rgba(0,0,0,.18);
-      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.78);
+      border:1px solid rgba(59,42,31,.12);
       border-radius: 18px;
       overflow:hidden;
       display:grid;
       grid-template-columns: 1fr 1.1fr;
       min-height: 178px;
-      box-shadow: 0 20px 60px rgba(0,0,0,.35);
+      box-shadow: 0 18px 46px rgba(32,24,16,.12);
       position:relative;
     }
     .prod::before{
       content:"";
       position:absolute; inset:0;
       background:
-        radial-gradient(420px 180px at 18% 22%, rgba(34,197,94,.16), transparent 65%),
-        radial-gradient(420px 180px at 82% 50%, rgba(56,189,248,.12), transparent 70%);
+        radial-gradient(420px 180px at 18% 22%, rgba(185,28,28,.10), transparent 65%),
+        radial-gradient(420px 180px at 82% 50%, rgba(201,138,30,.10), transparent 70%);
       pointer-events:none;
     }
     .prodLeft{
@@ -329,13 +349,13 @@
       border-radius:999px;
       font-size:12px;
       font-weight:1100;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.06);
-      color: rgba(233,241,255,.88);
+      border:1px solid rgba(59,42,31,.12);
+      background: rgba(255,255,255,.85);
+      color: rgba(59,42,31,.90);
     }
     .prodDesc{
       margin:0;
-      color: var(--muted);
+      color: rgba(59,42,31,.68);
       font-weight:850;
       line-height:1.25;
       font-size:13px;
@@ -343,7 +363,7 @@
     .price{
       margin-top:auto;
       font-weight:1100;
-      color: #c9ffe0;
+      color: rgba(59,42,31,.78);
       font-size: 13px;
     }
     .price b{
@@ -351,7 +371,7 @@
       font-size: 18px;
       letter-spacing:.2px;
       color: var(--warn);
-      text-shadow: 0 0 18px rgba(245,158,11,.10);
+      text-shadow: 0 0 18px rgba(183,119,18,.10);
     }
 
     .prodRight{
@@ -369,9 +389,9 @@
       height: 96px;
       border-radius: 16px;
       overflow:hidden;
-      background: #0b1220;
-      box-shadow: 0 18px 46px rgba(0,0,0,.45);
-      border: 1px solid rgba(255,255,255,.10);
+      background: #fbf2e2;
+      box-shadow: 0 14px 34px rgba(32,24,16,.14);
+      border: 1px solid rgba(59,42,31,.12);
     }
     .prodImg img{
       width:100%;
@@ -387,29 +407,29 @@
       padding: 10px 18px;
       border-radius: 999px;
       font-weight: 1100;
-      color:#07110c;
-      background: linear-gradient(180deg, #22c55e, #16a34a);
-      box-shadow: 0 14px 30px rgba(34,197,94,.20), 0 0 0 2px rgba(34,197,94,.10);
+      color:#fff;
+      background: linear-gradient(180deg, var(--brand), var(--brand2));
+      box-shadow: 0 14px 30px rgba(185,28,28,.18), 0 0 0 2px rgba(185,28,28,.10);
       font-size: 15px;
       min-width: 150px;
     }
     .btnAdd:active{transform: translateY(1px)}
-    .btnAdd:focus{outline: 3px solid rgba(56,189,248,.22)}
+    .btnAdd:focus{outline: 3px solid rgba(201,138,30,.22)}
 
     /* CART */
     .cartLine{
       display:flex; justify-content:space-between; gap:10px; align-items:flex-start;
-      border-bottom:1px dashed rgba(255,255,255,.14);
+      border-bottom:1px dashed rgba(59,42,31,.18);
       padding:10px 0;
     }
     .cartLine:last-child{border-bottom:none}
-    .muted{color: var(--muted)}
+    .muted{color: rgba(59,42,31,.62)}
     .qtyRow{display:flex; gap:6px; align-items:center}
     .mini{
       width:32px; height:32px;
       border-radius:12px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.18);
+      border:1px solid rgba(59,42,31,.14);
+      background: rgba(255,255,255,.85);
       cursor:pointer;
       font-weight:1100;
       color: var(--ink);
@@ -418,31 +438,31 @@
 
     label{
       display:block; font-size:12px; font-weight:1100; margin:10px 0 6px;
-      color: rgba(233,241,255,.86);
+      color: rgba(59,42,31,.86);
     }
     input, textarea, select{
       width:100%;
       padding:12px 12px;
-      border:1px solid rgba(255,255,255,.12);
+      border:1px solid rgba(59,42,31,.14);
       border-radius:14px;
       font-size:14px;
       outline:none;
-      background: rgba(0,0,0,.18);
+      background: rgba(255,255,255,.88);
       color: var(--ink);
     }
     textarea{min-height:90px; resize:vertical}
-    input::placeholder, textarea::placeholder{color: rgba(233,241,255,.55)}
+    input::placeholder, textarea::placeholder{color: rgba(59,42,31,.45)}
 
     .totalRow{
       display:flex; justify-content:space-between; align-items:center;
       padding-top:12px; margin-top:12px;
-      border-top:1px solid rgba(255,255,255,.12);
+      border-top:1px solid rgba(59,42,31,.14);
       font-size:14px;
       font-weight:1100;
     }
     .totalRow strong{
       font-size:16px;
-      color: #b8ffcf;
+      color: #7a0f0f;
     }
 
     /* STICKY BAR */
@@ -452,10 +472,10 @@
       z-index: 25;
       margin-top: 12px;
       border-radius: 16px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(10,12,20,.80);
+      border:1px solid rgba(59,42,31,.14);
+      background: rgba(251,242,226,.92);
       backdrop-filter: blur(10px);
-      box-shadow: 0 18px 70px rgba(0,0,0,.55);
+      box-shadow: 0 18px 50px rgba(32,24,16,.16);
       display:flex;
       align-items:center;
       justify-content:space-between;
@@ -470,7 +490,7 @@
       font-size:16px;
       letter-spacing:.2px;
       color: var(--warn);
-      text-shadow: 0 0 18px rgba(245,158,11,.12);
+      text-shadow: 0 0 18px rgba(183,119,18,.10);
     }
     .stickyBtn{
       border:none;
@@ -478,15 +498,15 @@
       padding: 12px 16px;
       border-radius: 14px;
       font-weight: 1100;
-      color:#07110c;
-      background: linear-gradient(180deg, #22c55e, #16a34a);
-      box-shadow: 0 14px 30px rgba(34,197,94,.20);
+      color:#fff;
+      background: linear-gradient(180deg, var(--brand), var(--brand2));
+      box-shadow: 0 14px 30px rgba(185,28,28,.18);
       min-width: 180px;
     }
     .btnGhost{
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      color:#fff;
+      border:1px solid rgba(59,42,31,.14);
+      background: rgba(255,255,255,.85);
+      color: var(--ink);
       padding: 10px 12px;
       border-radius: 14px;
       font-weight: 1100;
@@ -496,7 +516,7 @@
     /* MODALS */
     .backdrop{
       position:fixed; inset:0;
-      background:rgba(0,0,0,.68);
+      background:rgba(0,0,0,.58);
       display:none;
       align-items:center;
       justify-content:center;
@@ -505,23 +525,24 @@
     }
     .modal{
       width:min(820px, 100%);
-      background: rgba(10,12,20,.92);
+      background: rgba(251,242,226,.96);
       backdrop-filter: blur(10px);
       border-radius:18px;
       overflow:hidden;
-      border:1px solid rgba(255,255,255,.12);
-      box-shadow: 0 40px 120px rgba(0,0,0,.60);
+      border:1px solid rgba(59,42,31,.14);
+      box-shadow: 0 40px 120px rgba(0,0,0,.35);
+      color: var(--ink);
     }
     .modalHead{
       padding:14px 16px;
-      border-bottom:1px solid rgba(255,255,255,.10);
+      border-bottom:1px solid rgba(59,42,31,.14);
       display:flex; justify-content:space-between; align-items:center; gap:10px;
-      background: rgba(255,255,255,.04);
+      background: rgba(255,255,255,.70);
     }
     .modalHead h3{margin:0; font-size:15px}
     .closeX{
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
+      border:1px solid rgba(59,42,31,.14);
+      background: rgba(255,255,255,.80);
       border-radius:12px;
       width:40px; height:40px;
       cursor:pointer;
@@ -529,21 +550,21 @@
       color: var(--ink);
     }
     .optGroup{
-      border:1px solid rgba(255,255,255,.10);
+      border:1px solid rgba(59,42,31,.14);
       border-radius:16px;
       padding:12px 12px;
       margin-top:10px;
-      background: rgba(255,255,255,.04);
+      background: rgba(255,255,255,.70);
     }
     .optTitle{
       display:flex; align-items:center; justify-content:space-between; gap:10px;
     }
     .optTitle b{font-size:13px}
-    .optTitle span{font-size:12px; color:var(--muted); font-weight:900}
+    .optTitle span{font-size:12px; color:rgba(59,42,31,.60); font-weight:900}
     .optList{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px}
     .opt{
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.18);
+      border:1px solid rgba(59,42,31,.14);
+      background: rgba(255,255,255,.85);
       padding:8px 10px;
       border-radius:999px;
       font-size:13px;
@@ -553,21 +574,21 @@
       color: var(--ink);
     }
     .opt.active{
-      border-color: rgba(56,189,248,.55);
-      box-shadow:0 0 0 3px rgba(56,189,248,.16);
+      border-color: rgba(185,28,28,.50);
+      box-shadow:0 0 0 3px rgba(185,28,28,.14);
     }
     .footerBtns{
       display:flex;
       gap:10px;
       padding:14px 16px;
-      border-top:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
+      border-top:1px solid rgba(59,42,31,.14);
+      background: rgba(255,255,255,.70);
     }
     .footerBtns button{flex:1}
 
     .stepsBackdrop{
       position:fixed; inset:0;
-      background:rgba(0,0,0,.68);
+      background:rgba(0,0,0,.58);
       display:none;
       align-items:center;
       justify-content:center;
@@ -576,30 +597,31 @@
     }
     .steps{
       width:min(760px, 100%);
-      background: rgba(10,12,20,.92);
+      background: rgba(251,242,226,.96);
       backdrop-filter: blur(10px);
       border-radius: 18px;
       overflow:hidden;
-      border:1px solid rgba(255,255,255,.12);
-      box-shadow: 0 40px 120px rgba(0,0,0,.60);
+      border:1px solid rgba(59,42,31,.14);
+      box-shadow: 0 40px 120px rgba(0,0,0,.35);
+      color: var(--ink);
     }
     .stepsHead{
       padding:14px 16px;
       display:flex; justify-content:space-between; align-items:center; gap:10px;
-      border-bottom:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
+      border-bottom:1px solid rgba(59,42,31,.14);
+      background: rgba(255,255,255,.70);
     }
     .stepsHead .t{display:flex; flex-direction:column; gap:4px;}
     .stepsHead .t b{font-size:16px}
-    .stepsHead .t span{font-size:12px; color:var(--muted); font-weight:900}
+    .stepsHead .t span{font-size:12px; color:rgba(59,42,31,.60); font-weight:900}
     .stepsBody{padding:14px 16px}
     .stepRow{display:grid; grid-template-columns:1fr 1fr; gap:10px}
     @media (max-width:520px){ .stepRow{grid-template-columns:1fr} }
     .stepsFoot{
       display:flex; gap:10px;
       padding:14px 16px;
-      border-top:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
+      border-top:1px solid rgba(59,42,31,.14);
+      background: rgba(255,255,255,.70);
     }
 
     .btnDark{
@@ -608,13 +630,13 @@
       padding:12px 14px;
       border-radius: 14px;
       font-weight:1100;
-      color:#07110c;
-      background: linear-gradient(180deg, #38bdf8, #2f7cff);
-      box-shadow: 0 14px 32px rgba(56,189,248,.18);
+      color:#fff;
+      background: linear-gradient(180deg, var(--brand), var(--brand2));
+      box-shadow: 0 14px 32px rgba(185,28,28,.18);
     }
     .btnLight{
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
+      border:1px solid rgba(59,42,31,.14);
+      background: rgba(255,255,255,.85);
       color: var(--ink);
       padding:12px 14px;
       border-radius: 14px;
@@ -624,18 +646,18 @@
 
     .note{
       font-size:12px;
-      color: var(--muted);
+      color: rgba(59,42,31,.62);
       font-weight:900;
       line-height:1.35;
-      background: rgba(255,255,255,.04);
+      background: rgba(255,255,255,.70);
       padding:10px 12px;
       border-radius:14px;
-      border:1px solid rgba(255,255,255,.10);
+      border:1px solid rgba(59,42,31,.14);
       margin-top:12px;
     }
     .tiny{
       font-size:12px;
-      color: rgba(233,241,255,.72);
+      color: rgba(59,42,31,.70);
       font-weight:900;
       line-height:1.35;
     }
@@ -643,11 +665,11 @@
       display:inline-flex; align-items:center; gap:8px;
       padding:8px 10px;
       border-radius:14px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.18);
+      border:1px solid rgba(59,42,31,.14);
+      background: rgba(255,255,255,.80);
       font-weight:950;
       font-size:12px;
-      color: rgba(233,241,255,.88);
+      color: rgba(59,42,31,.90);
     }
   </style>
 </head>
@@ -657,7 +679,7 @@
   <div class="row">
     <div class="brand">
       <h1>🥩 Mayoreo — Carnicería (Cliente arma su pedido)</h1>
-      <div class="sub">Selección por piezas/cajas • checkout por pasos • WhatsApp</div>
+      <div class="sub">Selección por piezas/kg/cajas • checkout por pasos • WhatsApp</div>
     </div>
     <div class="pill" id="cartPill">🛒 <b>0</b> <span class="amt" id="pillTotal">Cotización</span></div>
   </div>
@@ -665,18 +687,23 @@
 
 <div class="wrap">
 
+  <!-- BANNER -->
+  <div class="banner">
+    <img src="menuu.jpeg" alt="Banner Mayoreo">
+  </div>
+
   <div class="hero">
     <div class="heroTop">
       <div>
         <h2>Haz tu pedido de mayoreo en 1 minuto.</h2>
-        <p>Selecciona productos (piezas/cajas), agrega instrucciones como “cabeza en 4”, “pata en rodajas” y envía por WhatsApp para cotizar y confirmar.</p>
+        <p>Selecciona productos (piezas/kg/cajas), agrega instrucciones como “cabeza en 4”, “pata en rodajas” y envía por WhatsApp para cotizar y confirmar.</p>
         <div class="heroBadges">
-          <div class="chip">📦 <strong>Mayoreo</strong> (pzas / cajas)</div>
+          <div class="chip">📦 <strong>Mayoreo</strong> (pza / kg / caja)</div>
           <div class="chip">🧾 Pedido por pasos</div>
           <div class="chip">⚡ Respuesta rápida</div>
         </div>
       </div>
-      <div class="hint" title="Precios no visibles en el link">💬 Precios: <span style="color:#ffd79a">a cotizar</span></div>
+      <div class="hint" title="Precios no visibles en el link">💬 Precios: <span style="color:#b77712">a cotizar</span></div>
     </div>
     <div class="heroNote">
       Tip: En <b>Notas generales</b> escribe cortes/instrucciones. Ej: <b>“Cabeza en 4, pata en rodajas, entregar 9:30am”</b>.
@@ -755,7 +782,7 @@
     <div class="modalHead">
       <div>
         <h3 id="mTitle">Producto</h3>
-        <div class="muted" style="font-size:12px;font-weight:900">Configura presentación / origen / nota</div>
+        <div class="muted" style="font-size:12px;font-weight:900">Configura unidad / presentación / nota</div>
       </div>
       <button class="closeX" id="mClose">✕</button>
     </div>
@@ -798,54 +825,44 @@ const WHATSAPP_TAQ = "524621872594"; // 52 + número sin + (cámbialo si quieres
 const IMG_BASE = ""; // si están en /assets -> "assets/"
 
 /** =========================
- *  CATÁLOGO (NOMBRES DE IMAGEN = MISMO NOMBRE DEL ARCHIVO)
- *  OJO: usa exactamente estos archivos en la misma carpeta del HTML:
- *  bofe.jpg, cabezaderes.png, cajaazul.jpeg, cajawas.jpeg, canadian.jpg,
- *  corazon.png, cuajo.png, higado.png, libroderes.png, panzaderes.png,
- *  patablanca.jpeg, patamorena.png, teleco.png, tripaderastro.png, tripaderes.png
+ *  CATÁLOGO
+ *  - units: unidades permitidas en el modal (pza/kg/caja)
  *  ========================= */
 const catalogo = [
-  // VÍSCERAS
-  {id:"cabezaderes",  cat:"VÍSCERAS", name:"Cabeza de res (completa)", unit:"pza", desc:"Venta por pieza. Se puede partir / con lengua según nota.", mods:true, img:"cabezaderes.png"},
-  {id:"patablanca",   cat:"VÍSCERAS", name:"Pata blanca (completa)",   unit:"pza", desc:"Venta por pieza. Corte/rodajas bajo indicación.", mods:true, img:"patablanca.jpeg"},
-  {id:"patamorena",   cat:"VÍSCERAS", name:"Pata morena (completa)",   unit:"pza", desc:"Venta por pieza. Ideal para caldos.", mods:true, img:"patamorena.png"},
-  {id:"panzaderes",   cat:"VÍSCERAS", name:"Panza de res",             unit:"pza", desc:"Venta por pieza/lote. Especifica si la quieres sucia/limpia.", mods:true, img:"panzaderes.png"},
-  {id:"libroderes",   cat:"VÍSCERAS", name:"Libro de res",             unit:"pza", desc:"Venta por pieza/lote.", mods:true, img:"libroderes.png"},
-  {id:"tripaderes",   cat:"VÍSCERAS", name:"Tripa de res",             unit:"pza", desc:"Venta por pieza/lote.", mods:true, img:"tripaderes.png"},
-  {id:"tripaderastro",cat:"VÍSCERAS", name:"Tripa de rastro",          unit:"pza", desc:"Venta por pieza/lote.", mods:true, img:"tripaderastro.png"},
-  {id:"teleco",       cat:"VÍSCERAS", name:"Teleco",                   unit:"pza", desc:"Venta por pieza/lote.", mods:true, img:"teleco.png"},
-  {id:"cuajo",        cat:"VÍSCERAS", name:"Cuajo",                    unit:"pza", desc:"Venta por pieza/lote.", mods:true, img:"cuajo.png"},
-  {id:"corazon",      cat:"VÍSCERAS", name:"Corazón",                  unit:"pza", desc:"Venta por pieza/lote.", mods:true, img:"corazon.png"},
-  {id:"higado",       cat:"VÍSCERAS", name:"Hígado",                   unit:"pza", desc:"Venta por pieza/lote.", mods:true, img:"higado.png"},
-  {id:"bofe",         cat:"VÍSCERAS", name:"Bofe",                     unit:"pza", desc:"Venta por pieza/lote.", mods:true, img:"bofe.jpg"},
+  // VÍSCERAS (pza o kg)
+  {id:"cabezaderes",  cat:"VÍSCERAS", name:"Cabeza de res",    units:["pza","kg"], desc:"Se puede partir / con lengua según nota.", mods:true, img:"cabezaderes.png"},
+  {id:"patablanca",   cat:"VÍSCERAS", name:"Pata blanca",      units:["pza","kg"], desc:"Corte/rodajas bajo indicación.", mods:true, img:"patablanca.jpeg"},
+  {id:"patamorena",   cat:"VÍSCERAS", name:"Pata morena",      units:["pza","kg"], desc:"Ideal para caldos.", mods:true, img:"patamorena.png"},
+  {id:"panzaderes",   cat:"VÍSCERAS", name:"Panza de res",     units:["pza","kg"], desc:"Especifica si la quieres sucia/limpia en la nota.", mods:true, img:"panzaderes.png"},
+  {id:"libroderes",   cat:"VÍSCERAS", name:"Libro de res",     units:["pza","kg"], desc:"Venta por pieza o kilo.", mods:true, img:"libroderes.png"},
+  {id:"tripaderes",   cat:"VÍSCERAS", name:"Tripa de res",     units:["pza","kg"], desc:"Venta por pieza o kilo.", mods:true, img:"tripaderes.png"},
+  {id:"tripaderastro",cat:"VÍSCERAS", name:"Tripa de rastro",  units:["pza","kg"], desc:"Venta por pieza o kilo.", mods:true, img:"tripaderastro.png"},
+  {id:"teleco",       cat:"VÍSCERAS", name:"Teleco",           units:["pza","kg"], desc:"Venta por pieza o kilo.", mods:true, img:"teleco.png"},
+  {id:"cuajo",        cat:"VÍSCERAS", name:"Cuajo",            units:["pza","kg"], desc:"Venta por pieza o kilo.", mods:true, img:"cuajo.png"},
+  {id:"corazon",      cat:"VÍSCERAS", name:"Corazón",          units:["pza","kg"], desc:"Venta por pieza o kilo.", mods:true, img:"corazon.png"},
+  {id:"higado",       cat:"VÍSCERAS", name:"Hígado",           units:["pza","kg"], desc:"Venta por pieza o kilo.", mods:true, img:"higado.png"},
+  {id:"bofe",         cat:"VÍSCERAS", name:"Bofe",             units:["pza","kg"], desc:"Venta por pieza o kilo.", mods:true, img:"bofe.jpg"},
 
-  // CAJAS
-  {id:"cajaazul",     cat:"CAJAS", name:"Caja azul",       unit:"caja", desc:"Venta por caja. Especifica marca/peso si aplica.", mods:true, img:"cajaazul.jpeg"},
-  {id:"cajawas",      cat:"CAJAS", name:"Caja Washington", unit:"caja", desc:"Venta por caja. Especifica cantidad de cajas.", mods:true, img:"cajawas.jpeg"},
-  {id:"canadian",     cat:"CAJAS", name:"Menudo Canadian", unit:"caja", desc:"Venta por caja. Especifica cantidad.", mods:true, img:"canadian.jpg"},
+  // CAJAS (solo caja)
+  {id:"cajaazul",     cat:"CAJAS", name:"Caja azul",       units:["caja"], desc:"Venta por caja. Especifica marca/peso si aplica.", mods:true, img:"cajaazul.jpeg"},
+  {id:"cajawas",      cat:"CAJAS", name:"Caja Washington", units:["caja"], desc:"Venta por caja. Especifica cantidad de cajas.", mods:true, img:"cajawas.jpeg"},
+  {id:"canadian",     cat:"CAJAS", name:"Menudo Canadian", units:["caja"], desc:"Venta por caja. Especifica cantidad.", mods:true, img:"canadian.jpg"},
 ];
 
 const CATS = ["VÍSCERAS","CAJAS"];
 
 /** =========================
- *  MODIFICADORES (MAYOREO)
+ *  MODIFICADORES (solo PRESENTACIÓN)
  *  ========================= */
 const MODS = {
   presentacion: { title:"Presentación", type:"single", required:false,
     options:["Completo","Partido en 2","Partido en 4","En rodajas","Sin especificar"]
-  },
-  estado: { title:"Estado", type:"single", required:false,
-    options:["Sucia","Limpia","Congelada","Refrigerada","Sin especificar"]
-  },
-  origen: { title:"Origen", type:"single", required:false,
-    options:["Rastro","Limpieza","Congelado","Sin especificar"]
   }
 };
 
 function modsPara(item){
   if(!item.mods) return [];
-  // Para mayoreo, aplica a todo (si no lo usan, lo dejan vacío)
-  return ["presentacion","estado","origen"];
+  return ["presentacion"];
 }
 
 /** =========================
@@ -862,8 +879,8 @@ function modsToText(mods){
   }
   return parts.join(" • ");
 }
-function buildKey(item, mods, note){
-  return item.id + "|" + JSON.stringify(mods) + "|" + (note||"");
+function buildKey(item, unitSel, mods, note){
+  return item.id + "|" + unitSel + "|" + JSON.stringify(mods) + "|" + (note||"");
 }
 function validateRequired(item, mods){
   const keys = modsPara(item);
@@ -897,6 +914,10 @@ function renderTabs(){
   });
 }
 
+function unitsLabel(it){
+  return (it.units || []).join(" / ");
+}
+
 function renderItems(){
   sectionTitle.textContent = activeCat;
 
@@ -914,7 +935,7 @@ function renderItems(){
     const badge = it.cat==="CAJAS" ? "📦 Caja" : "🥩 Mayoreo";
     card.innerHTML = `
       <div class="prodLeft">
-        <div class="badge">${badge} • ${escapeHtml(it.unit)}</div>
+        <div class="badge">${badge} • ${escapeHtml(unitsLabel(it))}</div>
         <h3 class="prodName">${escapeHtml(it.name)}</h3>
         <p class="prodDesc">${escapeHtml(it.desc || "")}</p>
         <div class="price">Precio <b>A cotizar</b></div>
@@ -939,12 +960,11 @@ q.addEventListener("input", renderItems);
 /** =========================
  *  CARRITO (sin precios: solo qty)
  *  ========================= */
-let cart = []; // {key, id, name, unit, qty, mods, note}
+let cart = []; // {key, id, name, unitSel, qty, mods, note}
 
 const cartBox = document.getElementById("cart");
 const totalEl = document.getElementById("total");
 const cartPill = document.getElementById("cartPill");
-const pillTotal = document.getElementById("pillTotal");
 const barTotal = document.getElementById("barTotal");
 
 function cartCount(){ return cart.reduce((a,x)=>a + x.qty, 0); }
@@ -952,7 +972,6 @@ function cartCount(){ return cart.reduce((a,x)=>a + x.qty, 0); }
 function renderCart(){
   const count = cartCount();
   cartPill.innerHTML = `🛒 <b>${count}</b> <span class="amt">Cotización</span>`;
-  pillTotal.textContent = "Cotización";
   totalEl.textContent = "Cotización";
   barTotal.textContent = "Cotización";
 
@@ -967,7 +986,7 @@ function renderCart(){
     wrap.innerHTML = `
       <div style="min-width:0">
         <div style="font-weight:1100;font-size:14px">${escapeHtml(line.name)}
-          <span class="muted" style="font-weight:1100">(${escapeHtml(line.unit)})</span>
+          <span class="muted" style="font-weight:1100">(${escapeHtml(line.unitSel)})</span>
         </div>
         <div class="muted" style="font-size:12px; margin-top:4px; line-height:1.25; font-weight:900">
           ${escapeHtml(modsToText(line.mods) || "")}
@@ -991,7 +1010,7 @@ function renderCart(){
 }
 
 /** =========================
- *  MODAL MODS
+ *  MODAL MODS (unidad + presentacion + nota)
  *  ========================= */
 const backdrop = document.getElementById("backdrop");
 const mTitle = document.getElementById("mTitle");
@@ -1005,10 +1024,35 @@ let draft = null;
 
 function openModal(item){
   currentItem = item;
-  draft = {mods:{}, note:""};
-  mTitle.textContent = `${item.name} — (${item.unit})`;
+  draft = {unitSel:(item.units?.[0] || "pza"), mods:{}, note:""};
+  mTitle.textContent = `${item.name}`;
   mBody.innerHTML = "";
 
+  // UNIDAD (pza/kg/caja)
+  const u = document.createElement("div");
+  u.className = "optGroup";
+  u.innerHTML = `
+    <div class="optTitle">
+      <b>Unidad</b>
+      <span>elige 1</span>
+    </div>
+    <div class="optList" data-k="__unit"></div>
+  `;
+  const ul = u.querySelector(".optList");
+  (item.units || ["pza"]).forEach(opt=>{
+    const o = document.createElement("div");
+    o.className = "opt" + (opt===draft.unitSel ? " active":"");
+    o.textContent = opt;
+    o.onclick = ()=>{
+      draft.unitSel = opt;
+      ul.querySelectorAll(".opt").forEach(x=>x.classList.remove("active"));
+      o.classList.add("active");
+    };
+    ul.appendChild(o);
+  });
+  mBody.appendChild(u);
+
+  // PRESENTACIÓN
   const keys = modsPara(item);
   keys.forEach(k=>{
     const g = MODS[k];
@@ -1028,12 +1072,17 @@ function openModal(item){
       const o = document.createElement("div");
       o.className = "opt";
       o.textContent = opt;
-      o.onclick = ()=> toggleOpt(k, opt, o);
+      o.onclick = ()=>{
+        draft.mods[k] = opt;
+        list.querySelectorAll(".opt").forEach(x=>x.classList.remove("active"));
+        o.classList.add("active");
+      };
       list.appendChild(o);
     });
     mBody.appendChild(box);
   });
 
+  // NOTA
   const n = document.createElement("div");
   n.className = "optGroup";
   n.innerHTML = `
@@ -1060,14 +1109,8 @@ function closeModal(){
   draft = null;
 }
 
-function toggleOpt(k, opt, el){
-  draft.mods[k] = opt;
-  el.parentElement.querySelectorAll(".opt").forEach(x=>x.classList.remove("active"));
-  el.classList.add("active");
-}
-
-function addLine(item, mods, note){
-  const key = buildKey(item, mods, note);
+function addLine(item, unitSel, mods, note){
+  const key = buildKey(item, unitSel, mods, note);
   const existing = cart.find(x=>x.key===key);
   if(existing){ existing.qty += 1; }
   else{
@@ -1075,7 +1118,7 @@ function addLine(item, mods, note){
       key,
       id:item.id,
       name:item.name,
-      unit:item.unit,
+      unitSel: unitSel,
       qty:1,
       mods: mods,
       note: note || ""
@@ -1085,11 +1128,7 @@ function addLine(item, mods, note){
 }
 
 function onAddClicked(item){
-  if(item.mods && modsPara(item).length){
-    openModal(item);
-  }else{
-    addLine(item, {}, "");
-  }
+  openModal(item);
 }
 
 mClose.onclick = closeModal;
@@ -1100,12 +1139,12 @@ mAdd.onclick = ()=>{
   if(!currentItem || !draft) return;
   const err = validateRequired(currentItem, draft.mods);
   if(err){ alert(err); return; }
-  addLine(currentItem, draft.mods, draft.note);
+  addLine(currentItem, draft.unitSel, draft.mods, draft.note);
   closeModal();
 };
 
 /** =========================
- *  CHECKOUT POR PASOS (cliente arma su pedido)
+ *  CHECKOUT POR PASOS (idéntico a tu flujo)
  *  ========================= */
 const canalEl = document.getElementById("canal");
 
@@ -1119,7 +1158,7 @@ const btnNext = document.getElementById("btnNext");
 
 let step = 1;
 
-// Guardado simple de clientes (para sugerencias tipo "chema", "lola")
+// Guardado simple de clientes
 const LS_CLIENTES_KEY = "mayoreo_clientes_hist";
 
 function getClientesHist(){
@@ -1170,7 +1209,6 @@ function renderStep(){
   btnNext.textContent = (step===3) ? "ENVIAR WHATSAPP" : "CONTINUAR";
 
   if(step===1){
-    // datalist de clientes
     const options = getClientesHist().map(n=>`<option value="${escapeHtml(n)}"></option>`).join("");
     stepsBody.innerHTML = `
       <label>* Cliente / Negocio</label>
@@ -1241,7 +1279,6 @@ function renderStep(){
     return;
   }
 
-  // Paso 3: resumen corto + aviso
   const canalTxt = canal==="domicilio" ? "Envío / Ruta" : "Pasar a recoger";
   stepsBody.innerHTML = `
     <div class="note">
@@ -1306,7 +1343,7 @@ function buildWhatsAppText(){
   lines.push(``);
   lines.push(`--------------------------`);
   cart.forEach(x=>{
-    lines.push(`- ${x.qty} ${x.unit} x ${x.name}`);
+    lines.push(`- ${x.qty} ${x.unitSel} x ${x.name}`);
     const mt = modsToText(x.mods);
     if(mt) lines.push(`  • ${mt}`);
     if(x.note) lines.push(`  • Nota: ${x.note}`);
@@ -1342,7 +1379,6 @@ btnNext.onclick = ()=>{
   if(step===1){ step=2; renderStep(); return; }
   if(step===2){ step=3; renderStep(); return; }
 
-  // guardar cliente en historial
   addClienteHist(form.cliente);
 
   const text = cleanWA(buildWhatsAppText());
@@ -1361,9 +1397,7 @@ document.getElementById("btnClear").onclick = ()=>{
   }
 };
 
-/** =========================
- *  INIT
- *  ========================= */
+/** INIT */
 renderTabs();
 renderItems();
 renderCart();
