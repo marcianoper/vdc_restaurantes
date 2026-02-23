@@ -9,19 +9,15 @@
     :root{
       --bg:#1a0f0c;
       --bg2:#24130f;
-
       --card:#fff6ec;
       --card2:#fff1e2;
-
       --ink:#2b1a14;
       --muted:#6a4a3c;
       --line: rgba(0,0,0,.10);
-
       --brand1:#8b1e1e;
       --brand2:#b63a2b;
       --gold:#d4a373;
       --green:#2f7d32;
-
       --shadow: 0 18px 50px rgba(0,0,0,.25);
       --r:18px;
     }
@@ -367,7 +363,6 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* BACKDROPS */
     .overlay{
       position:fixed; inset:0;
       background: rgba(0,0,0,.60);
@@ -486,7 +481,6 @@
       margin-top:12px;
     }
 
-    /* ✅ Body lock (iOS friendly) — SIN touch-action:none */
     body.locked{
       position: fixed;
       width: 100%;
@@ -569,7 +563,7 @@
   </div>
 </div>
 
-<!-- ✅ Pregunta al entrar: SOLO servicio -->
+<!-- Pregunta al entrar: SOLO servicio -->
 <div class="overlay" id="firstOverlay" aria-hidden="true">
   <div class="panel" id="firstPanel" role="dialog" aria-modal="true">
     <div class="panelHead">
@@ -617,7 +611,7 @@
   </div>
 </div>
 
-<!-- CHECKOUT POR PASOS -->
+<!-- CHECKOUT -->
 <div class="overlay" id="stepsOverlay" aria-hidden="true" style="z-index:9998;">
   <div class="panel" id="stepsPanel" role="dialog" aria-modal="true" style="width:min(760px, 100%);">
     <div class="panelHead">
@@ -724,12 +718,10 @@ function validateRequired(item, mods){
   return null;
 }
 
-/** ✅ Tap helper (iOS/Android robusto) */
+/** ✅ Tap helper (iOS/Android) */
 function bindTap(el, fn){
   if(!el) return;
-  // Pointer events (mejor)
   el.addEventListener("pointerup", (e)=>{ e.preventDefault(); e.stopPropagation(); fn(e); });
-  // Fallback click
   el.addEventListener("click", (e)=>{ e.preventDefault(); e.stopPropagation(); fn(e); });
 }
 
@@ -800,8 +792,7 @@ function renderItems(){
         <button class="btnAdd" type="button">Agregar</button>
       </div>
     `;
-    const btn = card.querySelector("button");
-    bindTap(btn, ()=> onAddClicked(it));
+    bindTap(card.querySelector("button"), ()=> onAddClicked(it));
     itemsBox.appendChild(card);
   });
 
@@ -825,8 +816,7 @@ function cartCount(){ return cart.reduce((a,x)=>a + x.qty, 0); }
 function cartTotal(){ return cart.reduce((a,x)=>a + x.qty*(x.basePrice), 0); }
 
 function renderCart(){
-  const count = cartCount();
-  cartPill.innerHTML = `🛒 <b>${count}</b> <span class="amt">${money(cartTotal())}</span>`;
+  cartPill.innerHTML = `🛒 <b>${cartCount()}</b> <span class="amt">${money(cartTotal())}</span>`;
   pillTotal.textContent = money(cartTotal());
   totalEl.textContent = money(cartTotal());
   barTotal.textContent = money(cartTotal());
@@ -840,7 +830,6 @@ function renderCart(){
   cart.forEach((line, idx)=>{
     const wrap = document.createElement("div");
     wrap.className = "cartLine";
-    const lineTotal = line.qty*(line.basePrice);
     wrap.innerHTML = `
       <div style="min-width:0">
         <div style="font-weight:1000;font-size:14px">${escapeHtml(line.name)}
@@ -857,7 +846,7 @@ function renderCart(){
           <div style="min-width:24px; text-align:center; font-weight:1000">${line.qty}</div>
           <button class="mini" type="button" data-act="inc">+</button>
         </div>
-        <div style="margin-top:6px; font-weight:1000">${money(lineTotal)}</div>
+        <div style="margin-top:6px; font-weight:1000">${money(line.qty*(line.basePrice))}</div>
         <button class="mini" type="button" style="margin-top:8px;width:100%;height:34px;border-radius:12px;font-weight:1000">✕</button>
       </div>
     `;
@@ -869,14 +858,13 @@ function renderCart(){
 }
 
 /** =========================
- *  OVERLAY: servicio al entrar
+ *  FIRST OVERLAY (servicio)
  *  ========================= */
 const canalEl = document.getElementById("canal");
 const firstOverlay = document.getElementById("firstOverlay");
 const firstPanel = document.getElementById("firstPanel");
 const firstCanalOpts = document.getElementById("firstCanalOpts");
 const firstOk = document.getElementById("firstOk");
-
 let firstChoice = "recoger";
 
 function openFirstCanal(){
@@ -885,12 +873,10 @@ function openFirstCanal(){
   firstOverlay.setAttribute("aria-hidden","false");
 
   firstCanalOpts.innerHTML = "";
-  const opciones = [
+  [
     {val:"recoger", label:"🚶‍♂️ Pasar a recoger"},
     {val:"domicilio", label:"🏠 Envío a domicilio"}
-  ];
-
-  opciones.forEach(o=>{
+  ].forEach(o=>{
     const b = document.createElement("div");
     b.className = "opt" + (firstChoice===o.val ? " active":"");
     b.textContent = o.label;
@@ -902,7 +888,6 @@ function openFirstCanal(){
     firstCanalOpts.appendChild(b);
   });
 }
-
 function closeFirstCanal(){
   canalEl.value = firstChoice;
   canalEl.disabled = false;
@@ -911,16 +896,12 @@ function closeFirstCanal(){
   unlockBody();
 }
 
-// ✅ Solo bloquea tap si tocan el FONDO (no la tarjeta)
-firstOverlay.addEventListener("pointerdown", (e)=>{
-  if(e.target === firstOverlay) e.preventDefault();
-}, { passive:false });
-
-bindTap(firstOk, closeFirstCanal);
+firstOverlay.addEventListener("pointerdown", (e)=>{ if(e.target === firstOverlay) e.preventDefault(); }, { passive:false });
 firstPanel.addEventListener("pointerdown", (e)=> e.stopPropagation());
+bindTap(firstOk, closeFirstCanal);
 
 /** =========================
- *  MODAL MODS
+ *  MODS OVERLAY
  *  ========================= */
 const modsOverlay = document.getElementById("modsOverlay");
 const modsPanel = document.getElementById("modsPanel");
@@ -1028,10 +1009,7 @@ function onAddClicked(item){
 
 bindTap(mClose, closeMods);
 bindTap(mCancel, closeMods);
-
-modsOverlay.addEventListener("pointerdown", (e)=>{
-  if(e.target === modsOverlay) e.preventDefault();
-}, { passive:false });
+modsOverlay.addEventListener("pointerdown", (e)=>{ if(e.target === modsOverlay) e.preventDefault(); }, { passive:false });
 modsPanel.addEventListener("pointerdown", (e)=> e.stopPropagation());
 
 bindTap(mAdd, ()=>{
@@ -1055,7 +1033,7 @@ bindTap(mAdd, ()=>{
 });
 
 /** =========================
- *  CHECKOUT
+ *  CHECKOUT + MAPS
  *  ========================= */
 const stepsOverlay = document.getElementById("stepsOverlay");
 const stepsPanel = document.getElementById("stepsPanel");
@@ -1067,6 +1045,7 @@ const btnBack = document.getElementById("btnBack");
 const btnNext = document.getElementById("btnNext");
 
 let step = 1;
+
 const form = {
   nombre: "",
   tel: "",
@@ -1078,6 +1057,8 @@ const form = {
   cp: "",
   estado: "Guanajuato",
   refs: "",
+  // ✅ Ubicación en Maps
+  mapsLink: "",
   metodo: "efectivo",
   pagareCon: "",
   notas: ""
@@ -1095,13 +1076,35 @@ function closeSteps(){
   stepsOverlay.setAttribute("aria-hidden","true");
   unlockBody();
 }
-
 bindTap(stepsClose, closeSteps);
-
-stepsOverlay.addEventListener("pointerdown", (e)=>{
-  if(e.target === stepsOverlay) e.preventDefault();
-}, { passive:false });
+stepsOverlay.addEventListener("pointerdown", (e)=>{ if(e.target === stepsOverlay) e.preventDefault(); }, { passive:false });
 stepsPanel.addEventListener("pointerdown", (e)=> e.stopPropagation());
+
+function openMapsAt(lat, lng){
+  // abre Google Maps centrado en el punto (el usuario puede mover y elegir)
+  const url = `https://www.google.com/maps/@?api=1&map_action=map&center=${lat},${lng}&zoom=18`;
+  window.open(url, "_blank");
+}
+
+function chooseLocationInMaps(){
+  // Intento 1: con GPS
+  if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(
+      (pos)=>{
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+        openMapsAt(lat, lng);
+      },
+      ()=>{
+        // Si no dio permiso / falla, abre Maps sin coordenadas
+        window.open("https://www.google.com/maps", "_blank");
+      },
+      { enableHighAccuracy:true, timeout:8000, maximumAge:0 }
+    );
+  }else{
+    window.open("https://www.google.com/maps", "_blank");
+  }
+}
 
 function renderStep(){
   const canal = canalEl.value;
@@ -1112,7 +1115,7 @@ function renderStep(){
     stepSub.textContent = "Datos personales";
   } else if(step===2){
     stepTitle.textContent = "Paso 2 de 3";
-    stepSub.textContent = (canal==="domicilio") ? "Dirección de entrega" : "Confirmación rápida";
+    stepSub.textContent = (canal==="domicilio") ? "Dirección y ubicación" : "Confirmación rápida";
   } else {
     stepTitle.textContent = "Paso 3 de 3";
     stepSub.textContent = "Pago y enviar pedido";
@@ -1152,6 +1155,7 @@ function renderStep(){
       stepsBody.innerHTML = `<div class="note">Como tu servicio es recoger, este paso se brinca y pasamos al pago.</div>`;
       return;
     }
+
     stepsBody.innerHTML = `
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
         <div>
@@ -1183,7 +1187,29 @@ function renderStep(){
 
       <label>* Referencias</label>
       <textarea id="s_refs" placeholder="Entre calles, color de la casa, etc.">${escapeHtml(form.refs)}</textarea>
+
+      <div class="optGroup">
+        <div class="optTitle">
+          <b>📍 Ubicación en tiempo real (Maps)</b>
+          <span>opcional pero recomendado</span>
+        </div>
+
+        <div class="note" style="margin-top:10px">
+          1) Toca <b>Elegir ubicación</b> para abrir Google Maps.<br>
+          2) En Maps, pon el pin en tu ubicación y comparte el enlace.<br>
+          3) Pega el enlace aquí para mandarlo en el pedido.
+        </div>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px">
+          <button class="btnDark" id="btnMaps" type="button">📍 Elegir ubicación en Maps</button>
+          <button class="btnLight" id="btnPasteMaps" type="button">📋 Pegar enlace</button>
+        </div>
+
+        <label style="margin-top:12px">Enlace de Google Maps</label>
+        <input id="s_maps" value="${escapeHtml(form.mapsLink)}" placeholder="Pega aquí el link que compartiste de Maps">
+      </div>
     `;
+
     setTimeout(()=>{
       const bind = (id, fn)=>{ const el=document.getElementById(id); if(el) el.oninput=fn; };
       bind("s_calle",  e=> form.calle  = e.target.value);
@@ -1192,7 +1218,30 @@ function renderStep(){
       bind("s_col",    e=> form.col    = e.target.value);
       bind("s_cp",     e=> form.cp     = e.target.value);
       bind("s_refs",   e=> form.refs   = e.target.value);
+      bind("s_maps",   e=> form.mapsLink = e.target.value);
+
+      const btnMaps = document.getElementById("btnMaps");
+      const btnPaste = document.getElementById("btnPasteMaps");
+      if(btnMaps) bindTap(btnMaps, chooseLocationInMaps);
+
+      if(btnPaste){
+        bindTap(btnPaste, async ()=>{
+          try{
+            const txt = await navigator.clipboard.readText();
+            if(txt){
+              form.mapsLink = txt.trim();
+              const inp = document.getElementById("s_maps");
+              if(inp) inp.value = form.mapsLink;
+            }else{
+              alert("No encontré texto en el portapapeles.");
+            }
+          }catch(e){
+            alert("Tu navegador no permitió leer el portapapeles. Copia el enlace y pégalo manualmente.");
+          }
+        });
+      }
     },0);
+
     return;
   }
 
@@ -1240,6 +1289,7 @@ function stepValidate(){
     if(!form.col.trim()) return "Falta la colonia.";
     if(!form.cp.trim()) return "Falta el CP.";
     if(!form.refs.trim()) return "Faltan referencias.";
+    // mapsLink es opcional (no lo forzamos)
   }
   if(step===3){
     const p = form.pagareCon.trim();
@@ -1283,6 +1333,12 @@ function buildWhatsAppText(){
     lines.push(``);
     lines.push(`Domicilio para la entrega:`);
     lines.push(dir);
+
+    if(form.mapsLink.trim()){
+      lines.push(``);
+      lines.push(`📍 Ubicación (Google Maps):`);
+      lines.push(form.mapsLink.trim());
+    }
   }
 
   lines.push(``);
@@ -1350,7 +1406,7 @@ renderTabs();
 renderItems();
 renderCart();
 
-// ✅ Cada vez que entren: preguntar servicio (no guarda)
+// Preguntar servicio al entrar
 window.addEventListener("load", ()=> openFirstCanal());
 </script>
 
