@@ -138,8 +138,7 @@
     .hero::before{
       content:"";
       position:absolute; inset:0;
-      background:
-        linear-gradient(180deg, rgba(0,0,0,.15), rgba(0,0,0,.45));
+      background: linear-gradient(180deg, rgba(0,0,0,.15), rgba(0,0,0,.45));
       pointer-events:none;
     }
     .hero img{
@@ -642,6 +641,7 @@
       <h2>Tu pedido</h2>
       <div class="content">
 
+        <!-- (se queda visible, pero NO se guarda; se define al entrar) -->
         <label>Servicio</label>
         <select id="canal">
           <option value="recoger">Pasar a recoger</option>
@@ -1051,6 +1051,13 @@ const btnNext = document.getElementById("btnNext");
 
 let step = 1;
 
+// Paso 0 = SOLO elegir canal (al entrar)
+function openCanalFirst(){
+  step = 0;
+  stepsBackdrop.style.display = "flex";
+  renderStep();
+}
+
 const form = {
   nombre: "",
   tel: "",
@@ -1068,35 +1075,26 @@ const form = {
 };
 
 function openSteps(){
-  step = 1;
+  step = 1; // checkout normal inicia en paso 1
   stepsBackdrop.style.display = "flex";
   renderStep();
 }
 function closeSteps(){ stepsBackdrop.style.display = "none"; }
 
-/** =========================
- *  PRIMER PREGUNTA (SIEMPRE PREGUNTA DOMICILIO/RECOGER)
- *  ========================= */
-function openCanalFirst(){
-  step = 0; // paso 0 = elegir canal
-  stepsBackdrop.style.display = "flex";
-  renderStep();
-}
-
 function renderStep(){
   const canal = canalEl.value;
   const total = cartTotal();
 
-  // PASO 0: elegir canal (SIEMPRE)
+  // PASO 0: preguntar canal y CERRAR para que ya pidan productos
   if(step === 0){
     stepTitle.textContent = "Antes de empezar…";
-    stepSub.textContent = "¿Cómo será tu pedido?";
+    stepSub.textContent = "¿Tu pedido será a domicilio o para recoger?";
     btnBack.style.display = "none";
-    btnNext.textContent = "CONTINUAR";
+    btnNext.textContent = "LISTO";
 
     stepsBody.innerHTML = `
       <div class="note" style="margin-top:0">
-        Elige cómo quieres tu pedido:
+        Elige una opción (esto se pregunta <b>cada vez</b> que entras).
       </div>
 
       <div class="optGroup" style="margin-top:12px">
@@ -1130,7 +1128,7 @@ function renderStep(){
     return;
   }
 
-  // Paso 1..3 normales
+  // Pasos 1..3 checkout
   if(step===1){
     stepTitle.textContent = "Paso 1 de 3";
     stepSub.textContent = "Datos personales";
@@ -1262,6 +1260,7 @@ function renderStep(){
 
 function stepValidate(){
   const canal = canalEl.value;
+
   if(step===1){
     if(!form.nombre.trim()) return "Pon tu nombre.";
     if(!form.tel.trim()) return "Pon tu celular.";
@@ -1358,10 +1357,9 @@ document.getElementById("btnCheckout").onclick = ()=>{
 btnBack.onclick = ()=>{ if(step>1){ step--; renderStep(); } };
 
 btnNext.onclick = ()=>{
-  // Paso 0: solo continuar al paso 1 (NO GUARDA NADA)
+  // Paso 0: solo cerrar para que ya pidan productos
   if(step === 0){
-    step = 1;
-    renderStep();
+    closeSteps();
     return;
   }
 
@@ -1394,9 +1392,9 @@ renderTabs();
 renderItems();
 renderCart();
 
-// Al cargar: SIEMPRE preguntar el canal (domicilio/recoger)
+// Al cargar: SIEMPRE preguntar el canal, y luego ya dejar pedir productos
 window.addEventListener("load", ()=>{
-  canalEl.value = "recoger";
+  canalEl.value = "recoger"; // default visible
   openCanalFirst();
 });
 </script>
