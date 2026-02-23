@@ -7,25 +7,20 @@
 
   <style>
     :root{
-      /* TAQUERÍA TRADICIONAL: rojo + crema + carbón */
       --bg:#1a0f0c;
       --bg2:#24130f;
 
-      /* Tarjetas en crema (para que se vea “menú”) */
       --card:#fff6ec;
       --card2:#fff1e2;
 
-      /* Textos oscuros (sobre crema) */
       --ink:#2b1a14;
       --muted:#6a4a3c;
       --line: rgba(0,0,0,.10);
 
-      /* Marca */
       --brand1:#8b1e1e;
       --brand2:#b63a2b;
       --gold:#d4a373;
       --green:#2f7d32;
-      --danger:#9b1c1c;
 
       --shadow: 0 18px 50px rgba(0,0,0,.25);
       --r:18px;
@@ -43,7 +38,6 @@
         linear-gradient(180deg, var(--bg), var(--bg2));
     }
 
-    /* TOP BAR */
     header{
       position: sticky; top: 0; z-index: 40;
       padding: 12px 14px;
@@ -109,7 +103,6 @@
       font-weight:1000;
     }
 
-    /* LAYOUT */
     .wrap{
       max-width:1200px;
       margin:0 auto;
@@ -127,7 +120,6 @@
       .grid{grid-template-columns:1fr}
     }
 
-    /* HERO */
     .hero{
       border-radius: 22px;
       overflow:hidden;
@@ -155,7 +147,6 @@
       .hero img{height:170px}
     }
 
-    /* CARD */
     .card{
       background: linear-gradient(180deg, var(--card), var(--card2));
       border:1px solid rgba(255,255,255,.10);
@@ -179,7 +170,6 @@
     }
     .content{padding:14px}
 
-    /* SEARCH + TABS */
     .searchRow{display:flex; gap:10px; align-items:center; margin-top:12px;}
     .searchRow input{
       flex:1;
@@ -209,11 +199,6 @@
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
     }
-    .tab:hover{
-      box-shadow: 0 14px 28px rgba(0,0,0,.14);
-      transform: translateY(-1px);
-      transition: .15s ease;
-    }
     .tab.active{
       border-color: rgba(139,30,30,.35);
       background: linear-gradient(180deg, rgba(182,58,43,.14), rgba(255,255,255,.80));
@@ -236,7 +221,6 @@
       margin: 8px 0 18px;
     }
 
-    /* PRODUCT GRID */
     .items{
       display:grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -247,7 +231,6 @@
       .sectionTitle{font-size:32px}
     }
 
-    /* PRODUCT CARD */
     .prod{
       background: rgba(255,255,255,.82);
       border:1px solid rgba(0,0,0,.10);
@@ -293,7 +276,6 @@
     }
     .prodImg img{width:100%; height:100%; object-fit: cover; display:block;}
 
-    /* BOTONES */
     .btnAdd, .stickyBtn{
       border:none; cursor:pointer;
       padding: 12px 18px;
@@ -307,10 +289,7 @@
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
     }
-    .btnAdd:active, .stickyBtn:active{transform: translateY(1px)}
-    .btnAdd:focus, .stickyBtn:focus{outline: 3px solid rgba(182,58,43,.18)}
 
-    /* CART */
     .cartLine{
       display:flex; justify-content:space-between; gap:10px; align-items:flex-start;
       border-bottom:1px dashed rgba(0,0,0,.16);
@@ -330,7 +309,7 @@
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
     }
-    .mini:active{transform: translateY(1px)}
+
     label{
       display:block; font-size:12px; font-weight:1000; margin:10px 0 6px;
       color: rgba(43,26,20,.92);
@@ -357,7 +336,6 @@
     }
     .totalRow strong{font-size:18px; color: var(--green);}
 
-    /* STICKY BAR */
     .stickyBar{
       position: sticky;
       bottom: 12px;
@@ -376,6 +354,7 @@
     }
     .stickyBar .left{display:flex; align-items:center; gap:10px; font-weight:1000; color: var(--ink);}
     .stickyBar .amount{font-size:18px; letter-spacing:.2px; color: var(--green);}
+
     .btnGhost{
       border:1px solid rgba(0,0,0,.12);
       background: rgba(255,255,255,.70);
@@ -388,38 +367,48 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* MODAL (mods) */
-    .backdrop{
+    /* BACKDROPS */
+    .overlay{
       position:fixed; inset:0;
-      background:rgba(0,0,0,.55);
+      background: rgba(0,0,0,.60);
       display:none;
       align-items:center;
       justify-content:center;
       padding:16px;
-      z-index:9999;
+      z-index:9997;
       pointer-events:auto;
-      touch-action:none;
       -webkit-tap-highlight-color: transparent;
     }
-    .modal{
-      width:min(820px, 100%);
+    .panel{
+      width:min(640px, 100%);
       background: linear-gradient(180deg, var(--card), var(--card2));
-      border-radius:18px;
+      border-radius: 18px;
       overflow:hidden;
       border:1px solid rgba(0,0,0,.12);
       box-shadow: 0 40px 120px rgba(0,0,0,.35);
       pointer-events:auto;
-      touch-action: manipulation;
       transform: translateZ(0);
       -webkit-transform: translateZ(0);
     }
-    .modalHead{
+    .panelHead{
       padding:14px 16px;
       border-bottom:1px solid rgba(0,0,0,.10);
-      display:flex; justify-content:space-between; align-items:center; gap:10px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
       background: rgba(0,0,0,.03);
     }
-    .modalHead h3{margin:0; font-size:15px; color: var(--ink)}
+    .panelBody{padding:14px 16px}
+    .panelFoot{
+      padding:14px 16px;
+      border-top:1px solid rgba(0,0,0,.10);
+      background: rgba(0,0,0,.03);
+      display:flex;
+      gap:10px;
+      justify-content:flex-end;
+    }
+
     .closeX{
       border:1px solid rgba(0,0,0,.14);
       background: rgba(255,255,255,.75);
@@ -431,6 +420,7 @@
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
     }
+
     .optGroup{
       border:1px solid rgba(0,0,0,.10);
       border-radius:16px;
@@ -442,10 +432,11 @@
     .optTitle b{font-size:13px; color: var(--ink)}
     .optTitle span{font-size:12px; color:var(--muted); font-weight:900}
     .optList{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px}
+
     .opt{
       border:1px solid rgba(0,0,0,.12);
       background: rgba(255,255,255,.85);
-      padding:8px 10px;
+      padding:10px 12px;
       border-radius:999px;
       font-size:13px;
       cursor:pointer;
@@ -454,17 +445,10 @@
       color: var(--ink);
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
+      pointer-events:auto;
     }
     .opt.active{border-color: rgba(139,30,30,.45); box-shadow:0 0 0 3px rgba(139,30,30,.14);}
 
-    .footerBtns{
-      display:flex;
-      gap:10px;
-      padding:14px 16px;
-      border-top:1px solid rgba(0,0,0,.10);
-      background: rgba(0,0,0,.03);
-    }
-    .footerBtns button{flex:1}
     .btnDark{
       border:none; cursor:pointer;
       padding:12px 14px;
@@ -475,6 +459,7 @@
       box-shadow: 0 12px 28px rgba(139,30,30,.28);
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
+      min-width: 160px;
     }
     .btnLight{
       border:1px solid rgba(0,0,0,.12);
@@ -486,63 +471,7 @@
       cursor:pointer;
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
-    }
-
-    /* CANAL FIRST (solo pregunta al entrar) */
-    .firstBackdrop{
-      position:fixed; inset:0;
-      background: rgba(0,0,0,.60);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding:16px;
-      z-index:9997;
-      pointer-events:auto;
-      touch-action:none;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .firstCard{
-      width:min(640px, 100%);
-      background: linear-gradient(180deg, var(--card), var(--card2));
-      border-radius: 18px;
-      overflow:hidden;
-      border:1px solid rgba(0,0,0,.12);
-      box-shadow: 0 40px 120px rgba(0,0,0,.35);
-      pointer-events:auto;
-      transform: translateZ(0);
-      -webkit-transform: translateZ(0);
-    }
-    .firstHead{
-      padding:14px 16px;
-      border-bottom:1px solid rgba(0,0,0,.10);
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      background: rgba(0,0,0,.03);
-    }
-    .firstHead b{font-size:16px}
-    .firstBody{padding:14px 16px}
-    .firstFoot{
-      padding:14px 16px;
-      border-top:1px solid rgba(0,0,0,.10);
-      background: rgba(0,0,0,.03);
-      display:flex;
-      gap:10px;
-      justify-content:flex-end;
-    }
-    .firstBtn{
-      border:none;
-      cursor:pointer;
-      padding:12px 14px;
-      border-radius: 14px;
-      font-weight:1000;
-      color:#fff;
-      background: linear-gradient(180deg, var(--brand2), var(--brand1));
-      box-shadow: 0 12px 28px rgba(139,30,30,.28);
-      touch-action: manipulation;
-      -webkit-tap-highlight-color: transparent;
-      min-width: 160px;
+      min-width: 140px;
     }
 
     .note{
@@ -557,12 +486,11 @@
       margin-top:12px;
     }
 
-    /* Body lock (iOS friendly) */
+    /* ✅ Body lock (iOS friendly) — SIN touch-action:none */
     body.locked{
       position: fixed;
       width: 100%;
       overflow: hidden;
-      touch-action: none;
     }
   </style>
 </head>
@@ -584,7 +512,6 @@
   </div>
 
   <div class="grid">
-    <!-- MENÚ -->
     <section class="card">
       <h2>Menú</h2>
       <div class="content">
@@ -607,7 +534,6 @@
       </div>
     </section>
 
-    <!-- CARRITO -->
     <aside class="card">
       <h2>Tu pedido</h2>
       <div class="content">
@@ -643,17 +569,16 @@
   </div>
 </div>
 
-<!-- PREGUNTA AL ENTRAR (SOLO SERVICIO) -->
-<div class="firstBackdrop" id="firstBackdrop" aria-hidden="true">
-  <div class="firstCard" role="dialog" aria-modal="true">
-    <div class="firstHead">
+<!-- ✅ Pregunta al entrar: SOLO servicio -->
+<div class="overlay" id="firstOverlay" aria-hidden="true">
+  <div class="panel" id="firstPanel" role="dialog" aria-modal="true">
+    <div class="panelHead">
       <div style="display:flex; flex-direction:column; gap:4px;">
         <b>Antes de empezar…</b>
         <span class="muted" style="font-size:12px; font-weight:900">¿Cómo será tu pedido?</span>
       </div>
-      <!-- sin cerrar: elige una opción y listo -->
     </div>
-    <div class="firstBody">
+    <div class="panelBody">
       <div class="optGroup" style="margin-top:0">
         <div class="optTitle">
           <b>Servicio</b>
@@ -666,26 +591,26 @@
         Elige <b>una</b> opción y te dejamos empezar a escoger tus productos.
       </div>
     </div>
-    <div class="firstFoot">
-      <button class="firstBtn" id="firstOk" type="button">LISTO</button>
+    <div class="panelFoot">
+      <button class="btnDark" id="firstOk" type="button">LISTO</button>
     </div>
   </div>
 </div>
 
 <!-- MODAL MODIFICADORES -->
-<div class="backdrop" id="backdrop" aria-hidden="true">
-  <div class="modal" role="dialog" aria-modal="true">
-    <div class="modalHead">
+<div class="overlay" id="modsOverlay" aria-hidden="true" style="z-index:9999;">
+  <div class="panel" id="modsPanel" role="dialog" aria-modal="true" style="width:min(820px, 100%);">
+    <div class="panelHead">
       <div>
-        <h3 id="mTitle">Producto</h3>
+        <b id="mTitle">Producto</b>
         <div class="muted" id="mSub" style="font-size:12px;font-weight:900">Configura como lo quieres</div>
       </div>
       <button class="closeX" id="mClose" type="button">✕</button>
     </div>
 
-    <div class="content" id="mBody"></div>
+    <div class="panelBody" id="mBody"></div>
 
-    <div class="footerBtns">
+    <div class="panelFoot" style="justify-content:space-between">
       <button class="btnLight" id="mCancel" type="button">Cancelar</button>
       <button class="btnDark" id="mAdd" type="button">Agregar al carrito</button>
     </div>
@@ -693,9 +618,9 @@
 </div>
 
 <!-- CHECKOUT POR PASOS -->
-<div class="firstBackdrop" id="stepsBackdrop" aria-hidden="true" style="z-index:9998;">
-  <div class="firstCard" role="dialog" aria-modal="true" style="width:min(760px, 100%);">
-    <div class="firstHead">
+<div class="overlay" id="stepsOverlay" aria-hidden="true" style="z-index:9998;">
+  <div class="panel" id="stepsPanel" role="dialog" aria-modal="true" style="width:min(760px, 100%);">
+    <div class="panelHead">
       <div style="display:flex; flex-direction:column; gap:4px;">
         <b id="stepTitle">Paso 1 de 3</b>
         <span class="muted" id="stepSub" style="font-size:12px; font-weight:900">Datos personales</span>
@@ -703,11 +628,11 @@
       <button class="closeX" id="stepsClose" type="button">✕</button>
     </div>
 
-    <div class="firstBody" id="stepsBody"></div>
+    <div class="panelBody" id="stepsBody"></div>
 
-    <div class="firstFoot" style="justify-content:space-between;">
-      <button class="btnLight" id="btnBack" type="button" style="min-width:140px;">Regresar</button>
-      <button class="btnDark" id="btnNext" type="button" style="min-width:180px;">Continuar</button>
+    <div class="panelFoot" style="justify-content:space-between;">
+      <button class="btnLight" id="btnBack" type="button">Regresar</button>
+      <button class="btnDark" id="btnNext" type="button">Continuar</button>
     </div>
   </div>
 </div>
@@ -717,7 +642,7 @@
  *  CONFIG
  *  ========================= */
 const TAQUERIA_NOMBRE = "Tacos Los Fundadores";
-const WHATSAPP_TAQ = "524621872594"; // 52 + número sin +
+const WHATSAPP_TAQ = "524621872594";
 const IMG_BASE = "";
 
 /** =========================
@@ -799,8 +724,17 @@ function validateRequired(item, mods){
   return null;
 }
 
+/** ✅ Tap helper (iOS/Android robusto) */
+function bindTap(el, fn){
+  if(!el) return;
+  // Pointer events (mejor)
+  el.addEventListener("pointerup", (e)=>{ e.preventDefault(); e.stopPropagation(); fn(e); });
+  // Fallback click
+  el.addEventListener("click", (e)=>{ e.preventDefault(); e.stopPropagation(); fn(e); });
+}
+
 /** =========================
- *  BODY LOCK (iOS / Safari)
+ *  BODY LOCK (iOS)
  *  ========================= */
 let _scrollY = 0;
 function lockBody(){
@@ -831,7 +765,7 @@ function renderTabs(){
     const el = document.createElement("div");
     el.className = "tab" + (c===activeCat ? " active":"");
     el.innerHTML = `<span>${c}</span>`;
-    el.onclick = ()=>{ activeCat=c; renderTabs(); renderItems(); };
+    bindTap(el, ()=>{ activeCat=c; renderTabs(); renderItems(); });
     tabs.appendChild(el);
   });
 }
@@ -866,7 +800,8 @@ function renderItems(){
         <button class="btnAdd" type="button">Agregar</button>
       </div>
     `;
-    card.querySelector("button").onclick = ()=> onAddClicked(it);
+    const btn = card.querySelector("button");
+    bindTap(btn, ()=> onAddClicked(it));
     itemsBox.appendChild(card);
   });
 
@@ -926,17 +861,69 @@ function renderCart(){
         <button class="mini" type="button" style="margin-top:8px;width:100%;height:34px;border-radius:12px;font-weight:1000">✕</button>
       </div>
     `;
-    wrap.querySelector('[data-act="dec"]').onclick = ()=>{ line.qty=Math.max(1,line.qty-1); renderCart(); };
-    wrap.querySelector('[data-act="inc"]').onclick = ()=>{ line.qty+=1; renderCart(); };
-    wrap.querySelector('.mini:last-child').onclick = ()=>{ cart.splice(idx,1); renderCart(); };
+    bindTap(wrap.querySelector('[data-act="dec"]'), ()=>{ line.qty=Math.max(1,line.qty-1); renderCart(); });
+    bindTap(wrap.querySelector('[data-act="inc"]'), ()=>{ line.qty+=1; renderCart(); });
+    bindTap(wrap.querySelector('.mini:last-child'), ()=>{ cart.splice(idx,1); renderCart(); });
     cartBox.appendChild(wrap);
   });
 }
 
 /** =========================
- *  MODAL MODS (FIX iOS tap-through)
+ *  OVERLAY: servicio al entrar
  *  ========================= */
-const backdrop = document.getElementById("backdrop");
+const canalEl = document.getElementById("canal");
+const firstOverlay = document.getElementById("firstOverlay");
+const firstPanel = document.getElementById("firstPanel");
+const firstCanalOpts = document.getElementById("firstCanalOpts");
+const firstOk = document.getElementById("firstOk");
+
+let firstChoice = "recoger";
+
+function openFirstCanal(){
+  lockBody();
+  firstOverlay.style.display = "flex";
+  firstOverlay.setAttribute("aria-hidden","false");
+
+  firstCanalOpts.innerHTML = "";
+  const opciones = [
+    {val:"recoger", label:"🚶‍♂️ Pasar a recoger"},
+    {val:"domicilio", label:"🏠 Envío a domicilio"}
+  ];
+
+  opciones.forEach(o=>{
+    const b = document.createElement("div");
+    b.className = "opt" + (firstChoice===o.val ? " active":"");
+    b.textContent = o.label;
+    bindTap(b, ()=>{
+      firstChoice = o.val;
+      firstCanalOpts.querySelectorAll(".opt").forEach(x=>x.classList.remove("active"));
+      b.classList.add("active");
+    });
+    firstCanalOpts.appendChild(b);
+  });
+}
+
+function closeFirstCanal(){
+  canalEl.value = firstChoice;
+  canalEl.disabled = false;
+  firstOverlay.style.display = "none";
+  firstOverlay.setAttribute("aria-hidden","true");
+  unlockBody();
+}
+
+// ✅ Solo bloquea tap si tocan el FONDO (no la tarjeta)
+firstOverlay.addEventListener("pointerdown", (e)=>{
+  if(e.target === firstOverlay) e.preventDefault();
+}, { passive:false });
+
+bindTap(firstOk, closeFirstCanal);
+firstPanel.addEventListener("pointerdown", (e)=> e.stopPropagation());
+
+/** =========================
+ *  MODAL MODS
+ *  ========================= */
+const modsOverlay = document.getElementById("modsOverlay");
+const modsPanel = document.getElementById("modsPanel");
 const mTitle = document.getElementById("mTitle");
 const mBody  = document.getElementById("mBody");
 const mClose = document.getElementById("mClose");
@@ -946,7 +933,7 @@ const mAdd   = document.getElementById("mAdd");
 let currentItem = null;
 let draft = null;
 
-function openModal(item){
+function openMods(item){
   currentItem = item;
   draft = {mods:{}, note:""};
   mTitle.textContent = `${item.name} — ${money(item.price)}`;
@@ -964,16 +951,32 @@ function openModal(item){
         <b>${g.title}${g.required ? " *":""}</b>
         <span>${g.type==="single" ? "elige 1" : "elige las que quieras"}</span>
       </div>
-      <div class="optList" data-k="${k}"></div>
+      <div class="optList"></div>
     `;
     const list = box.querySelector(".optList");
+
     g.options.forEach(opt=>{
       const o = document.createElement("div");
       o.className = "opt";
       o.textContent = opt;
-      o.onclick = ()=> toggleOpt(k, opt, o);
+
+      bindTap(o, ()=>{
+        if(g.type==="single"){
+          draft.mods[k] = opt;
+          list.querySelectorAll(".opt").forEach(x=>x.classList.remove("active"));
+          o.classList.add("active");
+        }else{
+          draft.mods[k] = draft.mods[k] || [];
+          const arr = draft.mods[k];
+          const i = arr.indexOf(opt);
+          if(i>=0){ arr.splice(i,1); o.classList.remove("active"); }
+          else{ arr.push(opt); o.classList.add("active"); }
+        }
+      });
+
       list.appendChild(o);
     });
+
     mBody.appendChild(box);
   });
 
@@ -982,7 +985,7 @@ function openModal(item){
   n.innerHTML = `
     <div class="optTitle">
       <b>Nota (opcional)</b>
-      <span>ej. “bien doradito”, “sin grasa”, etc.</span>
+      <span>ej. “bien doradito”</span>
     </div>
     <div style="margin-top:10px">
       <input id="noteProd" placeholder="Escribe una nota para este producto..."/>
@@ -991,35 +994,23 @@ function openModal(item){
   mBody.appendChild(n);
 
   lockBody();
-  backdrop.style.display = "flex";
-  backdrop.setAttribute("aria-hidden","false");
+  modsOverlay.style.display = "flex";
+  modsOverlay.setAttribute("aria-hidden","false");
 
-  setTimeout(()=> {
+  setTimeout(()=>{
     const inp = document.getElementById("noteProd");
     if(inp) inp.oninput = ()=> draft.note = inp.value;
-  }, 0);
+  },0);
 }
-function closeModal(){
-  backdrop.style.display = "none";
-  backdrop.setAttribute("aria-hidden","true");
+
+function closeMods(){
+  modsOverlay.style.display = "none";
+  modsOverlay.setAttribute("aria-hidden","true");
   currentItem = null;
   draft = null;
   unlockBody();
 }
-function toggleOpt(k, opt, el){
-  const g = MODS[k];
-  if(g.type==="single"){
-    draft.mods[k] = opt;
-    el.parentElement.querySelectorAll(".opt").forEach(x=>x.classList.remove("active"));
-    el.classList.add("active");
-  }else{
-    draft.mods[k] = draft.mods[k] || [];
-    const arr = draft.mods[k];
-    const i = arr.indexOf(opt);
-    if(i>=0){ arr.splice(i,1); el.classList.remove("active"); }
-    else{ arr.push(opt); el.classList.add("active"); }
-  }
-}
+
 function addLine(item, mods, note){
   const key = buildKey(item, mods, note);
   const existing = cart.find(x=>x.key===key);
@@ -1029,23 +1020,21 @@ function addLine(item, mods, note){
   }
   renderCart();
 }
+
 function onAddClicked(item){
-  if(item.mods && modsPara(item).length) openModal(item);
+  if(item.mods && modsPara(item).length) openMods(item);
   else addLine(item, {}, "");
 }
-mClose.onclick = closeModal;
-mCancel.onclick = closeModal;
 
-backdrop.addEventListener("click", (e)=>{ if(e.target === e.currentTarget) closeModal(); });
-backdrop.addEventListener("touchstart", (e)=>{ if(e.target === e.currentTarget) e.preventDefault(); }, { passive:false });
-(function(){
-  const modalEl = backdrop.querySelector(".modal");
-  if(!modalEl) return;
-  modalEl.addEventListener("click", (e)=> e.stopPropagation());
-  modalEl.addEventListener("touchstart", (e)=> e.stopPropagation(), { passive:true });
-})();
+bindTap(mClose, closeMods);
+bindTap(mCancel, closeMods);
 
-mAdd.onclick = ()=>{
+modsOverlay.addEventListener("pointerdown", (e)=>{
+  if(e.target === modsOverlay) e.preventDefault();
+}, { passive:false });
+modsPanel.addEventListener("pointerdown", (e)=> e.stopPropagation());
+
+bindTap(mAdd, ()=>{
   if(!currentItem || !draft) return;
 
   if(currentItem.cat==="TACOS"){
@@ -1062,67 +1051,14 @@ mAdd.onclick = ()=>{
   if(err){ alert(err); return; }
 
   addLine(currentItem, draft.mods, draft.note);
-  closeModal();
-};
+  closeMods();
+});
 
 /** =========================
- *  PREGUNTA AL ENTRAR (SOLO CANAL) ✅
- *  - No guarda en localStorage
- *  - Solo pregunta una vez al cargar
- *  - Al elegir, desbloquea el menú
+ *  CHECKOUT
  *  ========================= */
-const canalEl = document.getElementById("canal");
-const firstBackdrop = document.getElementById("firstBackdrop");
-const firstCanalOpts = document.getElementById("firstCanalOpts");
-const firstOk = document.getElementById("firstOk");
-
-let firstChoice = canalEl.value || "recoger";
-
-function openFirstCanal(){
-  // bloquea scroll para iOS y evita "tap-through"
-  lockBody();
-  firstBackdrop.style.display = "flex";
-  firstBackdrop.setAttribute("aria-hidden","false");
-
-  // construir opciones
-  firstCanalOpts.innerHTML = "";
-  const opciones = [
-    {val:"recoger", label:"🚶‍♂️ Pasar a recoger"},
-    {val:"domicilio", label:"🏠 Envío a domicilio"}
-  ];
-  opciones.forEach(o=>{
-    const b = document.createElement("div");
-    b.className = "opt" + (firstChoice===o.val ? " active":"");
-    b.textContent = o.label;
-    b.onclick = ()=>{
-      firstChoice = o.val;
-      firstCanalOpts.querySelectorAll(".opt").forEach(x=>x.classList.remove("active"));
-      b.classList.add("active");
-    };
-    firstCanalOpts.appendChild(b);
-  });
-}
-
-function closeFirstCanal(){
-  // aplica canal al select (y lo habilita)
-  canalEl.value = firstChoice;
-  canalEl.disabled = false;
-
-  firstBackdrop.style.display = "none";
-  firstBackdrop.setAttribute("aria-hidden","true");
-  unlockBody();
-}
-
-// No cerrar tocando fuera: queremos que elija sí o sí
-firstBackdrop.addEventListener("touchstart", (e)=>{ e.preventDefault(); }, { passive:false });
-
-// Botón LISTO
-firstOk.onclick = closeFirstCanal;
-
-/** =========================
- *  CHECKOUT POR PASOS (sin paso de canal)
- *  ========================= */
-const stepsBackdrop = document.getElementById("stepsBackdrop");
+const stepsOverlay = document.getElementById("stepsOverlay");
+const stepsPanel = document.getElementById("stepsPanel");
 const stepsClose = document.getElementById("stepsClose");
 const stepsBody = document.getElementById("stepsBody");
 const stepTitle = document.getElementById("stepTitle");
@@ -1131,7 +1067,6 @@ const btnBack = document.getElementById("btnBack");
 const btnNext = document.getElementById("btnNext");
 
 let step = 1;
-
 const form = {
   nombre: "",
   tel: "",
@@ -1151,19 +1086,22 @@ const form = {
 function openSteps(){
   step = 1;
   lockBody();
-  stepsBackdrop.style.display = "flex";
-  stepsBackdrop.setAttribute("aria-hidden","false");
+  stepsOverlay.style.display = "flex";
+  stepsOverlay.setAttribute("aria-hidden","false");
   renderStep();
 }
 function closeSteps(){
-  stepsBackdrop.style.display = "none";
-  stepsBackdrop.setAttribute("aria-hidden","true");
+  stepsOverlay.style.display = "none";
+  stepsOverlay.setAttribute("aria-hidden","true");
   unlockBody();
 }
 
-stepsClose.onclick = closeSteps;
-// evitar tap-through: click afuera NO cierra, solo con X
-stepsBackdrop.addEventListener("touchstart", (e)=>{ e.preventDefault(); }, { passive:false });
+bindTap(stepsClose, closeSteps);
+
+stepsOverlay.addEventListener("pointerdown", (e)=>{
+  if(e.target === stepsOverlay) e.preventDefault();
+}, { passive:false });
+stepsPanel.addEventListener("pointerdown", (e)=> e.stopPropagation());
 
 function renderStep(){
   const canal = canalEl.value;
@@ -1185,7 +1123,7 @@ function renderStep(){
 
   if(step===1){
     stepsBody.innerHTML = `
-      <div class="stepRow" style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
         <div>
           <label>* Nombre</label>
           <input id="s_nombre" value="${escapeHtml(form.nombre)}" placeholder="Ej. Marciano Pérez">
@@ -1214,9 +1152,8 @@ function renderStep(){
       stepsBody.innerHTML = `<div class="note">Como tu servicio es recoger, este paso se brinca y pasamos al pago.</div>`;
       return;
     }
-
     stepsBody.innerHTML = `
-      <div class="stepRow" style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
         <div>
           <label>* Calle</label>
           <input id="s_calle" value="${escapeHtml(form.calle)}" placeholder="Ej. Calle Unión">
@@ -1233,7 +1170,7 @@ function renderStep(){
         </div>
       </div>
 
-      <div class="stepRow" style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
         <div>
           <label>* Colonia</label>
           <input id="s_col" value="${escapeHtml(form.col)}" placeholder="Ej. Barrio de la Calzada">
@@ -1241,17 +1178,6 @@ function renderStep(){
         <div>
           <label>* CP</label>
           <input id="s_cp" value="${escapeHtml(form.cp)}" placeholder="Ej. 36580">
-        </div>
-      </div>
-
-      <div class="stepRow" style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
-        <div>
-          <label>* Ciudad</label>
-          <input id="s_ciudad" value="${escapeHtml(form.ciudad)}">
-        </div>
-        <div>
-          <label>* Estado</label>
-          <input id="s_estado" value="${escapeHtml(form.estado)}">
         </div>
       </div>
 
@@ -1265,15 +1191,13 @@ function renderStep(){
       bind("s_noint",  e=> form.noint  = e.target.value);
       bind("s_col",    e=> form.col    = e.target.value);
       bind("s_cp",     e=> form.cp     = e.target.value);
-      bind("s_ciudad", e=> form.ciudad = e.target.value);
-      bind("s_estado", e=> form.estado = e.target.value);
       bind("s_refs",   e=> form.refs   = e.target.value);
     },0);
     return;
   }
 
   stepsBody.innerHTML = `
-    <div class="stepRow" style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
       <div>
         <label>Método de pago</label>
         <select id="s_metodo">
@@ -1331,6 +1255,7 @@ function cleanWA(text){
     .replace(/\n{3,}/g, "\n\n")
     .trim();
 }
+
 function buildWhatsAppText(){
   const canal = canalEl.value;
   const canalTxt = canal==="recoger" ? "Pasar a recoger" : "Domicilio";
@@ -1393,14 +1318,21 @@ function buildWhatsAppText(){
 }
 
 /** BOTONES */
-document.getElementById("btnCheckout").onclick = ()=>{
+bindTap(document.getElementById("btnCheckout"), ()=>{
   if(cart.length===0){ alert("Agrega algo al carrito primero 😄"); return; }
   openSteps();
-};
+});
 
-btnBack.onclick = ()=>{ if(step>1){ step--; renderStep(); } };
+bindTap(document.getElementById("btnClear"), ()=>{
+  if(confirm("¿Vaciar carrito?")){
+    cart = [];
+    renderCart();
+  }
+});
 
-btnNext.onclick = ()=>{
+bindTap(btnBack, ()=>{ if(step>1){ step--; renderStep(); } });
+
+bindTap(btnNext, ()=>{
   const err = stepValidate();
   if(err){ alert(err); return; }
 
@@ -1411,23 +1343,14 @@ btnNext.onclick = ()=>{
   const url = `https://wa.me/${WHATSAPP_TAQ}?text=${encodeURIComponent(text)}`;
   window.open(url, "_blank");
   closeSteps();
-};
+});
 
-document.getElementById("btnClear").onclick = ()=>{
-  if(confirm("¿Vaciar carrito?")){
-    cart = [];
-    renderCart();
-  }
-};
-
-/** =========================
- *  INIT
- *  ========================= */
+/** INIT */
 renderTabs();
 renderItems();
 renderCart();
 
-// ✅ al entrar a la página, preguntar SOLO el servicio (cada vez)
+// ✅ Cada vez que entren: preguntar servicio (no guarda)
 window.addEventListener("load", ()=> openFirstCanal());
 </script>
 
