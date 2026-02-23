@@ -360,6 +360,7 @@
       box-shadow: 0 12px 28px rgba(139,30,30,.30);
       font-size: 15px;
       min-width: 150px;
+      touch-action: manipulation;
     }
     .btnAdd:active,
     .stickyBtn:active{transform: translateY(1px)}
@@ -383,6 +384,7 @@
       cursor:pointer;
       font-weight:1000;
       color: var(--ink);
+      touch-action: manipulation;
     }
     .mini:active{transform: translateY(1px)}
     label{
@@ -394,7 +396,7 @@
       padding:12px 12px;
       border:1px solid rgba(0,0,0,.12);
       border-radius:14px;
-      font-size:14px;
+      font-size:16px; /* IMPORTANTe: evita zoom raro en iOS */
       outline:none;
       background: rgba(255,255,255,.78);
       color: var(--ink);
@@ -450,6 +452,7 @@
       border-radius: 14px;
       font-weight: 1000;
       cursor:pointer;
+      touch-action: manipulation;
     }
 
     /* MODAL */
@@ -461,6 +464,10 @@
       justify-content:center;
       padding:16px;
       z-index:60;
+
+      /* mobile: scroll estable */
+      overflow:auto;
+      -webkit-overflow-scrolling: touch;
     }
     .modal{
       width:min(820px, 100%);
@@ -475,6 +482,9 @@
       border-bottom:1px solid rgba(0,0,0,.10);
       display:flex; justify-content:space-between; align-items:center; gap:10px;
       background: rgba(0,0,0,.03);
+      position: sticky;
+      top: 0;
+      z-index: 2;
     }
     .modalHead h3{margin:0; font-size:15px; color: var(--ink)}
     .closeX{
@@ -485,6 +495,7 @@
       cursor:pointer;
       font-weight:1000;
       color: var(--ink);
+      touch-action: manipulation;
     }
     .optGroup{
       border:1px solid rgba(0,0,0,.10);
@@ -509,6 +520,7 @@
       user-select:none;
       font-weight:1000;
       color: var(--ink);
+      touch-action: manipulation;
     }
     .opt.active{
       border-color: rgba(139,30,30,.45);
@@ -520,6 +532,9 @@
       padding:14px 16px;
       border-top:1px solid rgba(0,0,0,.10);
       background: rgba(0,0,0,.03);
+      position: sticky;
+      bottom: 0;
+      z-index: 2;
     }
     .footerBtns button{flex:1}
     .btnDark{
@@ -531,6 +546,7 @@
       color:#fff;
       background: linear-gradient(180deg, var(--brand2), var(--brand1));
       box-shadow: 0 12px 28px rgba(139,30,30,.28);
+      touch-action: manipulation;
     }
     .btnLight{
       border:1px solid rgba(0,0,0,.12);
@@ -540,6 +556,7 @@
       border-radius: 14px;
       font-weight:1000;
       cursor:pointer;
+      touch-action: manipulation;
     }
 
     .stepsBackdrop{
@@ -550,6 +567,10 @@
       justify-content:center;
       padding:16px;
       z-index:70;
+
+      /* FIX MOBILE: no se “rompe” el scroll */
+      overflow:auto;
+      -webkit-overflow-scrolling: touch;
     }
     .steps{
       width:min(760px, 100%);
@@ -564,18 +585,26 @@
       display:flex; justify-content:space-between; align-items:center; gap:10px;
       border-bottom:1px solid rgba(0,0,0,.10);
       background: rgba(0,0,0,.03);
+      position: sticky;
+      top: 0;
+      z-index: 2;
     }
     .stepsHead .t{display:flex; flex-direction:column; gap:4px;}
     .stepsHead .t b{font-size:16px; color: var(--ink)}
     .stepsHead .t span{font-size:12px; color:var(--muted); font-weight:900}
+
     .stepsBody{padding:14px 16px}
     .stepRow{display:grid; grid-template-columns:1fr 1fr; gap:10px}
     @media (max-width:520px){ .stepRow{grid-template-columns:1fr} }
+
     .stepsFoot{
       display:flex; gap:10px;
       padding:14px 16px;
       border-top:1px solid rgba(0,0,0,.10);
       background: rgba(0,0,0,.03);
+      position: sticky;
+      bottom: 0;
+      z-index: 2;
     }
 
     .note{
@@ -588,6 +617,13 @@
       border-radius:14px;
       border:1px solid rgba(0,0,0,.10);
       margin-top:12px;
+    }
+
+    /* Cuando un modal está abierto: bloquear scroll del body (mobile friendly) */
+    body.lockScroll{
+      position: fixed;
+      width: 100%;
+      overflow: hidden;
     }
   </style>
 </head>
@@ -643,7 +679,6 @@
 
         <label>Canal</label>
         <select id="canal">
-          <option value="aqui">Comer aquí</option>
           <option value="recoger">Pasar a recoger</option>
           <option value="domicilio">Envío a domicilio</option>
         </select>
@@ -696,7 +731,7 @@
   </div>
 </div>
 
-<!-- CHECKOUT POR PASOS -->
+<!-- CHECKOUT POR PASOS (incluye el Paso 0 = canal al entrar) -->
 <div class="stepsBackdrop" id="stepsBackdrop">
   <div class="steps">
     <div class="stepsHead">
@@ -961,6 +996,19 @@ const mAdd   = document.getElementById("mAdd");
 let currentItem = null;
 let draft = null;
 
+function lockScroll(){
+  // guardar scroll
+  document.body.dataset.scrollY = String(window.scrollY || 0);
+  document.body.classList.add("lockScroll");
+  document.body.style.top = `-${document.body.dataset.scrollY}px`;
+}
+function unlockScroll(){
+  const y = Number(document.body.dataset.scrollY || 0);
+  document.body.classList.remove("lockScroll");
+  document.body.style.top = "";
+  window.scrollTo(0, y);
+}
+
 function openModal(item){
   currentItem = item;
   draft = {mods:{}, note:""};
@@ -1006,6 +1054,8 @@ function openModal(item){
   mBody.appendChild(n);
 
   backdrop.style.display = "flex";
+  lockScroll();
+
   setTimeout(()=> {
     const inp = document.getElementById("noteProd");
     if(inp) inp.oninput = ()=> draft.note = inp.value;
@@ -1014,6 +1064,7 @@ function openModal(item){
 
 function closeModal(){
   backdrop.style.display = "none";
+  unlockScroll();
   currentItem = null;
   draft = null;
 }
@@ -1099,6 +1150,9 @@ const btnNext = document.getElementById("btnNext");
 
 let step = 1;
 
+/** Paso 0 = elegir canal al entrar */
+let canalYaElegido = false;
+
 const form = {
   nombre: "",
   tel: "",
@@ -1118,14 +1172,75 @@ const form = {
 function openSteps(){
   step = 1;
   stepsBackdrop.style.display = "flex";
+  lockScroll();
   renderStep();
 }
-function closeSteps(){ stepsBackdrop.style.display = "none"; }
+function closeSteps(){
+  stepsBackdrop.style.display = "none";
+  unlockScroll();
+}
+
+function openCanalFirst(){
+  if(canalYaElegido) return;
+  step = 0;
+  stepsBackdrop.style.display = "flex";
+  lockScroll();
+  renderStep();
+}
 
 function renderStep(){
   const canal = canalEl.value;
   const total = cartTotal();
 
+  // ===== PASO 0: elegir canal =====
+  if(step === 0){
+    stepTitle.textContent = "Bienvenido";
+    stepSub.textContent = "Elige tu tipo de servicio";
+
+    btnBack.style.display = "none";
+    btnNext.textContent = "CONTINUAR";
+
+    stepsBody.innerHTML = `
+      <div class="note" style="margin-top:0">
+        Para empezar, dinos cómo será tu pedido:
+      </div>
+
+      <div class="optGroup" style="margin-top:12px">
+        <div class="optTitle">
+          <b>Servicio</b>
+          <span>elige 1</span>
+        </div>
+        <div class="optList" id="canalOpts"></div>
+      </div>
+
+      <div class="note">
+        (Si quieres cambiarlo después, también puedes hacerlo en “Canal” dentro de <b>Tu pedido</b>).
+      </div>
+    `;
+
+    const opts = document.getElementById("canalOpts");
+    const opciones = [
+      {val:"recoger", label:"🚶‍♂️ Pasar a recoger"},
+      {val:"domicilio", label:"🏠 Envío a domicilio"}
+    ];
+
+    opts.innerHTML = "";
+    opciones.forEach(o=>{
+      const b = document.createElement("div");
+      b.className = "opt" + (canalEl.value===o.val ? " active":"");
+      b.textContent = o.label;
+      b.onclick = ()=>{
+        canalEl.value = o.val;
+        opts.querySelectorAll(".opt").forEach(x=>x.classList.remove("active"));
+        b.classList.add("active");
+      };
+      opts.appendChild(b);
+    });
+
+    return;
+  }
+
+  // ===== PASOS 1..3 (tu lógica) =====
   if(step===1){
     stepTitle.textContent = "Paso 1 de 3";
     stepSub.textContent = "Datos personales";
@@ -1153,7 +1268,7 @@ function renderStep(){
         </div>
       </div>
       <div class="note">
-        Canal: <b>${canal==="aqui"?"Comer aquí":(canal==="recoger"?"Pasar a recoger":"Envío a domicilio")}</b><br>
+        Canal: <b>${canal==="recoger"?"Pasar a recoger":"Envío a domicilio"}</b><br>
         Total actual: <b>${money(total)}</b>
       </div>
     `;
@@ -1166,7 +1281,7 @@ function renderStep(){
 
   if(step===2){
     if(canal!=="domicilio"){
-      stepsBody.innerHTML = `<div class="note">Como tu canal no es domicilio, este paso solo confirma y brinca al pago.</div>`;
+      stepsBody.innerHTML = `<div class="note">Como tu canal es recoger, este paso se brinca y pasamos al pago.</div>`;
       return;
     }
 
@@ -1274,6 +1389,7 @@ function stepValidate(){
   }
   return null;
 }
+
 function cleanWA(text){
   return (text || "")
     .replace(/\uFFFD/g, "")
@@ -1281,9 +1397,10 @@ function cleanWA(text){
     .replace(/\n{3,}/g, "\n\n")
     .trim();
 }
+
 function buildWhatsAppText(){
   const canal = canalEl.value;
-  const canalTxt = canal==="aqui" ? "Comer aquí" : (canal==="recoger" ? "Pasar a recoger" : "Domicilio");
+  const canalTxt = canal==="recoger" ? "Pasar a recoger" : "Domicilio";
   const total = cartTotal();
   const orderNo = String(Date.now()).slice(-6);
 
@@ -1344,12 +1461,21 @@ function buildWhatsAppText(){
 
 document.getElementById("btnCheckout").onclick = ()=>{
   if(cart.length===0){ alert("Agrega algo al carrito primero 😄"); return; }
+  canalYaElegido = true; // ya que aquí ya lo eligió (o lo va a ver)
   openSteps();
 };
 
 btnBack.onclick = ()=>{ if(step>1){ step--; renderStep(); } };
 
 btnNext.onclick = ()=>{
+  // Paso 0: solo confirmar canal y pasar a paso 1
+  if(step === 0){
+    canalYaElegido = true;
+    step = 1;
+    renderStep();
+    return;
+  }
+
   const err = stepValidate();
   if(err){ alert(err); return; }
 
@@ -1378,6 +1504,13 @@ document.getElementById("btnClear").onclick = ()=>{
 renderTabs();
 renderItems();
 renderCart();
+
+// Preguntar canal al entrar
+window.addEventListener("load", ()=>{
+  // Default: recoger (por si el cliente solo quiere pedir rápido)
+  canalEl.value = "recoger";
+  openCanalFirst();
+});
 </script>
 
 </body>
