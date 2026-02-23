@@ -5,23 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Menú — Tacos Los Fundadores</title>
 
+  <!-- Leaflet (Mapa) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
   <style>
     :root{
-      --bg:#1a0f0c;
-      --bg2:#24130f;
-      --card:#fff6ec;
-      --card2:#fff1e2;
-      --ink:#2b1a14;
-      --muted:#6a4a3c;
-      --line: rgba(0,0,0,.10);
-      --brand1:#8b1e1e;
-      --brand2:#b63a2b;
-      --gold:#d4a373;
-      --green:#2f7d32;
+      --bg:#1a0f0c; --bg2:#24130f;
+      --card:#fff6ec; --card2:#fff1e2;
+      --ink:#2b1a14; --muted:#6a4a3c;
+      --brand1:#8b1e1e; --brand2:#b63a2b; --gold:#d4a373; --green:#2f7d32;
       --shadow: 0 18px 50px rgba(0,0,0,.25);
       --r:18px;
     }
-
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
@@ -51,70 +49,33 @@
       justify-content:space-between;
       gap:12px;
     }
-    .brand{
-      display:flex;
-      flex-direction:column;
-      gap:4px;
-      line-height:1.05;
-      min-width:0;
-    }
+    .brand{display:flex; flex-direction:column; gap:4px; line-height:1.05; min-width:0;}
     .brand h1{
-      margin:0;
-      font-size:16px;
-      letter-spacing:.2px;
-      font-weight:1000;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      color:#fff;
+      margin:0; font-size:16px; letter-spacing:.2px; font-weight:1000;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#fff;
     }
-    .brand .sub{
-      font-size:12px;
-      color: rgba(255,255,255,.78);
-      font-weight:800;
-    }
+    .brand .sub{font-size:12px; color: rgba(255,255,255,.78); font-weight:800;}
 
     .pill{
-      display:flex;
-      align-items:center;
-      gap:8px;
-      padding:8px 10px;
-      border-radius:999px;
+      display:flex; align-items:center; gap:8px;
+      padding:8px 10px; border-radius:999px;
       border:1px solid rgba(255,255,255,.14);
       background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
       box-shadow: 0 14px 34px rgba(0,0,0,.28);
-      font-weight:1000;
-      font-size:12px;
-      white-space:nowrap;
-      user-select:none;
-      color:#fff;
+      font-weight:1000; font-size:12px;
+      white-space:nowrap; user-select:none; color:#fff;
     }
     .pill b{font-size:13px}
     .pill .amt{
-      padding:4px 8px;
-      border-radius:999px;
+      padding:4px 8px; border-radius:999px;
       background: rgba(212,163,115,.22);
       border: 1px solid rgba(212,163,115,.28);
-      color: #fff;
-      font-weight:1000;
+      color: #fff; font-weight:1000;
     }
 
-    .wrap{
-      max-width:1200px;
-      margin:0 auto;
-      padding:14px;
-      display:grid;
-      gap:14px;
-    }
-    .grid{
-      display:grid;
-      grid-template-columns: 1.55fr .95fr;
-      gap:14px;
-      align-items:start;
-    }
-    @media (max-width: 980px){
-      .grid{grid-template-columns:1fr}
-    }
+    .wrap{max-width:1200px; margin:0 auto; padding:14px; display:grid; gap:14px;}
+    .grid{display:grid; grid-template-columns: 1.55fr .95fr; gap:14px; align-items:start;}
+    @media (max-width: 980px){ .grid{grid-template-columns:1fr} }
 
     .hero{
       border-radius: 22px;
@@ -126,22 +87,9 @@
       transform: translateZ(0);
       -webkit-transform: translateZ(0);
     }
-    .hero::before{
-      content:"";
-      position:absolute; inset:0;
-      background: linear-gradient(180deg, rgba(0,0,0,.15), rgba(0,0,0,.45));
-      pointer-events:none;
-    }
-    .hero img{
-      width:100%;
-      height: 240px;
-      object-fit: cover;
-      display:block;
-      filter: contrast(1.03) saturate(1.05);
-    }
-    @media (max-width:520px){
-      .hero img{height:170px}
-    }
+    .hero::before{content:""; position:absolute; inset:0; background: linear-gradient(180deg, rgba(0,0,0,.15), rgba(0,0,0,.45)); pointer-events:none;}
+    .hero img{width:100%; height: 240px; object-fit: cover; display:block; filter: contrast(1.03) saturate(1.05);}
+    @media (max-width:520px){ .hero img{height:170px} }
 
     .card{
       background: linear-gradient(180deg, var(--card), var(--card2));
@@ -151,16 +99,10 @@
       overflow:hidden;
     }
     .card h2{
-      margin:0;
-      padding:14px 14px 10px;
-      font-size:14px;
-      font-weight:1000;
-      letter-spacing:.3px;
+      margin:0; padding:14px 14px 10px;
+      font-size:14px; font-weight:1000; letter-spacing:.3px;
       border-bottom:1px solid rgba(0,0,0,.08);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
       background: rgba(0,0,0,.03);
       color: var(--ink);
     }
@@ -168,14 +110,10 @@
 
     .searchRow{display:flex; gap:10px; align-items:center; margin-top:12px;}
     .searchRow input{
-      flex:1;
-      padding:12px 12px;
-      border-radius:14px;
+      flex:1; padding:12px 12px; border-radius:14px;
       border:1px solid rgba(0,0,0,.12);
       background: rgba(255,255,255,.75);
-      outline:none;
-      font-size:14px;
-      color: var(--ink);
+      outline:none; font-size:14px; color: var(--ink);
     }
     .searchRow input::placeholder{color: rgba(43,26,20,.55)}
 
@@ -185,11 +123,8 @@
       background: rgba(255,255,255,.72);
       padding:10px 14px;
       border-radius: 999px;
-      font-weight:1000;
-      font-size:13px;
-      cursor:pointer;
-      user-select:none;
-      letter-spacing:.3px;
+      font-weight:1000; font-size:13px;
+      cursor:pointer; user-select:none; letter-spacing:.3px;
       box-shadow: 0 10px 24px rgba(0,0,0,.10);
       color: var(--ink);
       touch-action: manipulation;
@@ -201,31 +136,11 @@
       box-shadow: 0 0 0 3px rgba(139,30,30,.14), 0 16px 34px rgba(0,0,0,.12);
     }
 
-    .sectionTitle{
-      margin: 10px 0 10px;
-      font-size: 40px;
-      letter-spacing: .4px;
-      font-weight: 1000;
-      line-height:1;
-      color: var(--ink);
-    }
-    .divider{
-      height: 4px;
-      border-radius: 999px;
-      background: linear-gradient(90deg, rgba(139,30,30,.92), rgba(182,58,43,.85), rgba(212,163,115,.75));
-      opacity:.95;
-      margin: 8px 0 18px;
-    }
+    .sectionTitle{margin: 10px 0 10px; font-size: 40px; letter-spacing: .4px; font-weight: 1000; line-height:1; color: var(--ink);}
+    .divider{height: 4px; border-radius: 999px; background: linear-gradient(90deg, rgba(139,30,30,.92), rgba(182,58,43,.85), rgba(212,163,115,.75)); opacity:.95; margin: 8px 0 18px;}
 
-    .items{
-      display:grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap:14px;
-    }
-    @media (max-width: 620px){
-      .items{grid-template-columns:1fr}
-      .sectionTitle{font-size:32px}
-    }
+    .items{display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap:14px;}
+    @media (max-width: 620px){ .items{grid-template-columns:1fr} .sectionTitle{font-size:32px} }
 
     .prod{
       background: rgba(255,255,255,.82);
@@ -248,28 +163,13 @@
     }
     .prodLeft{padding:14px 14px 12px; display:flex; flex-direction:column; gap:8px; position:relative; z-index:2;}
     .prodName{font-weight:1000; font-size: 20px; margin:0; letter-spacing:.2px; color: var(--ink);}
-    .badge{
-      display:inline-flex; align-items:center; gap:6px; width:max-content;
-      padding:6px 10px; border-radius:999px; font-size:12px; font-weight:1000;
-      border:1px solid rgba(0,0,0,.10); background: rgba(255,255,255,.70); color: rgba(43,26,20,.92);
-    }
+    .badge{display:inline-flex; align-items:center; gap:6px; width:max-content; padding:6px 10px; border-radius:999px; font-size:12px; font-weight:1000; border:1px solid rgba(0,0,0,.10); background: rgba(255,255,255,.70); color: rgba(43,26,20,.92);}
     .prodDesc{margin:0; color: var(--muted); font-weight:800; line-height:1.25; font-size:13px;}
     .price{margin-top:auto; font-weight:1000; color: var(--muted); font-size: 14px;}
     .price b{display:block; font-size: 30px; letter-spacing:.2px; color: var(--green);}
 
-    .prodRight{
-      position:relative; z-index:2; padding:12px; display:flex; flex-direction:column;
-      justify-content:center; align-items:center; gap:10px;
-    }
-    .prodImg{
-      width: 100%;
-      height: 94px;
-      border-radius: 16px;
-      overflow:hidden;
-      background: #2a1612;
-      box-shadow: 0 14px 34px rgba(0,0,0,.16);
-      border: 1px solid rgba(0,0,0,.10);
-    }
+    .prodRight{position:relative; z-index:2; padding:12px; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:10px;}
+    .prodImg{width: 100%; height: 94px; border-radius: 16px; overflow:hidden; background: #2a1612; box-shadow: 0 14px 34px rgba(0,0,0,.16); border: 1px solid rgba(0,0,0,.10);}
     .prodImg img{width:100%; height:100%; object-fit: cover; display:block;}
 
     .btnAdd, .stickyBtn{
@@ -286,11 +186,7 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    .cartLine{
-      display:flex; justify-content:space-between; gap:10px; align-items:flex-start;
-      border-bottom:1px dashed rgba(0,0,0,.16);
-      padding:10px 0;
-    }
+    .cartLine{display:flex; justify-content:space-between; gap:10px; align-items:flex-start; border-bottom:1px dashed rgba(0,0,0,.16); padding:10px 0;}
     .cartLine:last-child{border-bottom:none}
     .muted{color: var(--muted)}
     .qtyRow{display:flex; gap:6px; align-items:center}
@@ -299,17 +195,12 @@
       border-radius:12px;
       border:1px solid rgba(0,0,0,.12);
       background: rgba(255,255,255,.80);
-      cursor:pointer;
-      font-weight:1000;
-      color: var(--ink);
+      cursor:pointer; font-weight:1000; color: var(--ink);
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
     }
 
-    label{
-      display:block; font-size:12px; font-weight:1000; margin:10px 0 6px;
-      color: rgba(43,26,20,.92);
-    }
+    label{display:block; font-size:12px; font-weight:1000; margin:10px 0 6px; color: rgba(43,26,20,.92);}
     input, textarea, select{
       width:100%;
       padding:12px 12px;
@@ -323,34 +214,22 @@
     textarea{min-height:90px; resize:vertical}
     input::placeholder, textarea::placeholder{color: rgba(43,26,20,.55)}
 
-    .totalRow{
-      display:flex; justify-content:space-between; align-items:center;
-      padding-top:12px; margin-top:12px;
-      border-top:1px solid rgba(0,0,0,.10);
-      font-size:14px;
-      font-weight:1000;
-    }
+    .totalRow{display:flex; justify-content:space-between; align-items:center; padding-top:12px; margin-top:12px; border-top:1px solid rgba(0,0,0,.10); font-size:14px; font-weight:1000;}
     .totalRow strong{font-size:18px; color: var(--green);}
 
     .stickyBar{
-      position: sticky;
-      bottom: 12px;
-      z-index: 25;
+      position: sticky; bottom: 12px; z-index: 25;
       margin-top: 12px;
       border-radius: 16px;
       border:1px solid rgba(0,0,0,.10);
       background: rgba(255,246,236,.92);
       backdrop-filter: blur(10px);
       box-shadow: 0 18px 60px rgba(0,0,0,.18);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
       padding: 10px 10px 10px 12px;
     }
     .stickyBar .left{display:flex; align-items:center; gap:10px; font-weight:1000; color: var(--ink);}
     .stickyBar .amount{font-size:18px; letter-spacing:.2px; color: var(--green);}
-
     .btnGhost{
       border:1px solid rgba(0,0,0,.12);
       background: rgba(255,255,255,.70);
@@ -375,7 +254,7 @@
       -webkit-tap-highlight-color: transparent;
     }
     .panel{
-      width:min(640px, 100%);
+      width:min(760px, 100%);
       background: linear-gradient(180deg, var(--card), var(--card2));
       border-radius: 18px;
       overflow:hidden;
@@ -388,10 +267,7 @@
     .panelHead{
       padding:14px 16px;
       border-bottom:1px solid rgba(0,0,0,.10);
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
+      display:flex; justify-content:space-between; align-items:center; gap:10px;
       background: rgba(0,0,0,.03);
     }
     .panelBody{padding:14px 16px}
@@ -399,9 +275,7 @@
       padding:14px 16px;
       border-top:1px solid rgba(0,0,0,.10);
       background: rgba(0,0,0,.03);
-      display:flex;
-      gap:10px;
-      justify-content:flex-end;
+      display:flex; gap:10px; justify-content:space-between;
     }
 
     .closeX{
@@ -470,10 +344,7 @@
     }
 
     .note{
-      font-size:12px;
-      color: var(--muted);
-      font-weight:900;
-      line-height:1.35;
+      font-size:12px; color: var(--muted); font-weight:900; line-height:1.35;
       background: rgba(255,255,255,.70);
       padding:10px 12px;
       border-radius:14px;
@@ -481,10 +352,24 @@
       margin-top:12px;
     }
 
-    body.locked{
-      position: fixed;
-      width: 100%;
-      overflow: hidden;
+    body.locked{position: fixed; width: 100%; overflow: hidden;}
+
+    /* MAPA */
+    #mapBox{
+      height: 220px;
+      border-radius: 16px;
+      overflow:hidden;
+      border: 1px solid rgba(0,0,0,.12);
+      box-shadow: 0 14px 34px rgba(0,0,0,.12);
+      background:#eee;
+      touch-action: pan-x pan-y;
+    }
+    .mapRow{
+      display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;
+    }
+    .tiny{
+      font-size:12px; font-weight:900; color: var(--muted);
+      margin-top:8px;
     }
   </style>
 </head>
@@ -565,7 +450,7 @@
 
 <!-- Pregunta al entrar: SOLO servicio -->
 <div class="overlay" id="firstOverlay" aria-hidden="true">
-  <div class="panel" id="firstPanel" role="dialog" aria-modal="true">
+  <div class="panel" role="dialog" aria-modal="true">
     <div class="panelHead">
       <div style="display:flex; flex-direction:column; gap:4px;">
         <b>Antes de empezar…</b>
@@ -574,37 +459,34 @@
     </div>
     <div class="panelBody">
       <div class="optGroup" style="margin-top:0">
-        <div class="optTitle">
-          <b>Servicio</b>
-          <span>elige 1</span>
-        </div>
+        <div class="optTitle"><b>Servicio</b><span>elige 1</span></div>
         <div class="optList" id="firstCanalOpts"></div>
       </div>
-
       <div class="note" style="margin-top:12px">
         Elige <b>una</b> opción y te dejamos empezar a escoger tus productos.
       </div>
     </div>
     <div class="panelFoot">
+      <div></div>
       <button class="btnDark" id="firstOk" type="button">LISTO</button>
     </div>
   </div>
 </div>
 
-<!-- MODAL MODIFICADORES -->
+<!-- MODS -->
 <div class="overlay" id="modsOverlay" aria-hidden="true" style="z-index:9999;">
-  <div class="panel" id="modsPanel" role="dialog" aria-modal="true" style="width:min(820px, 100%);">
+  <div class="panel" role="dialog" aria-modal="true" style="width:min(820px, 100%);">
     <div class="panelHead">
       <div>
         <b id="mTitle">Producto</b>
-        <div class="muted" id="mSub" style="font-size:12px;font-weight:900">Configura como lo quieres</div>
+        <div class="muted" style="font-size:12px;font-weight:900">Configura como lo quieres</div>
       </div>
       <button class="closeX" id="mClose" type="button">✕</button>
     </div>
 
     <div class="panelBody" id="mBody"></div>
 
-    <div class="panelFoot" style="justify-content:space-between">
+    <div class="panelFoot">
       <button class="btnLight" id="mCancel" type="button">Cancelar</button>
       <button class="btnDark" id="mAdd" type="button">Agregar al carrito</button>
     </div>
@@ -613,7 +495,7 @@
 
 <!-- CHECKOUT -->
 <div class="overlay" id="stepsOverlay" aria-hidden="true" style="z-index:9998;">
-  <div class="panel" id="stepsPanel" role="dialog" aria-modal="true" style="width:min(760px, 100%);">
+  <div class="panel" role="dialog" aria-modal="true" style="width:min(760px, 100%);">
     <div class="panelHead">
       <div style="display:flex; flex-direction:column; gap:4px;">
         <b id="stepTitle">Paso 1 de 3</b>
@@ -624,7 +506,7 @@
 
     <div class="panelBody" id="stepsBody"></div>
 
-    <div class="panelFoot" style="justify-content:space-between;">
+    <div class="panelFoot">
       <button class="btnLight" id="btnBack" type="button">Regresar</button>
       <button class="btnDark" id="btnNext" type="button">Continuar</button>
     </div>
@@ -703,9 +585,7 @@ function modsToText(mods){
   }
   return parts.join(" • ");
 }
-function buildKey(item, mods, note){
-  return item.id + "|" + JSON.stringify(mods) + "|" + (note||"");
-}
+function buildKey(item, mods, note){ return item.id + "|" + JSON.stringify(mods) + "|" + (note||""); }
 function validateRequired(item, mods){
   const keys = modsPara(item);
   for(const k of keys){
@@ -718,16 +598,12 @@ function validateRequired(item, mods){
   return null;
 }
 
-/** ✅ Tap helper (iOS/Android) */
 function bindTap(el, fn){
   if(!el) return;
   el.addEventListener("pointerup", (e)=>{ e.preventDefault(); e.stopPropagation(); fn(e); });
   el.addEventListener("click", (e)=>{ e.preventDefault(); e.stopPropagation(); fn(e); });
 }
 
-/** =========================
- *  BODY LOCK (iOS)
- *  ========================= */
 let _scrollY = 0;
 function lockBody(){
   _scrollY = window.scrollY || 0;
@@ -862,7 +738,6 @@ function renderCart(){
  *  ========================= */
 const canalEl = document.getElementById("canal");
 const firstOverlay = document.getElementById("firstOverlay");
-const firstPanel = document.getElementById("firstPanel");
 const firstCanalOpts = document.getElementById("firstCanalOpts");
 const firstOk = document.getElementById("firstOk");
 let firstChoice = "recoger";
@@ -895,16 +770,12 @@ function closeFirstCanal(){
   firstOverlay.setAttribute("aria-hidden","true");
   unlockBody();
 }
-
-firstOverlay.addEventListener("pointerdown", (e)=>{ if(e.target === firstOverlay) e.preventDefault(); }, { passive:false });
-firstPanel.addEventListener("pointerdown", (e)=> e.stopPropagation());
 bindTap(firstOk, closeFirstCanal);
 
 /** =========================
- *  MODS OVERLAY
+ *  MODS (simple)
  *  ========================= */
 const modsOverlay = document.getElementById("modsOverlay");
-const modsPanel = document.getElementById("modsPanel");
 const mTitle = document.getElementById("mTitle");
 const mBody  = document.getElementById("mBody");
 const mClose = document.getElementById("mClose");
@@ -935,12 +806,10 @@ function openMods(item){
       <div class="optList"></div>
     `;
     const list = box.querySelector(".optList");
-
     g.options.forEach(opt=>{
       const o = document.createElement("div");
       o.className = "opt";
       o.textContent = opt;
-
       bindTap(o, ()=>{
         if(g.type==="single"){
           draft.mods[k] = opt;
@@ -954,10 +823,8 @@ function openMods(item){
           else{ arr.push(opt); o.classList.add("active"); }
         }
       });
-
       list.appendChild(o);
     });
-
     mBody.appendChild(box);
   });
 
@@ -983,7 +850,6 @@ function openMods(item){
     if(inp) inp.oninput = ()=> draft.note = inp.value;
   },0);
 }
-
 function closeMods(){
   modsOverlay.style.display = "none";
   modsOverlay.setAttribute("aria-hidden","true");
@@ -991,27 +857,19 @@ function closeMods(){
   draft = null;
   unlockBody();
 }
-
 function addLine(item, mods, note){
   const key = buildKey(item, mods, note);
   const existing = cart.find(x=>x.key===key);
   if(existing){ existing.qty += 1; }
-  else{
-    cart.push({ key, id:item.id, name:item.name, basePrice:item.price, qty:1, mods, note: note || "" });
-  }
+  else cart.push({ key, id:item.id, name:item.name, basePrice:item.price, qty:1, mods, note: note || "" });
   renderCart();
 }
-
 function onAddClicked(item){
   if(item.mods && modsPara(item).length) openMods(item);
   else addLine(item, {}, "");
 }
-
 bindTap(mClose, closeMods);
 bindTap(mCancel, closeMods);
-modsOverlay.addEventListener("pointerdown", (e)=>{ if(e.target === modsOverlay) e.preventDefault(); }, { passive:false });
-modsPanel.addEventListener("pointerdown", (e)=> e.stopPropagation());
-
 bindTap(mAdd, ()=>{
   if(!currentItem || !draft) return;
 
@@ -1033,17 +891,15 @@ bindTap(mAdd, ()=>{
 });
 
 /** =========================
- *  CHECKOUT + MAPS
+ *  CHECKOUT + MAP EMBED
  *  ========================= */
 const stepsOverlay = document.getElementById("stepsOverlay");
-const stepsPanel = document.getElementById("stepsPanel");
 const stepsClose = document.getElementById("stepsClose");
 const stepsBody = document.getElementById("stepsBody");
 const stepTitle = document.getElementById("stepTitle");
 const stepSub = document.getElementById("stepSub");
 const btnBack = document.getElementById("btnBack");
 const btnNext = document.getElementById("btnNext");
-
 let step = 1;
 
 const form = {
@@ -1057,12 +913,19 @@ const form = {
   cp: "",
   estado: "Guanajuato",
   refs: "",
-  // ✅ Ubicación en Maps
+  // Coordenadas y link
+  lat: null,
+  lng: null,
   mapsLink: "",
   metodo: "efectivo",
   pagareCon: "",
   notas: ""
 };
+
+// Leaflet refs (se crean cuando renderizas el Paso 2)
+let map = null;
+let marker = null;
+let mapReady = false;
 
 function openSteps(){
   step = 1;
@@ -1077,33 +940,161 @@ function closeSteps(){
   unlockBody();
 }
 bindTap(stepsClose, closeSteps);
-stepsOverlay.addEventListener("pointerdown", (e)=>{ if(e.target === stepsOverlay) e.preventDefault(); }, { passive:false });
-stepsPanel.addEventListener("pointerdown", (e)=> e.stopPropagation());
 
-function openMapsAt(lat, lng){
-  // abre Google Maps centrado en el punto (el usuario puede mover y elegir)
-  const url = `https://www.google.com/maps/@?api=1&map_action=map&center=${lat},${lng}&zoom=18`;
-  window.open(url, "_blank");
+function setMapLinkFromLatLng(lat,lng){
+  form.mapsLink = `https://www.google.com/maps?q=${lat},${lng}`;
 }
 
-function chooseLocationInMaps(){
-  // Intento 1: con GPS
-  if(navigator.geolocation){
-    navigator.geolocation.getCurrentPosition(
-      (pos)=>{
-        const lat = pos.coords.latitude;
-        const lng = pos.coords.longitude;
-        openMapsAt(lat, lng);
-      },
-      ()=>{
-        // Si no dio permiso / falla, abre Maps sin coordenadas
-        window.open("https://www.google.com/maps", "_blank");
-      },
-      { enableHighAccuracy:true, timeout:8000, maximumAge:0 }
-    );
-  }else{
-    window.open("https://www.google.com/maps", "_blank");
+async function reverseGeocode(lat,lng){
+  // Nominatim OSM (gratis). Si luego quieres PRO, migramos a Google Places.
+  const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lng)}&addressdetails=1`;
+  const res = await fetch(url, {
+    headers: {
+      "Accept": "application/json"
+    }
+  });
+  if(!res.ok) throw new Error("No se pudo obtener dirección");
+  const data = await res.json();
+  const a = data.address || {};
+
+  // Intentar rellenar lo más útil:
+  const road = a.road || a.pedestrian || a.footway || a.residential || "";
+  const house = a.house_number || "";
+  const suburb = a.suburb || a.neighbourhood || a.quarter || "";
+  const city = a.city || a.town || a.village || a.municipality || a.county || "Irapuato";
+  const state = a.state || "Guanajuato";
+  const postcode = a.postcode || "";
+
+  // Actualiza form (sin machacar si ya escribió algo)
+  if(road && !form.calle.trim()) form.calle = road;
+  if(house && !form.noext.trim()) form.noext = house;
+  if(suburb && !form.col.trim()) form.col = suburb;
+  if(city) form.ciudad = city;
+  if(state) form.estado = state;
+  if(postcode && !form.cp.trim()) form.cp = postcode;
+
+  // refresca inputs si existen
+  const setVal = (id,val)=>{ const el=document.getElementById(id); if(el) el.value = val; };
+  setVal("s_calle", form.calle);
+  setVal("s_noext", form.noext);
+  setVal("s_col", form.col);
+  setVal("s_ciudad", form.ciudad);
+  setVal("s_estado", form.estado);
+  setVal("s_cp", form.cp);
+}
+
+async function updateLocation(lat,lng, {pan=true} = {}){
+  form.lat = lat;
+  form.lng = lng;
+  setMapLinkFromLatLng(lat,lng);
+
+  const latEl = document.getElementById("s_latlng");
+  if(latEl) latEl.textContent = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+
+  const linkEl = document.getElementById("s_mapslink");
+  if(linkEl) linkEl.value = form.mapsLink;
+
+  if(map && marker){
+    marker.setLatLng([lat,lng]);
+    if(pan) map.panTo([lat,lng], { animate:true });
   }
+
+  // intenta traer dirección
+  const status = document.getElementById("mapStatus");
+  try{
+    if(status) status.textContent = "Buscando dirección...";
+    await reverseGeocode(lat,lng);
+    if(status) status.textContent = "Dirección cargada ✅ (puedes ajustar manual)";
+  }catch(e){
+    if(status) status.textContent = "No se pudo autollenar dirección (ajusta manual) ⚠️";
+  }
+}
+
+function initLeafletMap(){
+  const box = document.getElementById("mapBox");
+  if(!box || mapReady) return;
+
+  mapReady = true;
+
+  // Centro default: Irapuato
+  const defaultLatLng = [20.6767, -101.3563];
+
+  map = L.map("mapBox", {
+    zoomControl: true,
+    dragging: true,
+    scrollWheelZoom: false,
+    tap: true
+  }).setView(defaultLatLng, 16);
+
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 20,
+    attribution: "&copy; OpenStreetMap"
+  }).addTo(map);
+
+  marker = L.marker(defaultLatLng, { draggable:true }).addTo(map);
+
+  marker.on("dragend", async ()=>{
+    const p = marker.getLatLng();
+    await updateLocation(p.lat, p.lng, {pan:false});
+  });
+
+  map.on("click", async (e)=>{
+    await updateLocation(e.latlng.lat, e.latlng.lng);
+  });
+
+  // Botón "mi ubicación"
+  const btn = document.getElementById("btnMyLoc");
+  if(btn){
+    bindTap(btn, ()=>{
+      if(!navigator.geolocation){
+        alert("Tu navegador no soporta ubicación.");
+        return;
+      }
+      const status = document.getElementById("mapStatus");
+      if(status) status.textContent = "Obteniendo ubicación…";
+      navigator.geolocation.getCurrentPosition(
+        async (pos)=>{
+          const lat = pos.coords.latitude;
+          const lng = pos.coords.longitude;
+          await updateLocation(lat,lng);
+          if(map) map.setView([lat,lng], 18);
+        },
+        ()=>{
+          alert("No se pudo obtener la ubicación. Activa permisos o mueve el pin manual.");
+          if(status) status.textContent = "Mueve el pin manualmente.";
+        },
+        { enableHighAccuracy:true, timeout:8000, maximumAge:0 }
+      );
+    });
+  }
+
+  // Inicializa la ubicación interna (si ya existía) o pide GPS
+  if(form.lat && form.lng){
+    updateLocation(form.lat, form.lng);
+    map.setView([form.lat, form.lng], 18);
+  }else{
+    // intenta con GPS automáticamente (si falla, se queda en Irapuato)
+    if(navigator.geolocation){
+      navigator.geolocation.getCurrentPosition(
+        async (pos)=>{
+          const lat = pos.coords.latitude;
+          const lng = pos.coords.longitude;
+          await updateLocation(lat,lng);
+          map.setView([lat,lng], 18);
+        },
+        async ()=>{
+          // default Irapuato (igual guardamos coords base)
+          await updateLocation(defaultLatLng[0], defaultLatLng[1], {pan:false});
+        },
+        { enableHighAccuracy:true, timeout:4000, maximumAge:60000 }
+      );
+    }else{
+      updateLocation(defaultLatLng[0], defaultLatLng[1], {pan:false});
+    }
+  }
+
+  // Fix de Leaflet cuando se muestra dentro de modal
+  setTimeout(()=> map && map.invalidateSize(true), 80);
 }
 
 function renderStep(){
@@ -1115,7 +1106,7 @@ function renderStep(){
     stepSub.textContent = "Datos personales";
   } else if(step===2){
     stepTitle.textContent = "Paso 2 de 3";
-    stepSub.textContent = (canal==="domicilio") ? "Dirección y ubicación" : "Confirmación rápida";
+    stepSub.textContent = (canal==="domicilio") ? "Dirección + Mapa" : "Confirmación rápida";
   } else {
     stepTitle.textContent = "Paso 3 de 3";
     stepSub.textContent = "Pago y enviar pedido";
@@ -1157,6 +1148,26 @@ function renderStep(){
     }
 
     stepsBody.innerHTML = `
+      <div class="optGroup" style="margin-top:0">
+        <div class="optTitle">
+          <b>📍 Elige tu ubicación en el mapa</b>
+          <span>arrastra el pin</span>
+        </div>
+
+        <div id="mapBox" style="margin-top:10px"></div>
+
+        <div class="mapRow">
+          <button class="btnDark" id="btnMyLoc" type="button">📍 Usar mi ubicación</button>
+          <button class="btnLight" id="btnCenterPin" type="button">🎯 Centrar al pin</button>
+        </div>
+
+        <div class="tiny" id="mapStatus">Toca el mapa o arrastra el pin para elegir.</div>
+        <div class="tiny">Coordenadas: <b id="s_latlng">—</b></div>
+
+        <label style="margin-top:12px">Link (se mandará en WhatsApp)</label>
+        <input id="s_mapslink" value="${escapeHtml(form.mapsLink)}" placeholder="Se genera solo">
+      </div>
+
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
         <div>
           <label>* Calle</label>
@@ -1185,29 +1196,19 @@ function renderStep(){
         </div>
       </div>
 
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
+        <div>
+          <label>* Ciudad</label>
+          <input id="s_ciudad" value="${escapeHtml(form.ciudad)}">
+        </div>
+        <div>
+          <label>* Estado</label>
+          <input id="s_estado" value="${escapeHtml(form.estado)}">
+        </div>
+      </div>
+
       <label>* Referencias</label>
       <textarea id="s_refs" placeholder="Entre calles, color de la casa, etc.">${escapeHtml(form.refs)}</textarea>
-
-      <div class="optGroup">
-        <div class="optTitle">
-          <b>📍 Ubicación en tiempo real (Maps)</b>
-          <span>opcional pero recomendado</span>
-        </div>
-
-        <div class="note" style="margin-top:10px">
-          1) Toca <b>Elegir ubicación</b> para abrir Google Maps.<br>
-          2) En Maps, pon el pin en tu ubicación y comparte el enlace.<br>
-          3) Pega el enlace aquí para mandarlo en el pedido.
-        </div>
-
-        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px">
-          <button class="btnDark" id="btnMaps" type="button">📍 Elegir ubicación en Maps</button>
-          <button class="btnLight" id="btnPasteMaps" type="button">📋 Pegar enlace</button>
-        </div>
-
-        <label style="margin-top:12px">Enlace de Google Maps</label>
-        <input id="s_maps" value="${escapeHtml(form.mapsLink)}" placeholder="Pega aquí el link que compartiste de Maps">
-      </div>
     `;
 
     setTimeout(()=>{
@@ -1217,34 +1218,27 @@ function renderStep(){
       bind("s_noint",  e=> form.noint  = e.target.value);
       bind("s_col",    e=> form.col    = e.target.value);
       bind("s_cp",     e=> form.cp     = e.target.value);
+      bind("s_ciudad", e=> form.ciudad = e.target.value);
+      bind("s_estado", e=> form.estado = e.target.value);
       bind("s_refs",   e=> form.refs   = e.target.value);
-      bind("s_maps",   e=> form.mapsLink = e.target.value);
 
-      const btnMaps = document.getElementById("btnMaps");
-      const btnPaste = document.getElementById("btnPasteMaps");
-      if(btnMaps) bindTap(btnMaps, chooseLocationInMaps);
-
-      if(btnPaste){
-        bindTap(btnPaste, async ()=>{
-          try{
-            const txt = await navigator.clipboard.readText();
-            if(txt){
-              form.mapsLink = txt.trim();
-              const inp = document.getElementById("s_maps");
-              if(inp) inp.value = form.mapsLink;
-            }else{
-              alert("No encontré texto en el portapapeles.");
-            }
-          }catch(e){
-            alert("Tu navegador no permitió leer el portapapeles. Copia el enlace y pégalo manualmente.");
+      const centerBtn = document.getElementById("btnCenterPin");
+      if(centerBtn){
+        bindTap(centerBtn, ()=>{
+          if(map && marker){
+            const p = marker.getLatLng();
+            map.setView([p.lat,p.lng], Math.max(map.getZoom(), 18));
           }
         });
       }
+
+      initLeafletMap();
     },0);
 
     return;
   }
 
+  // Paso 3
   stepsBody.innerHTML = `
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
       <div>
@@ -1289,7 +1283,6 @@ function stepValidate(){
     if(!form.col.trim()) return "Falta la colonia.";
     if(!form.cp.trim()) return "Falta el CP.";
     if(!form.refs.trim()) return "Faltan referencias.";
-    // mapsLink es opcional (no lo forzamos)
   }
   if(step===3){
     const p = form.pagareCon.trim();
@@ -1336,8 +1329,11 @@ function buildWhatsAppText(){
 
     if(form.mapsLink.trim()){
       lines.push(``);
-      lines.push(`📍 Ubicación (Google Maps):`);
+      lines.push(`📍 Ubicación (Mapa):`);
       lines.push(form.mapsLink.trim());
+    }
+    if(form.lat!=null && form.lng!=null){
+      lines.push(`Coordenadas: ${form.lat.toFixed(6)}, ${form.lng.toFixed(6)}`);
     }
   }
 
@@ -1378,16 +1374,13 @@ bindTap(document.getElementById("btnCheckout"), ()=>{
   if(cart.length===0){ alert("Agrega algo al carrito primero 😄"); return; }
   openSteps();
 });
-
 bindTap(document.getElementById("btnClear"), ()=>{
   if(confirm("¿Vaciar carrito?")){
     cart = [];
     renderCart();
   }
 });
-
 bindTap(btnBack, ()=>{ if(step>1){ step--; renderStep(); } });
-
 bindTap(btnNext, ()=>{
   const err = stepValidate();
   if(err){ alert(err); return; }
@@ -1405,10 +1398,7 @@ bindTap(btnNext, ()=>{
 renderTabs();
 renderItems();
 renderCart();
-
-// Preguntar servicio al entrar
 window.addEventListener("load", ()=> openFirstCanal());
 </script>
-
 </body>
 </html>
