@@ -639,7 +639,6 @@
       </div>
       <div class="chip" title="Horario sugerido">⏱️ Abierto hoy</div>
     </div>
-    <!-- Imagen hero opcional (pon un archivo "hero_menuderia.jpg" o cambia el nombre) -->
     <img class="heroImg" src="hero_menuderia.jpeg" alt="Menudería">
   </div>
 
@@ -675,9 +674,9 @@
       <h2>Tu pedido</h2>
       <div class="content">
 
-        <label>Canal</label>
+        <!-- ✅ CAMBIO: solo Domicilio o Recoger -->
+        <label>¿Cómo será tu pedido?</label>
         <select id="canal">
-          <option value="aqui">Comer aquí</option>
           <option value="recoger">Pasar a recoger</option>
           <option value="domicilio">Envío a domicilio</option>
         </select>
@@ -730,7 +729,7 @@
   </div>
 </div>
 
-<!-- CHECKOUT POR PASOS -->
+<!-- ✅ CHECKOUT + PASO 0 (pregunta canal) -->
 <div class="stepsBackdrop" id="stepsBackdrop">
   <div class="steps">
     <div class="stepsHead">
@@ -755,30 +754,25 @@
  *  CONFIG
  *  ========================= */
 const TAQUERIA_NOMBRE = "Menudería Zaragoza";
-const WHATSAPP_TAQ = "524621872594"; // cambia si quieres otro número (52 + número sin +)
+const WHATSAPP_TAQ = "524621872594";
 const IMG_BASE = "";
 
 /** =========================
- *  CATALOGO (con nombres de imagen EXACTOS)
+ *  CATALOGO
  *  ========================= */
 const catalogo = [
-  // MENUDO
-  {id:"plato_chico",    cat:"MENUDO",  name:"Plato de menudo chico",    price:0, desc:"Porción chica, bien servida.",    mods:true,  img:"platochicomenudo.jpeg"},
-  {id:"plato_mediano",  cat:"MENUDO",  name:"Plato de menudo mediano",  price:0, desc:"Porción mediana para buen antojo.",mods:true,  img:"platomedianomenudo.jpeg"},
-  {id:"plato_grande",   cat:"MENUDO",  name:"Plato de menudo grande",   price:0, desc:"Porción grande, para hambre seria.",mods:true,  img:"platograndemenudo.jpeg"},
-
-  // ANTOJITOS
-  {id:"quesadilla_panza", cat:"ANTOJITOS", name:"Quesadilla de panza", price:0, desc:"Quesito derretido + panza.", mods:true, img:"quesadillapanza.jpeg"},
-  {id:"taco_panza",       cat:"ANTOJITOS", name:"Taco de panza",       price:0, desc:"Taco bien servido de panza.", mods:true, img:"tacopanza.jpeg"},
-
-  // BEBIDAS
-  {id:"coca_600ml", cat:"BEBIDAS", name:"Coca Cola 600ml", price:0, desc:"Bien fría.", mods:false, img:"refresco600mlcoca.jpeg"},
+  {id:"plato_chico",    cat:"MENUDO",    name:"Plato de menudo chico",   price:0, desc:"Porción chica, bien servida.",      mods:true,  img:"platochicomenudo.jpeg"},
+  {id:"plato_mediano",  cat:"MENUDO",    name:"Plato de menudo mediano", price:0, desc:"Porción mediana para buen antojo.",  mods:true,  img:"platomedianomenudo.jpeg"},
+  {id:"plato_grande",   cat:"MENUDO",    name:"Plato de menudo grande",  price:0, desc:"Porción grande, para hambre seria.",  mods:true,  img:"platograndemenudo.jpeg"},
+  {id:"quesadilla_panza", cat:"ANTOJITOS", name:"Quesadilla de panza",   price:0, desc:"Quesito derretido + panza.",          mods:true,  img:"quesadillapanza.jpeg"},
+  {id:"taco_panza",       cat:"ANTOJITOS", name:"Taco de panza",         price:0, desc:"Taco bien servido de panza.",          mods:true,  img:"tacopanza.jpeg"},
+  {id:"coca_600ml",       cat:"BEBIDAS",   name:"Coca Cola 600ml",       price:0, desc:"Bien fría.",                          mods:false, img:"refresco600mlcoca.jpeg"},
 ];
 
 const CATS = ["MENUDO","ANTOJITOS","BEBIDAS"];
 
 /** =========================
- *  MODIFICADORES (opcionales)
+ *  MODIFICADORES
  *  ========================= */
 const MODS = {
   nivelPicante: { title:"Picante", type:"single", required:false,
@@ -805,10 +799,7 @@ function modsPara(item){
 /** =========================
  *  HELPERS
  *  ========================= */
-function money(n){
-  const v = Number(n || 0);
-  return "$" + v.toFixed(2);
-}
+function money(n){ return "$" + Number(n||0).toFixed(2); }
 function escapeHtml(s){
   return (s||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
 }
@@ -843,7 +834,6 @@ const tabs = document.getElementById("tabs");
 const itemsBox = document.getElementById("items");
 const sectionTitle = document.getElementById("sectionTitle");
 const q = document.getElementById("q");
-
 let activeCat = CATS[0];
 
 function renderTabs(){
@@ -856,10 +846,8 @@ function renderTabs(){
     tabs.appendChild(el);
   });
 }
-
 function renderItems(){
   sectionTitle.textContent = activeCat;
-
   const term = (q.value||"").trim().toLowerCase();
   const list = catalogo.filter(x=>{
     const inCat = x.cat===activeCat;
@@ -899,8 +887,7 @@ q.addEventListener("input", renderItems);
 /** =========================
  *  CARRITO
  *  ========================= */
-let cart = []; // {key, id, name, basePrice, qty, mods, note}
-
+let cart = [];
 const cartBox = document.getElementById("cart");
 const totalEl = document.getElementById("total");
 const cartPill = document.getElementById("cartPill");
@@ -1016,13 +1003,11 @@ function openModal(item){
     if(inp) inp.oninput = ()=> draft.note = inp.value;
   }, 0);
 }
-
 function closeModal(){
   backdrop.style.display = "none";
   currentItem = null;
   draft = null;
 }
-
 function toggleOpt(k, opt, el){
   const g = MODS[k];
   if(g.type==="single"){
@@ -1037,33 +1022,19 @@ function toggleOpt(k, opt, el){
     else{ arr.push(opt); el.classList.add("active"); }
   }
 }
-
 function addLine(item, mods, note){
   const key = buildKey(item, mods, note);
   const existing = cart.find(x=>x.key===key);
   if(existing){ existing.qty += 1; }
   else{
-    cart.push({
-      key,
-      id:item.id,
-      name:item.name,
-      basePrice:item.price,
-      qty:1,
-      mods: mods,
-      note: note || ""
-    });
+    cart.push({ key, id:item.id, name:item.name, basePrice:item.price, qty:1, mods, note: note || "" });
   }
   renderCart();
 }
-
 function onAddClicked(item){
-  if(item.mods && modsPara(item).length){
-    openModal(item);
-  }else{
-    addLine(item, {}, "");
-  }
+  if(item.mods && modsPara(item).length) openModal(item);
+  else addLine(item, {}, "");
 }
-
 mClose.onclick = closeModal;
 mCancel.onclick = closeModal;
 backdrop.addEventListener("click", (e)=>{ if(e.target===backdrop) closeModal(); });
@@ -1077,10 +1048,9 @@ mAdd.onclick = ()=>{
 };
 
 /** =========================
- *  CHECKOUT POR PASOS
+ *  CHECKOUT POR PASOS + PASO 0 (CANAL)
  *  ========================= */
 const canalEl = document.getElementById("canal");
-
 const stepsBackdrop = document.getElementById("stepsBackdrop");
 const stepsClose = document.getElementById("stepsClose");
 const stepsBody = document.getElementById("stepsBody");
@@ -1107,6 +1077,16 @@ const form = {
   notas: ""
 };
 
+/* ✅ MEMORIA DEL CANAL */
+const CANAL_KEY = "menuderia_canal";
+function getSavedCanal(){
+  const v = localStorage.getItem(CANAL_KEY);
+  return (v === "domicilio" || v === "recoger") ? v : null;
+}
+function setSavedCanal(v){
+  if(v === "domicilio" || v === "recoger") localStorage.setItem(CANAL_KEY, v);
+}
+
 function openSteps(){
   step = 1;
   stepsBackdrop.style.display = "flex";
@@ -1114,10 +1094,62 @@ function openSteps(){
 }
 function closeSteps(){ stepsBackdrop.style.display = "none"; }
 
+/* ✅ PASO 0: preguntar canal solo una vez (y recordar) */
+function openCanalFirst(){
+  const saved = getSavedCanal();
+  if(saved){
+    canalEl.value = saved;
+    return;
+  }
+  step = 0;
+  stepsBackdrop.style.display = "flex";
+  renderStep();
+}
+
 function renderStep(){
   const canal = canalEl.value;
   const total = cartTotal();
 
+  /* PASO 0 */
+  if(step === 0){
+    stepTitle.textContent = "Antes de empezar…";
+    stepSub.textContent = "¿Envío a domicilio o recoger?";
+    btnBack.style.display = "none";
+    btnNext.textContent = "LISTO";
+
+    stepsBody.innerHTML = `
+      <div class="note" style="margin-top:0">Elige una opción:</div>
+      <div class="optGroup" style="margin-top:12px">
+        <div class="optTitle">
+          <b>Servicio</b>
+          <span>elige 1</span>
+        </div>
+        <div class="optList" id="canalOpts"></div>
+      </div>
+    `;
+
+    const opts = document.getElementById("canalOpts");
+    const opciones = [
+      {val:"recoger", label:"🚶‍♂️ Pasar a recoger"},
+      {val:"domicilio", label:"🏠 Envío a domicilio"}
+    ];
+
+    opts.innerHTML = "";
+    opciones.forEach(o=>{
+      const b = document.createElement("div");
+      b.className = "opt" + (canalEl.value===o.val ? " active":"");
+      b.textContent = o.label;
+      b.onclick = ()=>{
+        canalEl.value = o.val;
+        opts.querySelectorAll(".opt").forEach(x=>x.classList.remove("active"));
+        b.classList.add("active");
+      };
+      opts.appendChild(b);
+    });
+    return;
+  }
+
+  /* pasos normales */
   if(step===1){
     stepTitle.textContent = "Paso 1 de 3";
     stepSub.textContent = "Datos personales";
@@ -1145,7 +1177,7 @@ function renderStep(){
         </div>
       </div>
       <div class="note">
-        Canal: <b>${canal==="aqui"?"Comer aquí":(canal==="recoger"?"Pasar a recoger":"Envío a domicilio")}</b><br>
+        Canal: <b>${canal==="recoger"?"Pasar a recoger":"Envío a domicilio"}</b><br>
         Total actual: <b>${money(total)}</b>
       </div>
     `;
@@ -1158,7 +1190,7 @@ function renderStep(){
 
   if(step===2){
     if(canal!=="domicilio"){
-      stepsBody.innerHTML = `<div class="note">Como tu canal no es domicilio, este paso solo confirma y brinca al pago.</div>`;
+      stepsBody.innerHTML = `<div class="note">Como tu canal es recoger, este paso se brinca y pasamos al pago.</div>`;
       return;
     }
 
@@ -1267,15 +1299,11 @@ function stepValidate(){
   return null;
 }
 function cleanWA(text){
-  return (text || "")
-    .replace(/\uFFFD/g, "")
-    .replace(/\r\n/g, "\n")
-    .replace(/\n{3,}/g, "\n\n")
-    .trim();
+  return (text || "").replace(/\uFFFD/g,"").replace(/\r\n/g,"\n").replace(/\n{3,}/g,"\n\n").trim();
 }
 function buildWhatsAppText(){
   const canal = canalEl.value;
-  const canalTxt = canal==="aqui" ? "Comer aquí" : (canal==="recoger" ? "Pasar a recoger" : "Domicilio");
+  const canalTxt = canal==="recoger" ? "Pasar a recoger" : "Domicilio";
   const total = cartTotal();
   const orderNo = String(Date.now()).slice(-6);
 
@@ -1296,7 +1324,6 @@ function buildWhatsAppText(){
       `Estado: ${form.estado}`,
       `Referencias: ${form.refs}`
     ].join("\n");
-
     lines.push(``);
     lines.push(`Domicilio para la entrega:`);
     lines.push(dir);
@@ -1334,14 +1361,21 @@ function buildWhatsAppText(){
   return lines.join("\n");
 }
 
+/* BOTONES */
 document.getElementById("btnCheckout").onclick = ()=>{
   if(cart.length===0){ alert("Agrega algo al carrito primero 😄"); return; }
   openSteps();
 };
-
 btnBack.onclick = ()=>{ if(step>1){ step--; renderStep(); } };
 
 btnNext.onclick = ()=>{
+  /* PASO 0: guardar canal y cerrar */
+  if(step === 0){
+    setSavedCanal(canalEl.value);
+    closeSteps();
+    return;
+  }
+
   const err = stepValidate();
   if(err){ alert(err); return; }
 
@@ -1364,12 +1398,17 @@ document.getElementById("btnClear").onclick = ()=>{
   }
 };
 
-/** =========================
- *  INIT
- *  ========================= */
+/** INIT */
 renderTabs();
 renderItems();
 renderCart();
+
+/* ✅ al cargar: si no hay canal guardado, preguntar primero */
+window.addEventListener("load", ()=>{
+  const saved = getSavedCanal();
+  canalEl.value = saved || "recoger";
+  if(!saved) openCanalFirst();
+});
 </script>
 
 </body>
