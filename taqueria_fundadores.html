@@ -14,13 +14,16 @@
       --bg:#1a0f0c;
       --bg2:#24130f;
 
+      /* Tarjetas en crema (para que se vea “menú”) */
       --card:#fff6ec;
       --card2:#fff1e2;
 
+      /* Textos oscuros (sobre crema) */
       --ink:#2b1a14;
       --muted:#6a4a3c;
       --line: rgba(0,0,0,.10);
 
+      /* Marca */
       --brand1:#8b1e1e;
       --brand2:#b63a2b;
       --gold:#d4a373;
@@ -216,6 +219,7 @@
       overflow:hidden;
       color: var(--ink);
       touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
     .tab:active{transform: translateY(1px)}
     .tab.active{
@@ -458,7 +462,7 @@
     }
     .btnGhost:active{transform: translateY(1px)}
 
-    /* MODAL (mods) */
+    /* MODAL (mods) + STEPS */
     .backdrop,
     .stepsBackdrop{
       position:fixed; inset:0;
@@ -468,9 +472,8 @@
       justify-content:center;
       padding:16px;
       z-index:999;
-      /* CLAVE PARA QUE NO AGARRE LO DE ATRÁS */
       pointer-events:auto;
-      touch-action:none;
+      touch-action:none; /* evita tap-through */
     }
 
     .modal,
@@ -521,7 +524,6 @@
     .optTitle span{font-size:12px; color:var(--muted); font-weight:900}
     .optList{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px}
 
-    /* USAMOS BUTTONS, NO DIVS (mejor en Safari/Android) */
     .optBtn{
       appearance:none;
       border:1px solid rgba(0,0,0,.12);
@@ -655,7 +657,7 @@
 <header>
   <div class="row">
     <div class="brand">
-      <h1>🌮 Menú — <span id="tqName">Tacos Los Fundadores</span></h1>
+      <h1>🌮 Menú — Tacos Los Fundadores</h1>
       <div class="sub">Pedido rápido • mapa gratis • WhatsApp</div>
     </div>
     <div class="pill" id="cartPill">🛒 <b>0</b> <span class="amt" id="pillTotal">$0.00</span></div>
@@ -703,7 +705,7 @@
       </h2>
       <div class="content">
 
-        <!-- oculto pero lo usamos internamente -->
+        <!-- oculto (solo interno) -->
         <select id="canal" style="display:none">
           <option value="recoger">Pasar a recoger</option>
           <option value="domicilio">Envío a domicilio</option>
@@ -780,24 +782,18 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 /** =========================
- *  CONFIG (multi-taquerías por query params)
- *  =========================
- *  Puedes abrir así:
- *  menu.html?tq_name=Tacos%20Los%20Fundadores&tq_lat=20.6767&tq_lng=-101.3563&tq_wa=524621872594
- */
-const params = new URLSearchParams(location.search);
+ *  CONFIG (UNA TAQUERÍA)
+ *  ========================= */
+const TAQUERIA_NOMBRE = "Tacos Los Fundadores";
+const WHATSAPP_TAQ    = "524621872594"; // 52 + número sin +
+/* 👇 CAMBIA AQUÍ por la ubicación real de la taquería */
+const TQ_LAT          = 20.6767;
+const TQ_LNG          = -101.3563;
 
-const TAQUERIA_NOMBRE = params.get("tq_name") || "Tacos Los Fundadores";
-const WHATSAPP_TAQ    = (params.get("tq_wa") || "524621872594").replace(/\D/g,"");
-const TQ_LAT          = Number(params.get("tq_lat") || 20.6767);     // pon la real
-const TQ_LNG          = Number(params.get("tq_lng") || -101.3563);    // pon la real
 const IMG_BASE = "";
 
-// UI header name
-document.getElementById("tqName").textContent = TAQUERIA_NOMBRE;
-
 /** =========================
- *  TARIFAS (según tu tabla)
+ *  TARIFAS (tu tabla)
  *  ========================= */
 const TARIFAS = [
   {from:0, to:3, normal:50, lluvia:65},
@@ -809,7 +805,6 @@ const TARIFAS = [
   {from:8, to:9, normal:80, lluvia:125},
   {from:9, to:10, normal:85, lluvia:135},
 ];
-
 function getTarifa(km, lluvia=false){
   const k = Number(km);
   const row = TARIFAS.find(r => k >= r.from && k < r.to) || null;
@@ -895,9 +890,6 @@ function validateRequired(item, mods){
   }
   return null;
 }
-function clamp(n,min,max){ return Math.max(min, Math.min(max, n)); }
-
-/** Distancia Haversine (km) */
 function haversineKm(lat1, lon1, lat2, lon2) {
   const R = 6371;
   const toRad = d => d * Math.PI / 180;
@@ -910,8 +902,6 @@ function haversineKm(lat1, lon1, lat2, lon2) {
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
   return R * c;
 }
-
-/** Nominatim reverse geocode (GRATIS) */
 async function reverseGeocode(lat,lng){
   const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lng)}`;
   const res = await fetch(url, { headers: { "Accept":"application/json" } });
@@ -919,7 +909,6 @@ async function reverseGeocode(lat,lng){
   return res.json();
 }
 function pickAddrParts(addr){
-  // Normalizamos lo mejor posible
   const road = addr.road || addr.pedestrian || addr.footway || addr.path || "";
   const house = addr.house_number || "";
   const suburb = addr.suburb || addr.neighbourhood || addr.quarter || addr.residential || "";
@@ -970,9 +959,7 @@ function renderItems(){
         <div class="price">MXN <b>${money(it.price)}</b></div>
       </div>
       <div class="prodRight">
-        <div class="prodImg">
-          <img src="${IMG_BASE + it.img}" alt="${escapeHtml(it.name)}">
-        </div>
+        <div class="prodImg"><img src="${IMG_BASE + it.img}" alt="${escapeHtml(it.name)}"></div>
         <button class="btnAdd" type="button">Agregar</button>
       </div>
     `;
@@ -1092,7 +1079,6 @@ function openModal(item){
       btn.className = "optBtn";
       btn.textContent = opt;
 
-      // pointerdown mejora “tap” en Safari/Android y evita click-through
       btn.addEventListener("pointerdown", (e)=>{
         e.preventDefault();
         e.stopPropagation();
@@ -1120,8 +1106,6 @@ function openModal(item){
 
   backdrop.style.display = "flex";
   backdrop.setAttribute("aria-hidden","false");
-
-  // bloquear scroll atrás
   document.body.style.overflow = "hidden";
 
   setTimeout(()=> {
@@ -1167,7 +1151,6 @@ function onAddClicked(item){
 mClose.addEventListener("click", closeModal, {passive:true});
 mCancel.addEventListener("click", closeModal, {passive:true});
 backdrop.addEventListener("pointerdown", (e)=>{
-  // solo si toca el fondo oscuro
   if(e.target===backdrop){ e.preventDefault(); closeModal(); }
 }, {passive:false});
 
@@ -1177,7 +1160,6 @@ mAdd.addEventListener("click", ()=>{
   const err = validateRequired(currentItem, draft.mods);
   if(err){ alert(err); return; }
 
-  // presets (para tacos/alambres)
   if(currentItem.cat==="TACOS"){
     if(currentItem.id==="taco_lengua")  draft.mods["carne"]="Lengua";
     if(currentItem.id==="taco_pastor")  draft.mods["carne"]="Pastor";
@@ -1193,7 +1175,7 @@ mAdd.addEventListener("click", ()=>{
 }, {passive:true});
 
 /** =========================
- *  SERVICIO: preguntar cada vez que entra
+ *  SERVICIO: preguntar siempre al entrar
  *  ========================= */
 const canalEl = document.getElementById("canal");
 const servTxt = document.getElementById("servTxt");
@@ -1203,7 +1185,6 @@ function getCanal(){ return canalEl.value; }
 function setCanal(v){
   canalEl.value = (v==="domicilio") ? "domicilio" : "recoger";
   servTxt.textContent = (getCanal()==="domicilio") ? "Domicilio" : "Recoger";
-  // si cambia a recoger, envío = 0
   if(getCanal()!=="domicilio"){
     envioPrecio = 0; envioKm = 0;
   }
@@ -1221,12 +1202,11 @@ const stepSub = document.getElementById("stepSub");
 const btnBack = document.getElementById("btnBack");
 const btnNext = document.getElementById("btnNext");
 
-let step = 0; // 0 = elegir servicio
+let step = 0; // 0 = servicio
 
 const form = {
   nombre: "",
   tel: "",
-  // Dirección
   calle: "",
   noext: "",
   col: "",
@@ -1234,10 +1214,8 @@ const form = {
   cp: "",
   estado: "Guanajuato",
   refs: "",
-  // Ubicación
   lat: null,
   lng: null,
-  // Pago
   metodo: "efectivo",
   pagareCon: "",
   notas: ""
@@ -1261,22 +1239,15 @@ function closeSteps(){
   document.body.style.overflow = "";
 }
 
-function stopAll(e){
-  e.preventDefault();
-  e.stopPropagation();
-}
-
 stepsBackdrop.addEventListener("pointerdown", (e)=>{
-  // tocar afuera cierra
   if(e.target===stepsBackdrop){
     e.preventDefault();
     closeSteps();
   }
 }, {passive:false});
-
 stepsClose.addEventListener("click", closeSteps, {passive:true});
+
 btnCambioServicio.addEventListener("click", ()=>{
-  // abre solo para cambiar servicio (paso 0)
   step = 0;
   stepsBackdrop.style.display = "flex";
   stepsBackdrop.setAttribute("aria-hidden","false");
@@ -1287,12 +1258,11 @@ btnCambioServicio.addEventListener("click", ()=>{
 function ensureMapInit(){
   if(mapReady) return;
 
-  // centro por defecto: taquería
   const centerLat = (form.lat ?? TQ_LAT);
   const centerLng = (form.lng ?? TQ_LNG);
 
-  map = L.map('miniMap', { zoomControl: true, attributionControl: false }).setView([centerLat, centerLng], 14);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
+  map = L.map('miniMap', { zoomControl:true, attributionControl:false }).setView([centerLat, centerLng], 14);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom:19 }).addTo(map);
 
   marker = L.marker([centerLat, centerLng], { draggable:true }).addTo(map);
 
@@ -1306,9 +1276,7 @@ function ensureMapInit(){
     await setDomFromLatLng(e.latlng.lat, e.latlng.lng, true);
   });
 
-  // hack: Safari necesita invalidateSize
   setTimeout(()=> { map.invalidateSize(true); }, 80);
-
   mapReady = true;
 }
 
@@ -1316,26 +1284,21 @@ async function setDomFromLatLng(lat,lng, recompute=true){
   form.lat = lat;
   form.lng = lng;
 
-  // Mostrar coords
   const elCoords = document.getElementById("coordsTxt");
   if(elCoords) elCoords.textContent = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
 
-  // Reverse geocode
   try{
     const data = await reverseGeocode(lat,lng);
     const addr = data.address || {};
     const parts = pickAddrParts(addr);
 
-    // Llenar campos lo mejor posible
     form.calle = (parts.road || form.calle || "");
-    // si la API trae house_number lo ponemos en noext (puedes cambiarlo)
     if(parts.house) form.noext = parts.house;
     form.col = (parts.suburb || form.col || "");
     form.ciudad = (parts.city || form.ciudad || "Irapuato");
     form.estado = (parts.state || form.estado || "Guanajuato");
     form.cp = (parts.postcode || form.cp || "");
 
-    // refrescar inputs si existen
     const f = (id,val)=>{ const el=document.getElementById(id); if(el) el.value = val || ""; };
     f("s_calle", form.calle);
     f("s_noext", form.noext);
@@ -1343,13 +1306,9 @@ async function setDomFromLatLng(lat,lng, recompute=true){
     f("s_ciudad", form.ciudad);
     f("s_estado", form.estado);
     f("s_cp", form.cp);
-  }catch(err){
-    // silencioso, pero dejamos coords
-  }
+  }catch(err){}
 
-  if(recompute){
-    await recomputeEnvio();
-  }
+  if(recompute) await recomputeEnvio();
 }
 
 async function recomputeEnvio(){
@@ -1370,17 +1329,11 @@ async function recomputeEnvio(){
   }
 
   envioKm = haversineKm(TQ_LAT, TQ_LNG, Number(form.lat), Number(form.lng));
-  // redondeo 1 decimal
   envioKm = Math.round(envioKm*10)/10;
 
   const r = getTarifa(envioKm, lluvia);
-  if(!r.ok){
-    envioPrecio = 0;
-  }else{
-    envioPrecio = r.precio;
-  }
+  envioPrecio = r.ok ? r.precio : 0;
 
-  // UI
   const kmTxt = document.getElementById("kmTxt");
   const envioTxt = document.getElementById("envioTxt");
   if(kmTxt) kmTxt.textContent = `${envioKm.toFixed(1)} km`;
@@ -1394,7 +1347,7 @@ function renderStep(){
   const subTotal = cartSubTotal();
   const total = cartTotal();
 
-  // STEP 0: solo elegir servicio
+  // STEP 0: servicio
   if(step === 0){
     stepTitle.textContent = "Antes de empezar…";
     stepSub.textContent = "¿Tu pedido es para domicilio o recoger?";
@@ -1416,7 +1369,7 @@ function renderStep(){
 
       <div class="note">
         <b>${TAQUERIA_NOMBRE}</b><br>
-        Si eliges <b>Domicilio</b> te pediremos tu ubicación en el mapa para calcular el envío.
+        Si eliges <b>Domicilio</b>, te pediremos tu ubicación en el mapa para calcular el envío.
       </div>
     `;
 
@@ -1433,7 +1386,6 @@ function renderStep(){
       b.className = "optBtn" + (canalEl.value===o.val ? " active":"");
       b.textContent = o.label;
 
-      // pointerdown: mejora taps en Safari/Android
       b.addEventListener("pointerdown", (e)=>{
         e.preventDefault();
         e.stopPropagation();
@@ -1480,7 +1432,7 @@ function renderStep(){
     return;
   }
 
-  // STEP 2: domicilio (solo si domicilio)
+  // STEP 2: mapa (solo domicilio)
   if(step===2){
     btnBack.style.display = "inline-block";
     btnNext.textContent = "CONTINUAR";
@@ -1490,7 +1442,7 @@ function renderStep(){
       stepSub.textContent = "Confirmación rápida";
       stepsBody.innerHTML = `
         <div class="note" style="margin-top:0">
-          Como tu servicio es <b>Recoger</b>, no necesitamos domicilio. Continuamos al pago.
+          Servicio <b>Recoger</b>: no necesitamos domicilio. Continuamos al pago.
         </div>
         <div class="kpiRow">
           <div class="kpi"><b>Subtotal</b><span>${money(subTotal)}</span></div>
@@ -1506,9 +1458,7 @@ function renderStep(){
         Toca el mapa para poner tu pin o arrástralo. Con eso calculamos el envío.
       </div>
 
-      <div class="mapWrap">
-        <div id="miniMap"></div>
-      </div>
+      <div class="mapWrap"><div id="miniMap"></div></div>
 
       <div class="mapBar">
         <button class="btnLight" type="button" id="btnMiUbicacion">📍 Usar mi ubicación</button>
@@ -1569,17 +1519,13 @@ function renderStep(){
         <label>* Referencias</label>
         <textarea id="s_refs" placeholder="Entre calles, color de la casa, etc.">${escapeHtml(form.refs)}</textarea>
 
-        <div class="note">
-          Coordenadas: <b id="coordsTxt">${(form.lat!=null && form.lng!=null) ? `${form.lat.toFixed(5)}, ${form.lng.toFixed(5)}` : "—"}</b>
-        </div>
+        <div class="note">Coordenadas: <b id="coordsTxt">${(form.lat!=null&&form.lng!=null)?`${form.lat.toFixed(5)}, ${form.lng.toFixed(5)}`:"—"}</b></div>
       </div>
     `;
 
-    // Init map after DOM paint
     setTimeout(async ()=>{
       ensureMapInit();
 
-      // hooks inputs
       const link = (id, key)=>{
         const el = document.getElementById(id);
         if(!el) return;
@@ -1611,10 +1557,10 @@ function renderStep(){
           navigator.geolocation.getCurrentPosition(async (pos)=>{
             const lat = pos.coords.latitude;
             const lng = pos.coords.longitude;
-            if(marker) marker.setLatLng([lat,lng]);
-            if(map) map.setView([lat,lng], 16, {animate:true});
+            marker.setLatLng([lat,lng]);
+            map.setView([lat,lng], 16, {animate:true});
             await setDomFromLatLng(lat,lng,true);
-          }, (err)=>{
+          }, ()=>{
             alert("No se pudo obtener tu ubicación. Revisa permisos.");
           }, { enableHighAccuracy:true, timeout:12000, maximumAge:0 });
         }, {passive:true});
@@ -1622,26 +1568,24 @@ function renderStep(){
 
       const btnC = document.getElementById("btnCentrarTq");
       if(btnC){
-        btnC.addEventListener("click", async ()=>{
-          if(marker) marker.setLatLng([TQ_LAT,TQ_LNG]);
-          if(map) map.setView([TQ_LAT,TQ_LNG], 14, {animate:true});
-          // NO llenamos domicilio con la taquería, solo centramos
+        btnC.addEventListener("click", ()=>{
+          marker.setLatLng([TQ_LAT,TQ_LNG]);
+          map.setView([TQ_LAT,TQ_LNG], 14, {animate:true});
         }, {passive:true});
       }
 
-      // si ya tenía coords, calcular envío; si no, pon el pin en taquería pero sin set domicilio
+      // Si no hay coords guardadas, deja el pin en taquería (pero el cliente lo mueve)
       if(form.lat==null || form.lng==null){
-        if(marker) marker.setLatLng([TQ_LAT,TQ_LNG]);
-        if(map) map.setView([TQ_LAT,TQ_LNG], 14);
+        marker.setLatLng([TQ_LAT,TQ_LNG]);
+        map.setView([TQ_LAT,TQ_LNG], 14);
         await recomputeEnvio();
       }else{
-        if(marker) marker.setLatLng([form.lat, form.lng]);
-        if(map) map.setView([form.lat, form.lng], 16);
+        marker.setLatLng([form.lat, form.lng]);
+        map.setView([form.lat, form.lng], 16);
         await recomputeEnvio();
       }
 
-      // Safari: recalcular tamaño al mostrar
-      if(map) setTimeout(()=> map.invalidateSize(true), 120);
+      setTimeout(()=> map.invalidateSize(true), 120);
     }, 0);
 
     return;
@@ -1706,12 +1650,10 @@ function stepValidate(){
   if(step===0){
     if(canal!=="domicilio" && canal!=="recoger") return "Elige domicilio o recoger.";
   }
-
   if(step===1){
     if(!form.nombre.trim()) return "Pon tu nombre.";
     if(!form.tel.trim()) return "Pon tu celular.";
   }
-
   if(step===2 && canal==="domicilio"){
     if(form.lat==null || form.lng==null) return "Elige tu ubicación en el mapa (o usa “mi ubicación”).";
     if(!form.calle.trim()) return "Falta la calle.";
@@ -1719,16 +1661,13 @@ function stepValidate(){
     if(!form.col.trim()) return "Falta la colonia.";
     if(!form.cp.trim()) return "Falta el CP.";
     if(!form.refs.trim()) return "Faltan referencias.";
-    // validar rango envío
     const r = getTarifa(envioKm, lluvia);
     if(!r.ok) return "Tu domicilio está fuera del rango de envío (0–10 km).";
   }
-
   if(step===3){
     const p = form.pagareCon.trim();
     if(p && isNaN(Number(p))) return "En 'Pagaré con' pon solo número (ej. 500).";
   }
-
   return null;
 }
 
@@ -1820,40 +1759,17 @@ btnNext.addEventListener("click", async ()=>{
   const err = stepValidate();
   if(err){ alert(err); return; }
 
-  // Flujo:
-  // 0 -> 1
-  // 1 -> 2
-  // 2 -> 3
-  // 3 -> enviar
-
-  if(step===0){
-    // ya eligió domicilio/recoger
-    closeSteps();
-    return;
-  }
-
-  if(step===1){
-    step = 2;
-    renderStep();
-    return;
-  }
-
+  if(step===0){ closeSteps(); return; }        // solo elegir servicio
+  if(step===1){ step=2; renderStep(); return; }
   if(step===2){
-    // por seguridad recalculamos envío antes de pasar
     if(getCanal()==="domicilio"){
       await recomputeEnvio();
       const r = getTarifa(envioKm, lluvia);
-      if(!r.ok){
-        alert("Tu domicilio está fuera del rango de envío (0–10 km).");
-        return;
-      }
+      if(!r.ok){ alert("Tu domicilio está fuera del rango de envío (0–10 km)."); return; }
     }
-    step = 3;
-    renderStep();
-    return;
+    step=3; renderStep(); return;
   }
 
-  // step 3: enviar WhatsApp
   const text = cleanWA(buildWhatsAppText());
   const url = `https://wa.me/${WHATSAPP_TAQ}?text=${encodeURIComponent(text)}`;
   window.open(url, "_blank");
@@ -1874,10 +1790,9 @@ renderTabs();
 renderItems();
 renderCart();
 
-// Al cargar: SIEMPRE preguntar domicilio/recoger (sin guardar)
+// SIEMPRE preguntar servicio al entrar
 window.addEventListener("load", ()=>{
-  setCanal("recoger"); // default
-  // Abrimos el selector de servicio al entrar (solo eso)
+  setCanal("recoger");
   step = 0;
   stepsBackdrop.style.display = "flex";
   stepsBackdrop.setAttribute("aria-hidden","false");
