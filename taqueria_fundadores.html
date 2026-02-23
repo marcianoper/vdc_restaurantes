@@ -135,8 +135,8 @@
       box-shadow: var(--shadow);
       position:relative;
       background: rgba(0,0,0,.25);
-      -webkit-transform: translateZ(0);
       transform: translateZ(0);
+      -webkit-transform: translateZ(0);
     }
     .hero::before{
       content:"";
@@ -180,9 +180,7 @@
     .content{padding:14px}
 
     /* SEARCH + TABS */
-    .searchRow{
-      display:flex; gap:10px; align-items:center; margin-top:12px;
-    }
+    .searchRow{display:flex; gap:10px; align-items:center; margin-top:12px;}
     .searchRow input{
       flex:1;
       padding:12px 12px;
@@ -195,12 +193,7 @@
     }
     .searchRow input::placeholder{color: rgba(43,26,20,.55)}
 
-    .tabs{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      margin: 12px 0 10px;
-    }
+    .tabs{display:flex; flex-wrap:wrap; gap:10px; margin: 12px 0 10px;}
     .tab{
       border:1px solid rgba(0,0,0,.10);
       background: rgba(255,255,255,.72);
@@ -212,10 +205,9 @@
       user-select:none;
       letter-spacing:.3px;
       box-shadow: 0 10px 24px rgba(0,0,0,.10);
-      position:relative;
-      overflow:hidden;
       color: var(--ink);
       touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
     .tab:hover{
       box-shadow: 0 14px 28px rgba(0,0,0,.14);
@@ -275,64 +267,20 @@
         radial-gradient(420px 180px at 80% 50%, rgba(212,163,115,.10), transparent 70%);
       pointer-events:none;
     }
-    .prodLeft{
-      padding:14px 14px 12px;
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-      position:relative;
-      z-index:2;
-    }
-    .prodName{
-      font-weight:1000;
-      font-size: 20px;
-      margin:0;
-      letter-spacing:.2px;
-      color: var(--ink);
-    }
+    .prodLeft{padding:14px 14px 12px; display:flex; flex-direction:column; gap:8px; position:relative; z-index:2;}
+    .prodName{font-weight:1000; font-size: 20px; margin:0; letter-spacing:.2px; color: var(--ink);}
     .badge{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      width:max-content;
-      padding:6px 10px;
-      border-radius:999px;
-      font-size:12px;
-      font-weight:1000;
-      border:1px solid rgba(0,0,0,.10);
-      background: rgba(255,255,255,.70);
-      color: rgba(43,26,20,.92);
+      display:inline-flex; align-items:center; gap:6px; width:max-content;
+      padding:6px 10px; border-radius:999px; font-size:12px; font-weight:1000;
+      border:1px solid rgba(0,0,0,.10); background: rgba(255,255,255,.70); color: rgba(43,26,20,.92);
     }
-    .prodDesc{
-      margin:0;
-      color: var(--muted);
-      font-weight:800;
-      line-height:1.25;
-      font-size:13px;
-    }
-    .price{
-      margin-top:auto;
-      font-weight:1000;
-      color: var(--muted);
-      font-size: 14px;
-    }
-    .price b{
-      display:block;
-      font-size: 30px;
-      letter-spacing:.2px;
-      color: var(--green);
-      text-shadow: none;
-    }
+    .prodDesc{margin:0; color: var(--muted); font-weight:800; line-height:1.25; font-size:13px;}
+    .price{margin-top:auto; font-weight:1000; color: var(--muted); font-size: 14px;}
+    .price b{display:block; font-size: 30px; letter-spacing:.2px; color: var(--green);}
 
     .prodRight{
-      position:relative;
-      z-index:2;
-      padding:12px;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      align-items:center;
-      gap:10px;
+      position:relative; z-index:2; padding:12px; display:flex; flex-direction:column;
+      justify-content:center; align-items:center; gap:10px;
     }
     .prodImg{
       width: 100%;
@@ -343,18 +291,11 @@
       box-shadow: 0 14px 34px rgba(0,0,0,.16);
       border: 1px solid rgba(0,0,0,.10);
     }
-    .prodImg img{
-      width:100%;
-      height:100%;
-      object-fit: cover;
-      display:block;
-    }
+    .prodImg img{width:100%; height:100%; object-fit: cover; display:block;}
 
     /* BOTONES */
-    .btnAdd,
-    .stickyBtn{
-      border:none;
-      cursor:pointer;
+    .btnAdd, .stickyBtn{
+      border:none; cursor:pointer;
       padding: 12px 18px;
       border-radius: 999px;
       font-weight: 1000;
@@ -366,10 +307,8 @@
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
     }
-    .btnAdd:active,
-    .stickyBtn:active{transform: translateY(1px)}
-    .btnAdd:focus,
-    .stickyBtn:focus{outline: 3px solid rgba(182,58,43,.18)}
+    .btnAdd:active, .stickyBtn:active{transform: translateY(1px)}
+    .btnAdd:focus, .stickyBtn:focus{outline: 3px solid rgba(182,58,43,.18)}
 
     /* CART */
     .cartLine{
@@ -416,10 +355,7 @@
       font-size:14px;
       font-weight:1000;
     }
-    .totalRow strong{
-      font-size:18px;
-      color: var(--green);
-    }
+    .totalRow strong{font-size:18px; color: var(--green);}
 
     /* STICKY BAR */
     .stickyBar{
@@ -438,17 +374,8 @@
       gap:10px;
       padding: 10px 10px 10px 12px;
     }
-    .stickyBar .left{
-      display:flex; align-items:center; gap:10px;
-      font-weight:1000;
-      color: var(--ink);
-    }
-    .stickyBar .amount{
-      font-size:18px;
-      letter-spacing:.2px;
-      color: var(--green);
-      text-shadow: none;
-    }
+    .stickyBar .left{display:flex; align-items:center; gap:10px; font-weight:1000; color: var(--ink);}
+    .stickyBar .amount{font-size:18px; letter-spacing:.2px; color: var(--green);}
     .btnGhost{
       border:1px solid rgba(0,0,0,.12);
       background: rgba(255,255,255,.70);
@@ -469,9 +396,9 @@
       align-items:center;
       justify-content:center;
       padding:16px;
-      z-index:9999;                 /* FIX: arriba */
-      pointer-events:auto;          /* FIX: captura taps */
-      touch-action:none;            /* FIX iOS: evita bounce/tap-through */
+      z-index:9999;
+      pointer-events:auto;
+      touch-action:none;
       -webkit-tap-highlight-color: transparent;
     }
     .modal{
@@ -511,9 +438,7 @@
       margin-top:10px;
       background: rgba(255,255,255,.75);
     }
-    .optTitle{
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
-    }
+    .optTitle{display:flex; align-items:center; justify-content:space-between; gap:10px;}
     .optTitle b{font-size:13px; color: var(--ink)}
     .optTitle span{font-size:12px; color:var(--muted); font-weight:900}
     .optList{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px}
@@ -530,10 +455,8 @@
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
     }
-    .opt.active{
-      border-color: rgba(139,30,30,.45);
-      box-shadow:0 0 0 3px rgba(139,30,30,.14);
-    }
+    .opt.active{border-color: rgba(139,30,30,.45); box-shadow:0 0 0 3px rgba(139,30,30,.14);}
+
     .footerBtns{
       display:flex;
       gap:10px;
@@ -543,8 +466,7 @@
     }
     .footerBtns button{flex:1}
     .btnDark{
-      border:none;
-      cursor:pointer;
+      border:none; cursor:pointer;
       padding:12px 14px;
       border-radius: 14px;
       font-weight:1000;
@@ -566,48 +488,61 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* CHECKOUT (pasos) */
-    .stepsBackdrop{
+    /* CANAL FIRST (solo pregunta al entrar) */
+    .firstBackdrop{
       position:fixed; inset:0;
-      background:rgba(0,0,0,.55);
+      background: rgba(0,0,0,.60);
       display:none;
       align-items:center;
       justify-content:center;
       padding:16px;
-      z-index:9998;
+      z-index:9997;
       pointer-events:auto;
       touch-action:none;
       -webkit-tap-highlight-color: transparent;
     }
-    .steps{
-      width:min(760px, 100%);
+    .firstCard{
+      width:min(640px, 100%);
       background: linear-gradient(180deg, var(--card), var(--card2));
       border-radius: 18px;
       overflow:hidden;
       border:1px solid rgba(0,0,0,.12);
       box-shadow: 0 40px 120px rgba(0,0,0,.35);
       pointer-events:auto;
-      touch-action: manipulation;
       transform: translateZ(0);
       -webkit-transform: translateZ(0);
     }
-    .stepsHead{
+    .firstHead{
       padding:14px 16px;
-      display:flex; justify-content:space-between; align-items:center; gap:10px;
       border-bottom:1px solid rgba(0,0,0,.10);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
       background: rgba(0,0,0,.03);
     }
-    .stepsHead .t{display:flex; flex-direction:column; gap:4px;}
-    .stepsHead .t b{font-size:16px; color: var(--ink)}
-    .stepsHead .t span{font-size:12px; color:var(--muted); font-weight:900}
-    .stepsBody{padding:14px 16px}
-    .stepRow{display:grid; grid-template-columns:1fr 1fr; gap:10px}
-    @media (max-width:520px){ .stepRow{grid-template-columns:1fr} }
-    .stepsFoot{
-      display:flex; gap:10px;
+    .firstHead b{font-size:16px}
+    .firstBody{padding:14px 16px}
+    .firstFoot{
       padding:14px 16px;
       border-top:1px solid rgba(0,0,0,.10);
       background: rgba(0,0,0,.03);
+      display:flex;
+      gap:10px;
+      justify-content:flex-end;
+    }
+    .firstBtn{
+      border:none;
+      cursor:pointer;
+      padding:12px 14px;
+      border-radius: 14px;
+      font-weight:1000;
+      color:#fff;
+      background: linear-gradient(180deg, var(--brand2), var(--brand1));
+      box-shadow: 0 12px 28px rgba(139,30,30,.28);
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      min-width: 160px;
     }
 
     .note{
@@ -637,7 +572,7 @@
   <div class="row">
     <div class="brand">
       <h1>🌮 Menú — Tacos Los Fundadores</h1>
-      <div class="sub">Pedido rápido • elige domicilio/recoger • WhatsApp</div>
+      <div class="sub">Primero eliges servicio • luego armas tu pedido</div>
     </div>
     <div class="pill" id="cartPill">🛒 <b>0</b> <span class="amt" id="pillTotal">$0.00</span></div>
   </div>
@@ -677,7 +612,7 @@
       <h2>Tu pedido</h2>
       <div class="content">
         <label>Servicio</label>
-        <select id="canal">
+        <select id="canal" disabled>
           <option value="recoger">Pasar a recoger</option>
           <option value="domicilio">Envío a domicilio</option>
         </select>
@@ -699,12 +634,41 @@
             <span class="amount" id="barTotal">$0.00</span>
           </div>
           <div style="display:flex; gap:8px; align-items:center">
-            <button class="btnGhost" id="btnClear">Vaciar</button>
-            <button class="stickyBtn" id="btnCheckout">CONTINUAR</button>
+            <button class="btnGhost" id="btnClear" type="button">Vaciar</button>
+            <button class="stickyBtn" id="btnCheckout" type="button">CONTINUAR</button>
           </div>
         </div>
       </div>
     </aside>
+  </div>
+</div>
+
+<!-- PREGUNTA AL ENTRAR (SOLO SERVICIO) -->
+<div class="firstBackdrop" id="firstBackdrop" aria-hidden="true">
+  <div class="firstCard" role="dialog" aria-modal="true">
+    <div class="firstHead">
+      <div style="display:flex; flex-direction:column; gap:4px;">
+        <b>Antes de empezar…</b>
+        <span class="muted" style="font-size:12px; font-weight:900">¿Cómo será tu pedido?</span>
+      </div>
+      <!-- sin cerrar: elige una opción y listo -->
+    </div>
+    <div class="firstBody">
+      <div class="optGroup" style="margin-top:0">
+        <div class="optTitle">
+          <b>Servicio</b>
+          <span>elige 1</span>
+        </div>
+        <div class="optList" id="firstCanalOpts"></div>
+      </div>
+
+      <div class="note" style="margin-top:12px">
+        Elige <b>una</b> opción y te dejamos empezar a escoger tus productos.
+      </div>
+    </div>
+    <div class="firstFoot">
+      <button class="firstBtn" id="firstOk" type="button">LISTO</button>
+    </div>
   </div>
 </div>
 
@@ -728,22 +692,22 @@
   </div>
 </div>
 
-<!-- CHECKOUT POR PASOS (incluye PASO 0: elegir canal cada vez) -->
-<div class="stepsBackdrop" id="stepsBackdrop" aria-hidden="true">
-  <div class="steps" role="dialog" aria-modal="true">
-    <div class="stepsHead">
-      <div class="t">
-        <b id="stepTitle">Paso</b>
-        <span id="stepSub">...</span>
+<!-- CHECKOUT POR PASOS -->
+<div class="firstBackdrop" id="stepsBackdrop" aria-hidden="true" style="z-index:9998;">
+  <div class="firstCard" role="dialog" aria-modal="true" style="width:min(760px, 100%);">
+    <div class="firstHead">
+      <div style="display:flex; flex-direction:column; gap:4px;">
+        <b id="stepTitle">Paso 1 de 3</b>
+        <span class="muted" id="stepSub" style="font-size:12px; font-weight:900">Datos personales</span>
       </div>
       <button class="closeX" id="stepsClose" type="button">✕</button>
     </div>
 
-    <div class="stepsBody" id="stepsBody"></div>
+    <div class="firstBody" id="stepsBody"></div>
 
-    <div class="stepsFoot">
-      <button class="btnLight" id="btnBack" type="button">Regresar</button>
-      <button class="btnDark" id="btnNext" type="button">Continuar</button>
+    <div class="firstFoot" style="justify-content:space-between;">
+      <button class="btnLight" id="btnBack" type="button" style="min-width:140px;">Regresar</button>
+      <button class="btnDark" id="btnNext" type="button" style="min-width:180px;">Continuar</button>
     </div>
   </div>
 </div>
@@ -784,12 +748,12 @@ const CATS = ["COMBOS","TACOS","ALAMBRES","BEBIDAS","EXTRAS"];
  *  MODIFICADORES
  *  ========================= */
 const MODS = {
-  carne:      { title:"Carne",          type:"single", required:true,  options:["Lengua","Pastor","Chorizo"] },
-  tortilla:   { title:"Tortilla",       type:"single", required:true,  options:["Maíz","Harina"] },
-  conSin:     { title:"Con todo / Sin…",type:"multi",  required:false, options:["Con todo","Sin cebolla","Sin cilantro","Sin piña","Sin salsa"] },
-  salsas:     { title:"Salsas",         type:"multi",  required:false, options:["Verde","Roja","Habanero","Guacamole","Tatemada"] },
-  alambreTipo:{ title:"Tipo de alambre",type:"single", required:true,  options:["Mixto","Pastor"] },
-  bebida:     { title:"Bebida",         type:"single", required:false, options:["Coca 600ml","Agua fresca 1/2L"] }
+  carne:      { title:"Carne",           type:"single", required:true,  options:["Lengua","Pastor","Chorizo"] },
+  tortilla:   { title:"Tortilla",        type:"single", required:true,  options:["Maíz","Harina"] },
+  conSin:     { title:"Con todo / Sin…", type:"multi",  required:false, options:["Con todo","Sin cebolla","Sin cilantro","Sin piña","Sin salsa"] },
+  salsas:     { title:"Salsas",          type:"multi",  required:false, options:["Verde","Roja","Habanero","Guacamole","Tatemada"] },
+  alambreTipo:{ title:"Tipo de alambre", type:"single", required:true,  options:["Mixto","Pastor"] },
+  bebida:     { title:"Bebida",          type:"single", required:false, options:["Coca 600ml","Agua fresca 1/2L"] }
 };
 function modsPara(item){
   if(!item.mods) return [];
@@ -1035,7 +999,6 @@ function openModal(item){
     if(inp) inp.oninput = ()=> draft.note = inp.value;
   }, 0);
 }
-
 function closeModal(){
   backdrop.style.display = "none";
   backdrop.setAttribute("aria-hidden","true");
@@ -1043,7 +1006,6 @@ function closeModal(){
   draft = null;
   unlockBody();
 }
-
 function toggleOpt(k, opt, el){
   const g = MODS[k];
   if(g.type==="single"){
@@ -1058,7 +1020,6 @@ function toggleOpt(k, opt, el){
     else{ arr.push(opt); el.classList.add("active"); }
   }
 }
-
 function addLine(item, mods, note){
   const key = buildKey(item, mods, note);
   const existing = cart.find(x=>x.key===key);
@@ -1068,25 +1029,15 @@ function addLine(item, mods, note){
   }
   renderCart();
 }
-
 function onAddClicked(item){
   if(item.mods && modsPara(item).length) openModal(item);
   else addLine(item, {}, "");
 }
-
 mClose.onclick = closeModal;
 mCancel.onclick = closeModal;
 
-// FIX: cerrar solo si tocan el fondo
-backdrop.addEventListener("click", (e)=>{
-  if(e.target === e.currentTarget) closeModal();
-});
-// FIX iOS: evita tap-through/bounce en overlay
-backdrop.addEventListener("touchstart", (e)=>{
-  if(e.target === e.currentTarget) e.preventDefault();
-}, { passive:false });
-
-// FIX: taps dentro del modal NO se propagan al backdrop
+backdrop.addEventListener("click", (e)=>{ if(e.target === e.currentTarget) closeModal(); });
+backdrop.addEventListener("touchstart", (e)=>{ if(e.target === e.currentTarget) e.preventDefault(); }, { passive:false });
 (function(){
   const modalEl = backdrop.querySelector(".modal");
   if(!modalEl) return;
@@ -1097,7 +1048,6 @@ backdrop.addEventListener("touchstart", (e)=>{
 mAdd.onclick = ()=>{
   if(!currentItem || !draft) return;
 
-  // Autocompleta carne/tipo si aplica
   if(currentItem.cat==="TACOS"){
     if(currentItem.id==="taco_lengua")  draft.mods["carne"]="Lengua";
     if(currentItem.id==="taco_pastor")  draft.mods["carne"]="Pastor";
@@ -1116,9 +1066,62 @@ mAdd.onclick = ()=>{
 };
 
 /** =========================
- *  CHECKOUT POR PASOS (Paso 0: canal, SIEMPRE)
+ *  PREGUNTA AL ENTRAR (SOLO CANAL) ✅
+ *  - No guarda en localStorage
+ *  - Solo pregunta una vez al cargar
+ *  - Al elegir, desbloquea el menú
  *  ========================= */
 const canalEl = document.getElementById("canal");
+const firstBackdrop = document.getElementById("firstBackdrop");
+const firstCanalOpts = document.getElementById("firstCanalOpts");
+const firstOk = document.getElementById("firstOk");
+
+let firstChoice = canalEl.value || "recoger";
+
+function openFirstCanal(){
+  // bloquea scroll para iOS y evita "tap-through"
+  lockBody();
+  firstBackdrop.style.display = "flex";
+  firstBackdrop.setAttribute("aria-hidden","false");
+
+  // construir opciones
+  firstCanalOpts.innerHTML = "";
+  const opciones = [
+    {val:"recoger", label:"🚶‍♂️ Pasar a recoger"},
+    {val:"domicilio", label:"🏠 Envío a domicilio"}
+  ];
+  opciones.forEach(o=>{
+    const b = document.createElement("div");
+    b.className = "opt" + (firstChoice===o.val ? " active":"");
+    b.textContent = o.label;
+    b.onclick = ()=>{
+      firstChoice = o.val;
+      firstCanalOpts.querySelectorAll(".opt").forEach(x=>x.classList.remove("active"));
+      b.classList.add("active");
+    };
+    firstCanalOpts.appendChild(b);
+  });
+}
+
+function closeFirstCanal(){
+  // aplica canal al select (y lo habilita)
+  canalEl.value = firstChoice;
+  canalEl.disabled = false;
+
+  firstBackdrop.style.display = "none";
+  firstBackdrop.setAttribute("aria-hidden","true");
+  unlockBody();
+}
+
+// No cerrar tocando fuera: queremos que elija sí o sí
+firstBackdrop.addEventListener("touchstart", (e)=>{ e.preventDefault(); }, { passive:false });
+
+// Botón LISTO
+firstOk.onclick = closeFirstCanal;
+
+/** =========================
+ *  CHECKOUT POR PASOS (sin paso de canal)
+ *  ========================= */
 const stepsBackdrop = document.getElementById("stepsBackdrop");
 const stepsClose = document.getElementById("stepsClose");
 const stepsBody = document.getElementById("stepsBody");
@@ -1127,12 +1130,11 @@ const stepSub = document.getElementById("stepSub");
 const btnBack = document.getElementById("btnBack");
 const btnNext = document.getElementById("btnNext");
 
-let step = 0; // 0 = elegir canal
+let step = 1;
 
 const form = {
   nombre: "",
   tel: "",
-  // domicilio (solo si aplica)
   calle: "",
   noext: "",
   noint: "",
@@ -1141,15 +1143,13 @@ const form = {
   cp: "",
   estado: "Guanajuato",
   refs: "",
-  // pago
   metodo: "efectivo",
   pagareCon: "",
   notas: ""
 };
 
 function openSteps(){
-  // SIEMPRE preguntar canal al entrar a checkout
-  step = 0;
+  step = 1;
   lockBody();
   stepsBackdrop.style.display = "flex";
   stepsBackdrop.setAttribute("aria-hidden","false");
@@ -1161,71 +1161,13 @@ function closeSteps(){
   unlockBody();
 }
 
-// FIX: cerrar solo si tocan el fondo
-stepsBackdrop.addEventListener("click", (e)=>{
-  if(e.target === e.currentTarget) closeSteps();
-});
-stepsBackdrop.addEventListener("touchstart", (e)=>{
-  if(e.target === e.currentTarget) e.preventDefault();
-}, { passive:false });
-// evita propagación dentro del modal steps
-(function(){
-  const stepsEl = stepsBackdrop.querySelector(".steps");
-  if(!stepsEl) return;
-  stepsEl.addEventListener("click", (e)=> e.stopPropagation());
-  stepsEl.addEventListener("touchstart", (e)=> e.stopPropagation(), { passive:true });
-})();
+stepsClose.onclick = closeSteps;
+// evitar tap-through: click afuera NO cierra, solo con X
+stepsBackdrop.addEventListener("touchstart", (e)=>{ e.preventDefault(); }, { passive:false });
 
 function renderStep(){
   const canal = canalEl.value;
   const total = cartTotal();
-
-  // PASO 0: elegir canal (cada vez)
-  if(step === 0){
-    stepTitle.textContent = "Antes de terminar…";
-    stepSub.textContent = "¿Será a domicilio o recoger?";
-    btnBack.style.display = "none";
-    btnNext.textContent = "CONTINUAR";
-
-    stepsBody.innerHTML = `
-      <div class="note" style="margin-top:0">
-        Elige cómo será tu pedido. (Esto se pregunta cada vez)
-      </div>
-
-      <div class="optGroup" style="margin-top:12px">
-        <div class="optTitle">
-          <b>Servicio</b>
-          <span>elige 1</span>
-        </div>
-        <div class="optList" id="canalOpts"></div>
-      </div>
-
-      <div class="note">
-        Total actual: <b>${money(total)}</b>
-      </div>
-    `;
-
-    const opts = document.getElementById("canalOpts");
-    const opciones = [
-      {val:"recoger", label:"🚶‍♂️ Pasar a recoger"},
-      {val:"domicilio", label:"🏠 Envío a domicilio"}
-    ];
-
-    opts.innerHTML = "";
-    opciones.forEach(o=>{
-      const b = document.createElement("div");
-      b.className = "opt" + (canalEl.value===o.val ? " active":"");
-      b.textContent = o.label;
-      b.onclick = ()=>{
-        canalEl.value = o.val;
-        opts.querySelectorAll(".opt").forEach(x=>x.classList.remove("active"));
-        b.classList.add("active");
-      };
-      opts.appendChild(b);
-    });
-
-    return;
-  }
 
   if(step===1){
     stepTitle.textContent = "Paso 1 de 3";
@@ -1243,7 +1185,7 @@ function renderStep(){
 
   if(step===1){
     stepsBody.innerHTML = `
-      <div class="stepRow">
+      <div class="stepRow" style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
         <div>
           <label>* Nombre</label>
           <input id="s_nombre" value="${escapeHtml(form.nombre)}" placeholder="Ej. Marciano Pérez">
@@ -1274,12 +1216,12 @@ function renderStep(){
     }
 
     stepsBody.innerHTML = `
-      <div class="stepRow">
+      <div class="stepRow" style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
         <div>
           <label>* Calle</label>
           <input id="s_calle" value="${escapeHtml(form.calle)}" placeholder="Ej. Calle Unión">
         </div>
-        <div class="stepRow" style="grid-template-columns:1fr 1fr; gap:10px">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
           <div>
             <label>* No. Exterior</label>
             <input id="s_noext" value="${escapeHtml(form.noext)}" placeholder="Ej. 678">
@@ -1291,7 +1233,7 @@ function renderStep(){
         </div>
       </div>
 
-      <div class="stepRow">
+      <div class="stepRow" style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
         <div>
           <label>* Colonia</label>
           <input id="s_col" value="${escapeHtml(form.col)}" placeholder="Ej. Barrio de la Calzada">
@@ -1302,7 +1244,7 @@ function renderStep(){
         </div>
       </div>
 
-      <div class="stepRow">
+      <div class="stepRow" style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
         <div>
           <label>* Ciudad</label>
           <input id="s_ciudad" value="${escapeHtml(form.ciudad)}">
@@ -1317,24 +1259,21 @@ function renderStep(){
       <textarea id="s_refs" placeholder="Entre calles, color de la casa, etc.">${escapeHtml(form.refs)}</textarea>
     `;
     setTimeout(()=>{
-      const a = (id, fn)=>{
-        const el = document.getElementById(id);
-        if(el) el.oninput = fn;
-      };
-      a("s_calle",  e=> form.calle  = e.target.value);
-      a("s_noext",  e=> form.noext  = e.target.value);
-      a("s_noint",  e=> form.noint  = e.target.value);
-      a("s_col",    e=> form.col    = e.target.value);
-      a("s_cp",     e=> form.cp     = e.target.value);
-      a("s_ciudad", e=> form.ciudad = e.target.value);
-      a("s_estado", e=> form.estado = e.target.value);
-      a("s_refs",   e=> form.refs   = e.target.value);
+      const bind = (id, fn)=>{ const el=document.getElementById(id); if(el) el.oninput=fn; };
+      bind("s_calle",  e=> form.calle  = e.target.value);
+      bind("s_noext",  e=> form.noext  = e.target.value);
+      bind("s_noint",  e=> form.noint  = e.target.value);
+      bind("s_col",    e=> form.col    = e.target.value);
+      bind("s_cp",     e=> form.cp     = e.target.value);
+      bind("s_ciudad", e=> form.ciudad = e.target.value);
+      bind("s_estado", e=> form.estado = e.target.value);
+      bind("s_refs",   e=> form.refs   = e.target.value);
     },0);
     return;
   }
 
   stepsBody.innerHTML = `
-    <div class="stepRow">
+    <div class="stepRow" style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
       <div>
         <label>Método de pago</label>
         <select id="s_metodo">
@@ -1345,7 +1284,7 @@ function renderStep(){
         <input id="s_pagare" value="${escapeHtml(form.pagareCon)}" placeholder="Ej. 500">
       </div>
       <div>
-        <div class="note">
+        <div class="note" style="margin-top:0">
           Total a pagar: <b>${money(total)}</b><br>
           Al enviar, se abrirá WhatsApp con el mensaje listo.
         </div>
@@ -1392,7 +1331,6 @@ function cleanWA(text){
     .replace(/\n{3,}/g, "\n\n")
     .trim();
 }
-
 function buildWhatsAppText(){
   const canal = canalEl.value;
   const canalTxt = canal==="recoger" ? "Pasar a recoger" : "Domicilio";
@@ -1460,16 +1398,9 @@ document.getElementById("btnCheckout").onclick = ()=>{
   openSteps();
 };
 
-btnBack.onclick = ()=>{ if(step>0){ step--; renderStep(); } };
+btnBack.onclick = ()=>{ if(step>1){ step--; renderStep(); } };
 
 btnNext.onclick = ()=>{
-  // Paso 0 -> pasar a Paso 1
-  if(step === 0){
-    step = 1;
-    renderStep();
-    return;
-  }
-
   const err = stepValidate();
   if(err){ alert(err); return; }
 
@@ -1481,8 +1412,6 @@ btnNext.onclick = ()=>{
   window.open(url, "_blank");
   closeSteps();
 };
-
-stepsClose.onclick = closeSteps;
 
 document.getElementById("btnClear").onclick = ()=>{
   if(confirm("¿Vaciar carrito?")){
@@ -1497,6 +1426,9 @@ document.getElementById("btnClear").onclick = ()=>{
 renderTabs();
 renderItems();
 renderCart();
+
+// ✅ al entrar a la página, preguntar SOLO el servicio (cada vez)
+window.addEventListener("load", ()=> openFirstCanal());
 </script>
 
 </body>
