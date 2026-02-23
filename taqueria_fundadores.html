@@ -360,7 +360,6 @@
       box-shadow: 0 12px 28px rgba(139,30,30,.30);
       font-size: 15px;
       min-width: 150px;
-      touch-action: manipulation;
     }
     .btnAdd:active,
     .stickyBtn:active{transform: translateY(1px)}
@@ -384,7 +383,6 @@
       cursor:pointer;
       font-weight:1000;
       color: var(--ink);
-      touch-action: manipulation;
     }
     .mini:active{transform: translateY(1px)}
     label{
@@ -396,7 +394,7 @@
       padding:12px 12px;
       border:1px solid rgba(0,0,0,.12);
       border-radius:14px;
-      font-size:16px; /* IMPORTANTe: evita zoom raro en iOS */
+      font-size:14px;
       outline:none;
       background: rgba(255,255,255,.78);
       color: var(--ink);
@@ -452,10 +450,9 @@
       border-radius: 14px;
       font-weight: 1000;
       cursor:pointer;
-      touch-action: manipulation;
     }
 
-    /* MODAL */
+    /* MODAL (mods) */
     .backdrop{
       position:fixed; inset:0;
       background:rgba(0,0,0,.55);
@@ -464,10 +461,6 @@
       justify-content:center;
       padding:16px;
       z-index:60;
-
-      /* mobile: scroll estable */
-      overflow:auto;
-      -webkit-overflow-scrolling: touch;
     }
     .modal{
       width:min(820px, 100%);
@@ -482,9 +475,6 @@
       border-bottom:1px solid rgba(0,0,0,.10);
       display:flex; justify-content:space-between; align-items:center; gap:10px;
       background: rgba(0,0,0,.03);
-      position: sticky;
-      top: 0;
-      z-index: 2;
     }
     .modalHead h3{margin:0; font-size:15px; color: var(--ink)}
     .closeX{
@@ -495,7 +485,6 @@
       cursor:pointer;
       font-weight:1000;
       color: var(--ink);
-      touch-action: manipulation;
     }
     .optGroup{
       border:1px solid rgba(0,0,0,.10);
@@ -520,7 +509,6 @@
       user-select:none;
       font-weight:1000;
       color: var(--ink);
-      touch-action: manipulation;
     }
     .opt.active{
       border-color: rgba(139,30,30,.45);
@@ -532,9 +520,6 @@
       padding:14px 16px;
       border-top:1px solid rgba(0,0,0,.10);
       background: rgba(0,0,0,.03);
-      position: sticky;
-      bottom: 0;
-      z-index: 2;
     }
     .footerBtns button{flex:1}
     .btnDark{
@@ -546,7 +531,6 @@
       color:#fff;
       background: linear-gradient(180deg, var(--brand2), var(--brand1));
       box-shadow: 0 12px 28px rgba(139,30,30,.28);
-      touch-action: manipulation;
     }
     .btnLight{
       border:1px solid rgba(0,0,0,.12);
@@ -556,9 +540,9 @@
       border-radius: 14px;
       font-weight:1000;
       cursor:pointer;
-      touch-action: manipulation;
     }
 
+    /* CHECKOUT (pasos) */
     .stepsBackdrop{
       position:fixed; inset:0;
       background:rgba(0,0,0,.55);
@@ -567,10 +551,6 @@
       justify-content:center;
       padding:16px;
       z-index:70;
-
-      /* FIX MOBILE: no se “rompe” el scroll */
-      overflow:auto;
-      -webkit-overflow-scrolling: touch;
     }
     .steps{
       width:min(760px, 100%);
@@ -585,26 +565,18 @@
       display:flex; justify-content:space-between; align-items:center; gap:10px;
       border-bottom:1px solid rgba(0,0,0,.10);
       background: rgba(0,0,0,.03);
-      position: sticky;
-      top: 0;
-      z-index: 2;
     }
     .stepsHead .t{display:flex; flex-direction:column; gap:4px;}
     .stepsHead .t b{font-size:16px; color: var(--ink)}
     .stepsHead .t span{font-size:12px; color:var(--muted); font-weight:900}
-
     .stepsBody{padding:14px 16px}
     .stepRow{display:grid; grid-template-columns:1fr 1fr; gap:10px}
     @media (max-width:520px){ .stepRow{grid-template-columns:1fr} }
-
     .stepsFoot{
       display:flex; gap:10px;
       padding:14px 16px;
       border-top:1px solid rgba(0,0,0,.10);
       background: rgba(0,0,0,.03);
-      position: sticky;
-      bottom: 0;
-      z-index: 2;
     }
 
     .note{
@@ -617,13 +589,6 @@
       border-radius:14px;
       border:1px solid rgba(0,0,0,.10);
       margin-top:12px;
-    }
-
-    /* Cuando un modal está abierto: bloquear scroll del body (mobile friendly) */
-    body.lockScroll{
-      position: fixed;
-      width: 100%;
-      overflow: hidden;
     }
   </style>
 </head>
@@ -677,7 +642,7 @@
       <h2>Tu pedido</h2>
       <div class="content">
 
-        <label>Canal</label>
+        <label>Servicio</label>
         <select id="canal">
           <option value="recoger">Pasar a recoger</option>
           <option value="domicilio">Envío a domicilio</option>
@@ -731,7 +696,7 @@
   </div>
 </div>
 
-<!-- CHECKOUT POR PASOS (incluye el Paso 0 = canal al entrar) -->
+<!-- CHECKOUT POR PASOS -->
 <div class="stepsBackdrop" id="stepsBackdrop">
   <div class="steps">
     <div class="stepsHead">
@@ -757,76 +722,51 @@
  *  ========================= */
 const TAQUERIA_NOMBRE = "Tacos Los Fundadores";
 const WHATSAPP_TAQ = "524621872594"; // 52 + número sin +
-
-/** Si tus imágenes están en /assets:
- *  const IMG_BASE = "assets/";
- */
 const IMG_BASE = "";
 
 /** =========================
  *  CATALOGO
  *  ========================= */
 const catalogo = [
-  // COMBOS
   {id:"combo_tacos_bebida", cat:"COMBOS", name:"Combo Taquero", price:75, desc:"3 tacos (lengua/pastor/chorizo) + bebida.", mods:true, img:"combo_tacos_bebida.png"},
   {id:"combo_alambre_bebida", cat:"COMBOS", name:"Combo Alambre", price:115, desc:"1 alambre (mixto o pastor) + bebida.", mods:true, img:"combo_alambre_bebida.png"},
   {id:"combo_pareja", cat:"COMBOS", name:"Paquete para 2", price:210, desc:"6 tacos + 2 bebidas. Para compartir bien.", mods:true, img:"combo_pareja.png"},
 
-  // TACOS
   {id:"taco_lengua",  cat:"TACOS", name:"Taco de lengua",  price:18, desc:"Tortilla a elegir. Lengua bien servida.", mods:true, img:"taco_lengua.jpeg"},
   {id:"taco_pastor",  cat:"TACOS", name:"Taco al pastor",  price:18, desc:"Clásico pastor, con/sin piña.", mods:true, img:"taco_pastor.jpeg"},
   {id:"taco_chorizo", cat:"TACOS", name:"Taco de chorizo", price:18, desc:"Bien doradito, con salsa.", mods:true, img:"taco_chorizo.jpeg"},
 
-  // ALAMBRES
   {id:"alambre_mixto",  cat:"ALAMBRES", name:"Alambre mixto",  price:95, desc:"Queso + mixto. Perfecto para el hambre.", mods:true, img:"alambre_mixto.jpeg"},
   {id:"alambre_pastor", cat:"ALAMBRES", name:"Alambre al pastor", price:95, desc:"Queso + pastor. El consentido.", mods:true, img:"alambre_pastor.jpeg"},
 
-  // BEBIDAS
   {id:"coca_600ml", cat:"BEBIDAS", name:"Coca 600ml", price:25, desc:"Bien fría.", mods:false, img:"coca_600ml.png"},
   {id:"agua_fresca", cat:"BEBIDAS", name:"Agua fresca 1/2L", price:30, desc:"Del día.", mods:false, img:"agua_fresca.png"},
 
-  // EXTRAS
   {id:"queso_extra", cat:"EXTRAS", name:"Queso extra", price:10, desc:"Agrégalo a tu pedido.", mods:false, img:"queso_extra.png"},
   {id:"aguacate_extra", cat:"EXTRAS", name:"Aguacate extra", price:10, desc:"Para que quede fino.", mods:false, img:"aguacate_extra.png"},
   {id:"cebollitas", cat:"EXTRAS", name:"Cebollitas", price:10, desc:"Doraditas.", mods:false, img:"cebollitas.png"},
 ];
-
 const CATS = ["COMBOS","TACOS","ALAMBRES","BEBIDAS","EXTRAS"];
 
 /** =========================
  *  MODIFICADORES
  *  ========================= */
 const MODS = {
-  carne: { title:"Carne", type:"single", required:true,
-    options:["Lengua","Pastor","Chorizo"]
-  },
-  tortilla: { title:"Tortilla", type:"single", required:true,
-    options:["Maíz","Harina"]
-  },
-  conSin: { title:"Con todo / Sin…", type:"multi", required:false,
-    options:["Con todo","Sin cebolla","Sin cilantro","Sin piña","Sin salsa"]
-  },
-  salsas: { title:"Salsas", type:"multi", required:false,
-    options:["Verde","Roja","Habanero","Guacamole","Tatemada"]
-  },
-  alambreTipo: { title:"Tipo de alambre", type:"single", required:true,
-    options:["Mixto","Pastor"]
-  },
-  bebida: { title:"Bebida", type:"single", required:false,
-    options:["Coca 600ml","Agua fresca 1/2L"]
-  }
+  carne: { title:"Carne", type:"single", required:true, options:["Lengua","Pastor","Chorizo"] },
+  tortilla: { title:"Tortilla", type:"single", required:true, options:["Maíz","Harina"] },
+  conSin: { title:"Con todo / Sin…", type:"multi", required:false, options:["Con todo","Sin cebolla","Sin cilantro","Sin piña","Sin salsa"] },
+  salsas: { title:"Salsas", type:"multi", required:false, options:["Verde","Roja","Habanero","Guacamole","Tatemada"] },
+  alambreTipo: { title:"Tipo de alambre", type:"single", required:true, options:["Mixto","Pastor"] },
+  bebida: { title:"Bebida", type:"single", required:false, options:["Coca 600ml","Agua fresca 1/2L"] }
 };
-
 function modsPara(item){
   if(!item.mods) return [];
-
   if(item.cat === "COMBOS"){
     if(item.id === "combo_tacos_bebida") return ["carne","tortilla","conSin","salsas","bebida"];
     if(item.id === "combo_alambre_bebida") return ["alambreTipo","conSin","salsas","bebida"];
     if(item.id === "combo_pareja") return ["carne","tortilla","conSin","salsas","bebida"];
     return ["bebida"];
   }
-
   if(item.cat === "TACOS") return ["tortilla","conSin","salsas"];
   if(item.cat === "ALAMBRES") return ["conSin","salsas"];
   return [];
@@ -835,10 +775,7 @@ function modsPara(item){
 /** =========================
  *  HELPERS
  *  ========================= */
-function money(n){
-  const v = Number(n || 0);
-  return "$" + v.toFixed(2);
-}
+function money(n){ return "$" + Number(n||0).toFixed(2); }
 function escapeHtml(s){
   return (s||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
 }
@@ -873,7 +810,6 @@ const tabs = document.getElementById("tabs");
 const itemsBox = document.getElementById("items");
 const sectionTitle = document.getElementById("sectionTitle");
 const q = document.getElementById("q");
-
 let activeCat = CATS[0];
 
 function renderTabs(){
@@ -886,10 +822,8 @@ function renderTabs(){
     tabs.appendChild(el);
   });
 }
-
 function renderItems(){
   sectionTitle.textContent = activeCat;
-
   const term = (q.value||"").trim().toLowerCase();
   const list = catalogo.filter(x=>{
     const inCat = x.cat===activeCat;
@@ -929,8 +863,7 @@ q.addEventListener("input", renderItems);
 /** =========================
  *  CARRITO
  *  ========================= */
-let cart = []; // {key, id, name, basePrice, qty, mods, note}
-
+let cart = [];
 const cartBox = document.getElementById("cart");
 const totalEl = document.getElementById("total");
 const cartPill = document.getElementById("cartPill");
@@ -951,6 +884,7 @@ function renderCart(){
     cartBox.innerHTML = `<div class="muted" style="font-weight:1000">Aún no agregas nada 😄</div>`;
     return;
   }
+
   cartBox.innerHTML = "";
   cart.forEach((line, idx)=>{
     const wrap = document.createElement("div");
@@ -995,19 +929,6 @@ const mAdd   = document.getElementById("mAdd");
 
 let currentItem = null;
 let draft = null;
-
-function lockScroll(){
-  // guardar scroll
-  document.body.dataset.scrollY = String(window.scrollY || 0);
-  document.body.classList.add("lockScroll");
-  document.body.style.top = `-${document.body.dataset.scrollY}px`;
-}
-function unlockScroll(){
-  const y = Number(document.body.dataset.scrollY || 0);
-  document.body.classList.remove("lockScroll");
-  document.body.style.top = "";
-  window.scrollTo(0, y);
-}
 
 function openModal(item){
   currentItem = item;
@@ -1054,21 +975,16 @@ function openModal(item){
   mBody.appendChild(n);
 
   backdrop.style.display = "flex";
-  lockScroll();
-
   setTimeout(()=> {
     const inp = document.getElementById("noteProd");
     if(inp) inp.oninput = ()=> draft.note = inp.value;
   }, 0);
 }
-
 function closeModal(){
   backdrop.style.display = "none";
-  unlockScroll();
   currentItem = null;
   draft = null;
 }
-
 function toggleOpt(k, opt, el){
   const g = MODS[k];
   if(g.type==="single"){
@@ -1083,33 +999,19 @@ function toggleOpt(k, opt, el){
     else{ arr.push(opt); el.classList.add("active"); }
   }
 }
-
 function addLine(item, mods, note){
   const key = buildKey(item, mods, note);
   const existing = cart.find(x=>x.key===key);
   if(existing){ existing.qty += 1; }
   else{
-    cart.push({
-      key,
-      id:item.id,
-      name:item.name,
-      basePrice:item.price,
-      qty:1,
-      mods: mods,
-      note: note || ""
-    });
+    cart.push({ key, id:item.id, name:item.name, basePrice:item.price, qty:1, mods, note: note || "" });
   }
   renderCart();
 }
-
 function onAddClicked(item){
-  if(item.mods && modsPara(item).length){
-    openModal(item);
-  }else{
-    addLine(item, {}, "");
-  }
+  if(item.mods && modsPara(item).length) openModal(item);
+  else addLine(item, {}, "");
 }
-
 mClose.onclick = closeModal;
 mCancel.onclick = closeModal;
 backdrop.addEventListener("click", (e)=>{ if(e.target===backdrop) closeModal(); });
@@ -1125,7 +1027,6 @@ mAdd.onclick = ()=>{
     if(currentItem.id==="taco_pastor")  draft.mods["carne"]="Pastor";
     if(currentItem.id==="taco_chorizo") draft.mods["carne"]="Chorizo";
   }
-
   if(currentItem.cat==="ALAMBRES"){
     if(currentItem.id==="alambre_mixto")  draft.mods["alambreTipo"]="Mixto";
     if(currentItem.id==="alambre_pastor") draft.mods["alambreTipo"]="Pastor";
@@ -1150,9 +1051,6 @@ const btnNext = document.getElementById("btnNext");
 
 let step = 1;
 
-/** Paso 0 = elegir canal al entrar */
-let canalYaElegido = false;
-
 const form = {
   nombre: "",
   tel: "",
@@ -1172,19 +1070,31 @@ const form = {
 function openSteps(){
   step = 1;
   stepsBackdrop.style.display = "flex";
-  lockScroll();
   renderStep();
 }
-function closeSteps(){
-  stepsBackdrop.style.display = "none";
-  unlockScroll();
+function closeSteps(){ stepsBackdrop.style.display = "none"; }
+
+/** =========================
+ *  PRIMER PREGUNTA (SOLO DOMICILIO/RECOGER) + MEMORIA
+ *  ========================= */
+const CANAL_KEY = "vdc_menu_canal";
+
+function getSavedCanal(){
+  const v = localStorage.getItem(CANAL_KEY);
+  return (v === "domicilio" || v === "recoger") ? v : null;
+}
+function setSavedCanal(v){
+  if(v === "domicilio" || v === "recoger") localStorage.setItem(CANAL_KEY, v);
 }
 
 function openCanalFirst(){
-  if(canalYaElegido) return;
-  step = 0;
+  const saved = getSavedCanal();
+  if(saved){
+    canalEl.value = saved;
+    return;
+  }
+  step = 0; // paso 0 = solo elegir canal
   stepsBackdrop.style.display = "flex";
-  lockScroll();
   renderStep();
 }
 
@@ -1192,18 +1102,15 @@ function renderStep(){
   const canal = canalEl.value;
   const total = cartTotal();
 
-  // ===== PASO 0: elegir canal =====
+  // PASO 0: elegir canal, cerrar y ya dejan elegir productos
   if(step === 0){
-    stepTitle.textContent = "Bienvenido";
-    stepSub.textContent = "Elige tu tipo de servicio";
-
+    stepTitle.textContent = "Antes de empezar…";
+    stepSub.textContent = "¿Cómo será tu pedido?";
     btnBack.style.display = "none";
-    btnNext.textContent = "CONTINUAR";
+    btnNext.textContent = "LISTO";
 
     stepsBody.innerHTML = `
-      <div class="note" style="margin-top:0">
-        Para empezar, dinos cómo será tu pedido:
-      </div>
+      <div class="note" style="margin-top:0">Elige una opción:</div>
 
       <div class="optGroup" style="margin-top:12px">
         <div class="optTitle">
@@ -1211,10 +1118,6 @@ function renderStep(){
           <span>elige 1</span>
         </div>
         <div class="optList" id="canalOpts"></div>
-      </div>
-
-      <div class="note">
-        (Si quieres cambiarlo después, también puedes hacerlo en “Canal” dentro de <b>Tu pedido</b>).
       </div>
     `;
 
@@ -1240,7 +1143,7 @@ function renderStep(){
     return;
   }
 
-  // ===== PASOS 1..3 (tu lógica) =====
+  // Paso 1..3 normales
   if(step===1){
     stepTitle.textContent = "Paso 1 de 3";
     stepSub.textContent = "Datos personales";
@@ -1459,20 +1362,19 @@ function buildWhatsAppText(){
   return lines.join("\n");
 }
 
+/** BOTONES */
 document.getElementById("btnCheckout").onclick = ()=>{
   if(cart.length===0){ alert("Agrega algo al carrito primero 😄"); return; }
-  canalYaElegido = true; // ya que aquí ya lo eligió (o lo va a ver)
   openSteps();
 };
 
 btnBack.onclick = ()=>{ if(step>1){ step--; renderStep(); } };
 
 btnNext.onclick = ()=>{
-  // Paso 0: solo confirmar canal y pasar a paso 1
+  // Paso 0: guardar canal y cerrar
   if(step === 0){
-    canalYaElegido = true;
-    step = 1;
-    renderStep();
+    setSavedCanal(canalEl.value);
+    closeSteps();
     return;
   }
 
@@ -1505,11 +1407,11 @@ renderTabs();
 renderItems();
 renderCart();
 
-// Preguntar canal al entrar
+// Al cargar: si no hay canal guardado, preguntar primero (domicilio/recoger)
 window.addEventListener("load", ()=>{
-  // Default: recoger (por si el cliente solo quiere pedir rápido)
-  canalEl.value = "recoger";
-  openCanalFirst();
+  const saved = getSavedCanal();
+  canalEl.value = saved || "recoger";
+  if(!saved) openCanalFirst();
 });
 </script>
 
