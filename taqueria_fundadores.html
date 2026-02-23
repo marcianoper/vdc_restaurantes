@@ -1075,25 +1075,10 @@ function openSteps(){
 function closeSteps(){ stepsBackdrop.style.display = "none"; }
 
 /** =========================
- *  PRIMER PREGUNTA (SOLO DOMICILIO/RECOGER) + MEMORIA
+ *  PRIMER PREGUNTA (SIEMPRE PREGUNTA DOMICILIO/RECOGER)
  *  ========================= */
-const CANAL_KEY = "vdc_menu_canal";
-
-function getSavedCanal(){
-  const v = localStorage.getItem(CANAL_KEY);
-  return (v === "domicilio" || v === "recoger") ? v : null;
-}
-function setSavedCanal(v){
-  if(v === "domicilio" || v === "recoger") localStorage.setItem(CANAL_KEY, v);
-}
-
 function openCanalFirst(){
-  const saved = getSavedCanal();
-  if(saved){
-    canalEl.value = saved;
-    return;
-  }
-  step = 0; // paso 0 = solo elegir canal
+  step = 0; // paso 0 = elegir canal
   stepsBackdrop.style.display = "flex";
   renderStep();
 }
@@ -1102,15 +1087,17 @@ function renderStep(){
   const canal = canalEl.value;
   const total = cartTotal();
 
-  // PASO 0: elegir canal, cerrar y ya dejan elegir productos
+  // PASO 0: elegir canal (SIEMPRE)
   if(step === 0){
     stepTitle.textContent = "Antes de empezar…";
     stepSub.textContent = "¿Cómo será tu pedido?";
     btnBack.style.display = "none";
-    btnNext.textContent = "LISTO";
+    btnNext.textContent = "CONTINUAR";
 
     stepsBody.innerHTML = `
-      <div class="note" style="margin-top:0">Elige una opción:</div>
+      <div class="note" style="margin-top:0">
+        Elige cómo quieres tu pedido:
+      </div>
 
       <div class="optGroup" style="margin-top:12px">
         <div class="optTitle">
@@ -1371,10 +1358,10 @@ document.getElementById("btnCheckout").onclick = ()=>{
 btnBack.onclick = ()=>{ if(step>1){ step--; renderStep(); } };
 
 btnNext.onclick = ()=>{
-  // Paso 0: guardar canal y cerrar
+  // Paso 0: solo continuar al paso 1 (NO GUARDA NADA)
   if(step === 0){
-    setSavedCanal(canalEl.value);
-    closeSteps();
+    step = 1;
+    renderStep();
     return;
   }
 
@@ -1407,11 +1394,10 @@ renderTabs();
 renderItems();
 renderCart();
 
-// Al cargar: si no hay canal guardado, preguntar primero (domicilio/recoger)
+// Al cargar: SIEMPRE preguntar el canal (domicilio/recoger)
 window.addEventListener("load", ()=>{
-  const saved = getSavedCanal();
-  canalEl.value = saved || "recoger";
-  if(!saved) openCanalFirst();
+  canalEl.value = "recoger";
+  openCanalFirst();
 });
 </script>
 
