@@ -16,6 +16,7 @@
       --brand1:#8b1e1e; --brand2:#b63a2b; --gold:#d4a373; --green:#2f7d32; --danger:#9b1c1c;
       --shadow: 0 18px 50px rgba(0,0,0,.25);
       --r:18px;
+      --safeB: env(safe-area-inset-bottom, 0px);
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -209,7 +210,9 @@
       background:rgba(0,0,0,.55);
       display:none;
       align-items:center; justify-content:center;
-      padding:16px; z-index:999;
+      padding:16px;
+      padding-bottom: calc(16px + var(--safeB)); /* ✅ deja espacio contra footer del navegador */
+      z-index:999;
       pointer-events:auto;
       touch-action:none;
     }
@@ -251,13 +254,16 @@
       position: sticky;
       bottom: 0;
       z-index: 2;
-      display:flex; gap:10px; padding:14px 16px; border-top:1px solid rgba(0,0,0,.10); background: rgba(0,0,0,.03);
+      display:flex; gap:10px;
+      padding:14px 16px;
+      padding-bottom: calc(14px + var(--safeB)); /* ✅ safe area */
+      border-top:1px solid rgba(0,0,0,.10); background: rgba(0,0,0,.03);
     }
     .modal::after{
       content:"";
       position:absolute;
-      left:0; right:0; bottom:58px;
-      height:18px;
+      left:0; right:0; bottom:64px;
+      height:16px;
       pointer-events:none;
       background: linear-gradient(180deg, rgba(255,246,236,0), rgba(255,246,236,.92));
     }
@@ -318,7 +324,10 @@
       position: sticky;
       bottom: 0;
       z-index: 2;
-      display:flex; gap:10px; padding:14px 16px; border-top:1px solid rgba(0,0,0,.10); background: rgba(0,0,0,.03);
+      display:flex; gap:10px;
+      padding:14px 16px;
+      padding-bottom: calc(14px + var(--safeB)); /* ✅ safe area */
+      border-top:1px solid rgba(0,0,0,.10); background: rgba(0,0,0,.03);
     }
 
     .footerBtns button, .stepsFoot button{flex:1}
@@ -348,11 +357,12 @@
       padding:10px 12px;
       border-radius:14px;
       border:1px solid rgba(0,0,0,.10);
-      margin-top:12px;
+      margin-top:10px;
     }
 
     .mapWrap{border:1px solid rgba(0,0,0,.12); border-radius:16px; overflow:hidden; background:#fff; box-shadow: 0 10px 26px rgba(0,0,0,.10);}
-    #miniMap{width:100%; height: 170px; background:#eee; touch-action: pan-x pan-y;}
+    /* ✅ más pequeño para smartphone */
+    #miniMap{width:100%; height: 140px; background:#eee; touch-action: pan-x pan-y;}
 
     .mapBar{display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;}
     .mapBar .btnLight,.mapBar .btnDark{flex:1; min-width: 150px;}
@@ -362,16 +372,15 @@
     .kpi b{display:block; font-size:12px}
     .kpi span{display:block; margin-top:4px; font-weight:1000}
 
-    .toggleRow{
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
-      border:1px solid rgba(0,0,0,.10);
-      border-radius:16px;
-      background: rgba(255,255,255,.72);
-      padding:10px 12px;
-      margin-top:10px;
+    /* ✅ Ajustes extra solo para teléfonos: más compacto */
+    @media (max-width:520px){
+      .steps{max-height: 92vh;}
+      .stepsBody{padding:10px 12px;}
+      .stepsHead{padding:10px 12px;}
+      .stepsFoot{padding:10px 12px; padding-bottom: calc(12px + var(--safeB));}
+      #miniMap{height: 120px;}
+      .optGroup{padding:9px 9px;}
     }
-    .switch{display:inline-flex; align-items:center; gap:10px; font-weight:1000; user-select:none;}
-    .switch input{ width: 46px; height: 26px; padding:0; border-radius:999px; }
   </style>
 </head>
 
@@ -489,23 +498,23 @@ const TQ_LNG          = -101.3563;
 const IMG_BASE = "";
 
 /** =========================
- *  TARIFAS (tu tabla)
+ *  TARIFAS (tabla fija - sin lluvia)
  *  ========================= */
 const TARIFAS = [
-  {from:0, to:3, normal:50, lluvia:65},
-  {from:3, to:4, normal:55, lluvia:75},
-  {from:4, to:5, normal:60, lluvia:85},
-  {from:5, to:6, normal:65, lluvia:95},
-  {from:6, to:7, normal:70, lluvia:105},
-  {from:7, to:8, normal:75, lluvia:115},
-  {from:8, to:9, normal:80, lluvia:125},
-  {from:9, to:10, normal:85, lluvia:135},
+  {from:0, to:3, normal:50},
+  {from:3, to:4, normal:55},
+  {from:4, to:5, normal:60},
+  {from:5, to:6, normal:65},
+  {from:6, to:7, normal:70},
+  {from:7, to:8, normal:75},
+  {from:8, to:9, normal:80},
+  {from:9, to:10, normal:85},
 ];
-function getTarifa(km, lluvia=false){
+function getTarifa(km){
   const k = Number(km);
   const row = TARIFAS.find(r => k >= r.from && k < r.to) || null;
   if(!row) return {ok:false, precio:0, limiteKm: 10};
-  return {ok:true, precio: lluvia ? row.lluvia : row.normal};
+  return {ok:true, precio: row.normal};
 }
 
 /** =========================
@@ -529,7 +538,7 @@ const catalogo = [
 const CATS = ["COMBOS","TACOS","ALAMBRES","BEBIDAS","EXTRAS"];
 
 /** =========================
- *  MODIFICADORES (✅ quitamos Tortilla, Bebida y Salsas)
+ *  MODIFICADORES (sin tortilla / bebida / salsas)
  *  ========================= */
 const MODS = {
   carne: { title:"Carne", type:"single", required:true, options:["Lengua","Pastor","Chorizo"] },
@@ -538,16 +547,13 @@ const MODS = {
 };
 function modsPara(item){
   if(!item.mods) return [];
-  // COMBOS: solo elegimos carne (para el combo taquero / paquete 2) o tipo de alambre (para combo alambre) + con/sin opcional
   if(item.cat === "COMBOS"){
     if(item.id === "combo_tacos_bebida") return ["carne","conSin"];
     if(item.id === "combo_alambre_bebida") return ["alambreTipo","conSin"];
     if(item.id === "combo_pareja") return ["carne","conSin"];
     return ["conSin"];
   }
-  // TACOS: solo con/sin (carne se asigna automático por producto)
   if(item.cat === "TACOS") return ["conSin"];
-  // ALAMBRES: solo con/sin (tipo se asigna automático por producto)
   if(item.cat === "ALAMBRES") return ["conSin"];
   return [];
 }
@@ -681,7 +687,6 @@ function cartSubTotal(){ return cart.reduce((a,x)=>a + x.qty*(x.basePrice), 0); 
 
 let envioPrecio = 0;
 let envioKm = 0;
-let lluvia = false;
 
 function getCanal(){ return canalEl.value; }
 function cartTotal(){
@@ -846,7 +851,6 @@ backdrop.addEventListener("pointerdown", (e)=>{ if(e.target===backdrop){ e.preve
 mAdd.addEventListener("click", ()=>{
   if(!currentItem || !draft) return;
 
-  // ✅ auto-asignación por producto (para que no exista selector extra)
   if(currentItem.cat==="TACOS"){
     if(currentItem.id==="taco_lengua")  draft.mods["carne"]="Lengua";
     if(currentItem.id==="taco_pastor")  draft.mods["carne"]="Pastor";
@@ -993,9 +997,7 @@ async function recomputeEnvio(){
   if(getCanal()!=="domicilio"){
     envioPrecio = 0; envioKm = 0;
     renderCart();
-    const kmTxt = document.getElementById("kmTxt");
     const envioTxt = document.getElementById("envioTxt");
-    if(kmTxt) kmTxt.textContent = "—";
     if(envioTxt) envioTxt.textContent = money(0);
     return;
   }
@@ -1009,12 +1011,10 @@ async function recomputeEnvio(){
   envioKm = haversineKm(TQ_LAT, TQ_LNG, Number(form.lat), Number(form.lng));
   envioKm = Math.round(envioKm*10)/10;
 
-  const r = getTarifa(envioKm, lluvia);
+  const r = getTarifa(envioKm);
   envioPrecio = r.ok ? r.precio : 0;
 
-  const kmTxt = document.getElementById("kmTxt");
   const envioTxt = document.getElementById("envioTxt");
-  if(kmTxt) kmTxt.textContent = `${envioKm.toFixed(1)} km`;
   if(envioTxt) envioTxt.textContent = r.ok ? money(envioPrecio) : `Fuera de rango (0–${r.limiteKm} km)`;
 
   renderCart();
@@ -1033,7 +1033,7 @@ function renderStep(){
 
     stepsBody.innerHTML = `
       <div class="note" style="margin-top:0">Selecciona una opción para continuar.</div>
-      <div class="optGroup" style="margin-top:12px">
+      <div class="optGroup" style="margin-top:10px">
         <div class="optTitle"><b>Servicio</b><span>elige 1</span></div>
         <div class="optList" id="canalOpts"></div>
       </div>
@@ -1130,14 +1130,12 @@ function renderStep(){
         <button class="btnLight" type="button" id="btnCentrarTq">🏁 Centrar en taquería</button>
       </div>
 
+      <!-- ✅ Quitado "distancia estimada" | dejamos solo Envío -->
       <div class="kpiRow">
-        <div class="kpi"><b>Distancia estimada</b><span id="kmTxt">—</span></div>
-        <div class="kpi"><b>Envío</b><span id="envioTxt">$0.00</span></div>
-      </div>
-
-      <div class="toggleRow">
-        <div><b>Lluvia</b><div class="muted" style="font-weight:900;font-size:12px">Aplica tabla “con lluvia”</div></div>
-        <label class="switch"><input id="swLluvia" type="checkbox" ${lluvia?"checked":""}/></label>
+        <div class="kpi" style="grid-column: 1 / -1;">
+          <b>Envío</b>
+          <span id="envioTxt">${money(envioPrecio)}</span>
+        </div>
       </div>
 
       <div class="optGroup">
@@ -1180,14 +1178,6 @@ function renderStep(){
       link("s_ciudad","ciudad");
       link("s_estado","estado");
       link("s_refs","refs");
-
-      const sw = document.getElementById("swLluvia");
-      if(sw){
-        sw.addEventListener("change", async ()=>{
-          lluvia = !!sw.checked;
-          await recomputeEnvio();
-        }, {passive:true});
-      }
 
       const btnMi = document.getElementById("btnMiUbicacion");
       if(btnMi){
@@ -1296,7 +1286,7 @@ function stepValidate(){
     if(!form.col.trim()) return "Falta la colonia.";
     if(!form.cp.trim()) return "Falta el CP.";
     if(!form.refs.trim()) return "Faltan referencias.";
-    const r = getTarifa(envioKm, lluvia);
+    const r = getTarifa(envioKm);
     if(!r.ok) return "Tu domicilio está fuera del rango de envío (0–10 km).";
   }
   if(step===3){
@@ -1345,7 +1335,7 @@ function buildWhatsAppText(){
     lines.push(dir);
     lines.push(``);
     lines.push(`Distancia estimada: *${envioKm.toFixed(1)} km*`);
-    lines.push(`Envío ${lluvia ? "(lluvia)" : "(normal)"}: *${money(envioPrecio)}*`);
+    lines.push(`Envío: *${money(envioPrecio)}*`);
   }
 
   lines.push(``);
@@ -1407,7 +1397,7 @@ btnNext.addEventListener("click", async ()=>{
   if(step===2){
     if(getCanal()==="domicilio"){
       await recomputeEnvio();
-      const r = getTarifa(envioKm, lluvia);
+      const r = getTarifa(envioKm);
       if(!r.ok){ alert("Tu domicilio está fuera del rango de envío (0–10 km)."); return; }
     }
     step = 3; renderStep(); return;
