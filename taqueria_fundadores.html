@@ -1,10 +1,3 @@
-<!-- ✅ NUEVO CÓDIGO (CAMBIOS):
-1) Al entrar: SOLO pregunta Servicio (Paso 0) y al dar LISTO CIERRA (no avanza).
-2) Checkout: si NO hay servicio elegido -> abre Paso 0; si ya hay -> arranca en Paso 1.
-3) Modal de pasos compacto: max-height + scroll interno; footer siempre visible.
-4) Mapa más pequeño para que en zoom normal SIEMPRE se vea "Continuar".
--->
-
 <!doctype html>
 <html lang="es">
 <head>
@@ -220,6 +213,8 @@
       pointer-events:auto;
       touch-action:none;
     }
+
+    /* MODAL (productos) + Steps */
     .modal,.steps{
       width:min(820px, 100%);
       background: linear-gradient(180deg, var(--card), var(--card2));
@@ -230,6 +225,62 @@
       pointer-events:auto;
       touch-action: manipulation;
     }
+
+    /* ✅ MODAL MODIFICADORES: compacto + scroll interno + footer visible */
+    .modal{
+      max-height: 88vh;
+      display:flex;
+      flex-direction:column;
+    }
+    #mBody{
+      overflow:auto;
+      -webkit-overflow-scrolling: touch;
+      flex: 1 1 auto;
+    }
+    .modalHead{
+      flex: 0 0 auto;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+    .footerBtns{
+      flex: 0 0 auto;
+      position: sticky;
+      bottom: 0;
+      z-index: 2;
+      display:flex; gap:10px; padding:14px 16px; border-top:1px solid rgba(0,0,0,.10); background: rgba(0,0,0,.03);
+    }
+    /* 👇 fade sutil para indicar scroll (opcional) */
+    .modal::after{
+      content:"";
+      position:absolute;
+      left:0; right:0; bottom:58px; /* arriba del footer */
+      height:18px;
+      pointer-events:none;
+      background: linear-gradient(180deg, rgba(255,246,236,0), rgba(255,246,236,.92));
+    }
+
+    /* ✅ Compactar opciones (opcional pero recomendado) */
+    .optGroup{border:1px solid rgba(0,0,0,.10); border-radius:16px; padding:10px 10px; margin-top:8px; background: rgba(255,255,255,.75);}
+    .optTitle{display:flex; align-items:center; justify-content:space-between; gap:10px;}
+    .optTitle b{font-size:13px; color: var(--ink)}
+    .optTitle span{font-size:12px; color:var(--muted); font-weight:900}
+    .optList{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px}
+    .optBtn{
+      appearance:none;
+      border:1px solid rgba(0,0,0,.12);
+      background: rgba(255,255,255,.90);
+      padding:7px 10px;
+      border-radius:999px;
+      font-size:12.5px;
+      cursor:pointer;
+      user-select:none;
+      font-weight:1000;
+      color: var(--ink);
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .optBtn.active{border-color: rgba(139,30,30,.45); box-shadow:0 0 0 3px rgba(139,30,30,.14);}
 
     /* ✅ MODAL DE PASOS: compacto + scroll interno + footer visible */
     .steps{
@@ -248,13 +299,15 @@
       position: sticky;
       bottom: 0;
       z-index: 2;
+      display:flex; gap:10px; padding:14px 16px; border-top:1px solid rgba(0,0,0,.10); background: rgba(0,0,0,.03);
     }
 
-    .modalHead,.stepsHead{
+    .stepsHead{
       padding:14px 16px; border-bottom:1px solid rgba(0,0,0,.10);
       display:flex; justify-content:space-between; align-items:center; gap:10px;
       background: rgba(0,0,0,.03);
     }
+
     .closeX{
       border:1px solid rgba(0,0,0,.14);
       background: rgba(255,255,255,.75);
@@ -267,29 +320,6 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    .optGroup{border:1px solid rgba(0,0,0,.10); border-radius:16px; padding:12px 12px; margin-top:10px; background: rgba(255,255,255,.75);}
-    .optTitle{display:flex; align-items:center; justify-content:space-between; gap:10px;}
-    .optTitle b{font-size:13px; color: var(--ink)}
-    .optTitle span{font-size:12px; color:var(--muted); font-weight:900}
-    .optList{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px}
-
-    .optBtn{
-      appearance:none;
-      border:1px solid rgba(0,0,0,.12);
-      background: rgba(255,255,255,.90);
-      padding:8px 10px;
-      border-radius:999px;
-      font-size:13px;
-      cursor:pointer;
-      user-select:none;
-      font-weight:1000;
-      color: var(--ink);
-      touch-action: manipulation;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .optBtn.active{border-color: rgba(139,30,30,.45); box-shadow:0 0 0 3px rgba(139,30,30,.14);}
-
-    .footerBtns,.stepsFoot{display:flex; gap:10px; padding:14px 16px; border-top:1px solid rgba(0,0,0,.10); background: rgba(0,0,0,.03);}
     .footerBtns button{flex:1}
     .btnDark{
       border:none; cursor:pointer;
@@ -321,7 +351,6 @@
     }
 
     .mapWrap{border:1px solid rgba(0,0,0,.12); border-radius:16px; overflow:hidden; background:#fff; box-shadow: 0 10px 26px rgba(0,0,0,.10);}
-    /* ✅ Mapa más compacto */
     #miniMap{width:100%; height: 170px; background:#eee; touch-action: pan-x pan-y;}
 
     .mapBar{display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;}
@@ -847,7 +876,7 @@ function setCanal(v){
   renderCart();
 }
 
-let serviceChosen = false; // ✅ evita que se repita siempre
+let serviceChosen = false;
 
 /** =========================
  *  CHECKOUT POR PASOS + MAPA
@@ -900,7 +929,7 @@ stepsBackdrop.addEventListener("pointerdown", (e)=>{ if(e.target===stepsBackdrop
 stepsClose.addEventListener("click", closeSteps, {passive:true});
 
 btnCambioServicio.addEventListener("click", ()=>{
-  openSteps(0); // cambiar servicio
+  openSteps(0);
 }, {passive:true});
 
 function ensureMapInit(){
@@ -994,7 +1023,6 @@ function renderStep(){
   const subTotal = cartSubTotal();
   const total = cartTotal();
 
-  // STEP 0: servicio (solo eso y listo)
   if(step === 0){
     stepTitle.textContent = "Antes de empezar…";
     stepSub.textContent = "¿Tu pedido es para domicilio o recoger?";
@@ -1039,7 +1067,6 @@ function renderStep(){
     return;
   }
 
-  // STEP 1: datos
   if(step===1){
     stepTitle.textContent = "Paso 1 de 3";
     stepSub.textContent = "Datos personales";
@@ -1071,7 +1098,6 @@ function renderStep(){
     return;
   }
 
-  // STEP 2: mapa (solo domicilio)
   if(step===2){
     btnBack.style.display = "inline-block";
     btnNext.textContent = "CONTINUAR";
@@ -1200,7 +1226,6 @@ function renderStep(){
     return;
   }
 
-  // STEP 3: pago + enviar
   btnBack.style.display = "inline-block";
   btnNext.textContent = "ENVIAR PEDIDO";
   stepTitle.textContent = "Paso 3 de 3";
@@ -1359,13 +1384,10 @@ function buildWhatsAppText(){
 document.getElementById("btnCheckout").addEventListener("click", ()=>{
   if(cart.length===0){ alert("Agrega algo al carrito primero 😄"); return; }
 
-  // ✅ Si NO han elegido servicio todavía -> solo Paso 0
   if(!serviceChosen){
     openSteps(0);
     return;
   }
-
-  // ✅ Si ya eligieron -> Paso 1
   openSteps(1);
 }, {passive:true});
 
@@ -1380,7 +1402,6 @@ btnNext.addEventListener("click", async ()=>{
   const err = stepValidate();
   if(err){ alert(err); return; }
 
-  // ✅ Paso 0: SOLO guardar servicio y CERRAR (no avanzar)
   if(step===0){
     serviceChosen = true;
     closeSteps();
@@ -1405,7 +1426,6 @@ btnNext.addEventListener("click", async ()=>{
     return;
   }
 
-  // step===3 => WhatsApp
   const text = cleanWA(buildWhatsAppText());
   const url = `https://wa.me/${WHATSAPP_TAQ}?text=${encodeURIComponent(text)}`;
   window.open(url, "_blank");
@@ -1426,7 +1446,6 @@ renderTabs();
 renderItems();
 renderCart();
 
-// ✅ SOLO al entrar: pregunta servicio y se cierra en LISTO
 window.addEventListener("load", ()=>{
   setCanal("recoger");
   serviceChosen = false;
