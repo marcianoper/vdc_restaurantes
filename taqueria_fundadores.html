@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <title>Menú — Tacos Los Fundadores</title>
 
-  <!-- Leaflet (GRATIS) -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
   <style>
@@ -13,7 +12,7 @@
       --bg:#1a0f0c; --bg2:#24130f;
       --card:#fff6ec; --card2:#fff1e2;
       --ink:#2b1a14; --muted:#6a4a3c; --line: rgba(0,0,0,.10);
-      --brand1:#8b1e1e; --brand2:#b63a2b; --gold:#d4a373; --green:#2f7d32; --danger:#9b1c1c;
+      --brand1:#8b1e1e; --brand2:#b63a2b; --gold:#d4a373; --green:#2f7d32;
       --shadow: 0 18px 50px rgba(0,0,0,.25);
       --r:18px;
     }
@@ -224,14 +223,13 @@
       touch-action: manipulation;
     }
 
-    /* ✅ MODAL DE PASOS: compacto + scroll interno + footer visible */
     .steps{
-      max-height: 86vh;           /* un poco más chico */
+      max-height: 86vh;
       display:flex;
       flex-direction:column;
     }
     .stepsBody{
-      padding:12px 14px;          /* más compacto */
+      padding:12px 14px;
       overflow:auto;
       -webkit-overflow-scrolling: touch;
       flex: 1 1 auto;
@@ -315,7 +313,6 @@
     }
 
     .mapWrap{border:1px solid rgba(0,0,0,.12); border-radius:16px; overflow:hidden; background:#fff; box-shadow: 0 10px 26px rgba(0,0,0,.10);}
-    /* ✅ Mapa más compacto */
     #miniMap{width:100%; height: 150px; background:#eee; touch-action: pan-x pan-y;}
 
     .mapBar{display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;}
@@ -326,19 +323,39 @@
     .kpi b{display:block; font-size:12px}
     .kpi span{display:block; margin-top:4px; font-weight:1000}
 
-    .toggleRow{
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
+    /* ✅ Detalles colapsables */
+    .addrDetails[hidden]{ display:none !important; }
+
+    /* ✅ Flechas tipo acordeón */
+    .addrToggle{
+      margin-top:10px;
+      width:100%;
       border:1px solid rgba(0,0,0,.10);
       border-radius:16px;
       background: rgba(255,255,255,.72);
       padding:10px 12px;
-      margin-top:10px;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      cursor:pointer;
+      user-select:none;
+      font-weight:1000;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
-    .switch{display:inline-flex; align-items:center; gap:10px; font-weight:1000; user-select:none;}
-    .switch input{ width: 46px; height: 26px; padding:0; border-radius:999px; }
-
-    /* ✅ Mostrar/ocultar detalles */
-    .addrDetails[hidden]{ display:none !important; }
+    .addrToggle .left{
+      display:flex; flex-direction:column; gap:2px;
+    }
+    .addrToggle .left b{font-size:13px}
+    .addrToggle .left span{font-size:12px; color:var(--muted); font-weight:900}
+    .addrToggle .chev{
+      width:38px; height:38px;
+      border-radius:12px;
+      border:1px solid rgba(0,0,0,.12);
+      background: rgba(255,255,255,.78);
+      display:flex; align-items:center; justify-content:center;
+      font-size:18px;
+      line-height:1;
+    }
+    .addrToggle[aria-expanded="true"] .chev{ transform: rotate(180deg); }
   </style>
 </head>
 
@@ -447,7 +464,7 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 /** =========================
- *  CONFIG (UNA TAQUERÍA)
+ *  CONFIG
  *  ========================= */
 const TAQUERIA_NOMBRE = "Tacos Los Fundadores";
 const WHATSAPP_TAQ    = "524621872594";
@@ -456,7 +473,7 @@ const TQ_LNG          = -101.3563;
 const IMG_BASE = "";
 
 /** =========================
- *  TARIFAS
+ *  TARIFAS (sin lluvia)
  *  ========================= */
 const TARIFAS = [
   {from:0, to:3, normal:50},
@@ -496,8 +513,7 @@ const catalogo = [
 const CATS = ["COMBOS","TACOS","ALAMBRES","BEBIDAS","EXTRAS"];
 
 /** =========================
- *  MODIFICADORES
- *  (✅ quitados: Tortilla, Salsas, Bebida)
+ *  MODIFICADORES (quitados: tortilla, salsas, bebida)
  *  ========================= */
 const MODS = {
   carne: { title:"Carne", type:"single", required:true, options:["Lengua","Pastor","Chorizo"] },
@@ -510,7 +526,6 @@ function modsPara(item){
     if(item.id === "combo_tacos_bebida") return ["carne","conSin"];
     if(item.id === "combo_alambre_bebida") return ["alambreTipo","conSin"];
     if(item.id === "combo_pareja") return ["carne","conSin"];
-    return [];
   }
   return [];
 }
@@ -644,7 +659,9 @@ function cartSubTotal(){ return cart.reduce((a,x)=>a + x.qty*(x.basePrice), 0); 
 let envioPrecio = 0;
 let envioKm = 0;
 
+const canalEl = document.getElementById("canal");
 function getCanal(){ return canalEl.value; }
+
 function cartTotal(){
   return cartSubTotal() + (getCanal()==="domicilio" ? envioPrecio : 0);
 }
@@ -808,15 +825,13 @@ mAdd.addEventListener("click", ()=>{
   if(!currentItem || !draft) return;
   const err = validateRequired(currentItem, draft.mods);
   if(err){ alert(err); return; }
-
   addLine(currentItem, draft.mods, draft.note);
   closeModal();
 }, {passive:true});
 
 /** =========================
- *  SERVICIO (persistente en sesión)
+ *  SERVICIO
  *  ========================= */
-const canalEl = document.getElementById("canal");
 const servTxt = document.getElementById("servTxt");
 const btnCambioServicio = document.getElementById("btnCambioServicio");
 
@@ -829,7 +844,6 @@ function setCanal(v){
   }
   renderCart();
 }
-
 let serviceChosen = false;
 
 /** =========================
@@ -845,13 +859,8 @@ const btnNext = document.getElementById("btnNext");
 
 let step = 0;
 
-/* ✅ toggle detalles dirección */
+/* ✅ estado de detalles dirección */
 let showAddrDetails = true;
-function toggleAddrDetails(v){
-  showAddrDetails = !!v;
-  const box = document.getElementById("addrDetailsBox");
-  if(box) box.hidden = !showAddrDetails;
-}
 
 const form = {
   nombre: "",
@@ -889,7 +898,6 @@ function closeSteps(){
 
 stepsBackdrop.addEventListener("pointerdown", (e)=>{ if(e.target===stepsBackdrop){ e.preventDefault(); closeSteps(); } }, {passive:false});
 stepsClose.addEventListener("click", closeSteps, {passive:true});
-
 btnCambioServicio.addEventListener("click", ()=> openSteps(0), {passive:true});
 
 function ensureMapInit(){
@@ -974,12 +982,25 @@ async function recomputeEnvio(){
   renderCart();
 }
 
+/* ✅ toggle con flecha */
+function setAddrExpanded(expanded){
+  showAddrDetails = !!expanded;
+  const box = document.getElementById("addrDetailsBox");
+  const btn = document.getElementById("addrToggleBtn");
+  if(box) box.hidden = !showAddrDetails;
+  if(btn){
+    btn.setAttribute("aria-expanded", showAddrDetails ? "true":"false");
+    btn.querySelector(".chev").textContent = showAddrDetails ? "▲" : "▼";
+    btn.querySelector(".left b").textContent = showAddrDetails ? "Ocultar detalles de la dirección" : "Mostrar detalles de la dirección";
+  }
+}
+
 function renderStep(){
   const canal = getCanal();
   const subTotal = cartSubTotal();
   const total = cartTotal();
 
-  // STEP 0: servicio
+  // STEP 0
   if(step === 0){
     stepTitle.textContent = "Antes de empezar…";
     stepSub.textContent = "¿Tu pedido es para domicilio o recoger?";
@@ -1024,7 +1045,7 @@ function renderStep(){
     return;
   }
 
-  // STEP 1: datos
+  // STEP 1
   if(step===1){
     stepTitle.textContent = "Paso 1 de 3";
     stepSub.textContent = "Datos personales";
@@ -1056,7 +1077,7 @@ function renderStep(){
     return;
   }
 
-  // STEP 2: mapa (solo domicilio)
+  // STEP 2
   if(step===2){
     btnBack.style.display = "inline-block";
     btnNext.textContent = "CONTINUAR";
@@ -1094,16 +1115,15 @@ function renderStep(){
         </div>
       </div>
 
-      <!-- ✅ Toggle detalles -->
-      <div class="toggleRow">
-        <div>
-          <b>Mostrar detalles de la dirección</b>
-          <div class="muted" style="font-weight:900;font-size:12px">Calle, colonia y CP</div>
+      <!-- ✅ Flecha: ▲ muestra, ▼ oculta -->
+      <div class="addrToggle" id="addrToggleBtn" role="button" tabindex="0" aria-expanded="${showAddrDetails ? "true":"false"}">
+        <div class="left">
+          <b>${showAddrDetails ? "Ocultar detalles de la dirección" : "Mostrar detalles de la dirección"}</b>
+          <span>Calle, colonia y CP</span>
         </div>
-        <label class="switch"><input id="swAddrDetails" type="checkbox" ${showAddrDetails?"checked":""}/></label>
+        <div class="chev">${showAddrDetails ? "▲" : "▼"}</div>
       </div>
 
-      <!-- ✅ Detalles colapsables -->
       <div class="optGroup addrDetails" id="addrDetailsBox" ${showAddrDetails ? "" : "hidden"}>
         <div class="optTitle"><b>Dirección</b><span>puedes corregirlo</span></div>
 
@@ -1132,12 +1152,20 @@ function renderStep(){
     setTimeout(async ()=>{
       ensureMapInit();
 
-      const sw = document.getElementById("swAddrDetails");
-      if(sw){
-        sw.addEventListener("change", ()=>{
-          toggleAddrDetails(sw.checked);
-        }, {passive:true});
+      // ✅ click y teclado (Enter/Espacio) para toggle
+      const btnT = document.getElementById("addrToggleBtn");
+      const toggle = ()=> setAddrExpanded(!showAddrDetails);
+      if(btnT){
+        btnT.addEventListener("click", toggle, {passive:true});
+        btnT.addEventListener("keydown", (e)=>{
+          if(e.key==="Enter" || e.key===" "){
+            e.preventDefault();
+            toggle();
+          }
+        });
       }
+      // asegurar estado visual
+      setAddrExpanded(showAddrDetails);
 
       const link = (id, key)=>{
         const el = document.getElementById(id);
@@ -1185,14 +1213,13 @@ function renderStep(){
         await recomputeEnvio();
       }
 
-      toggleAddrDetails(showAddrDetails);
       setTimeout(()=> map.invalidateSize(true), 120);
     }, 0);
 
     return;
   }
 
-  // STEP 3: pago + enviar
+  // STEP 3
   btnBack.style.display = "inline-block";
   btnNext.textContent = "ENVIAR PEDIDO";
   stepTitle.textContent = "Paso 3 de 3";
@@ -1257,7 +1284,7 @@ function stepValidate(){
   if(step===2 && canal==="domicilio"){
     if(form.lat==null || form.lng==null) return "Elige tu ubicación en el mapa (o usa “mi ubicación”).";
 
-    // ✅ Si muestran detalles, valida; si NO, no obliga (solo pin)
+    // ✅ Si están visibles, valida; si no, no obliga
     if(showAddrDetails){
       if(!form.calle.trim()) return "Falta la calle.";
       if(!form.noext.trim()) return "Falta el número exterior.";
@@ -1302,7 +1329,6 @@ function buildWhatsAppText(){
   if(canal==="domicilio"){
     lines.push(``);
     lines.push(`Domicilio para la entrega:`);
-
     if(showAddrDetails){
       const dir = [
         `Calle: ${form.calle} ${form.noext}`,
@@ -1317,7 +1343,6 @@ function buildWhatsAppText(){
     }else{
       lines.push(`Ubicación: ${Number(form.lat).toFixed(5)}, ${Number(form.lng).toFixed(5)}`);
     }
-
     const r = getTarifa(envioKm);
     lines.push(``);
     lines.push(`Envío: *${r.ok ? money(envioPrecio) : "Fuera de rango"}*`);
@@ -1360,19 +1385,12 @@ function buildWhatsAppText(){
  *  ========================= */
 document.getElementById("btnCheckout").addEventListener("click", ()=>{
   if(cart.length===0){ alert("Agrega algo al carrito primero 😄"); return; }
-
-  if(!serviceChosen){
-    openSteps(0);
-    return;
-  }
+  if(!serviceChosen){ openSteps(0); return; }
   openSteps(1);
 }, {passive:true});
 
 btnBack.addEventListener("click", ()=>{
-  if(step>0){
-    step--;
-    renderStep();
-  }
+  if(step>0){ step--; renderStep(); }
 }, {passive:true});
 
 btnNext.addEventListener("click", async ()=>{
@@ -1385,22 +1403,14 @@ btnNext.addEventListener("click", async ()=>{
     renderCart();
     return;
   }
-
-  if(step===1){
-    step = 2;
-    renderStep();
-    return;
-  }
-
+  if(step===1){ step = 2; renderStep(); return; }
   if(step===2){
     if(getCanal()==="domicilio"){
       await recomputeEnvio();
       const r = getTarifa(envioKm);
       if(!r.ok){ alert("Tu domicilio está fuera del rango de envío (0–10 km)."); return; }
     }
-    step = 3;
-    renderStep();
-    return;
+    step = 3; renderStep(); return;
   }
 
   const text = cleanWA(buildWhatsAppText());
