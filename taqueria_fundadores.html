@@ -242,6 +242,9 @@
       position: sticky;
       top: 0;
       z-index: 2;
+      padding:14px 16px; border-bottom:1px solid rgba(0,0,0,.10);
+      display:flex; justify-content:space-between; align-items:center; gap:10px;
+      background: rgba(0,0,0,.03);
     }
     .footerBtns{
       flex: 0 0 auto;
@@ -250,17 +253,28 @@
       z-index: 2;
       display:flex; gap:10px; padding:14px 16px; border-top:1px solid rgba(0,0,0,.10); background: rgba(0,0,0,.03);
     }
-    /* 👇 fade sutil para indicar scroll (opcional) */
     .modal::after{
       content:"";
       position:absolute;
-      left:0; right:0; bottom:58px; /* arriba del footer */
+      left:0; right:0; bottom:58px;
       height:18px;
       pointer-events:none;
       background: linear-gradient(180deg, rgba(255,246,236,0), rgba(255,246,236,.92));
     }
 
-    /* ✅ Compactar opciones (opcional pero recomendado) */
+    .closeX{
+      border:1px solid rgba(0,0,0,.14);
+      background: rgba(255,255,255,.75);
+      border-radius:12px;
+      width:40px; height:40px;
+      cursor:pointer;
+      font-weight:1000;
+      color: var(--ink);
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* opciones compactas */
     .optGroup{border:1px solid rgba(0,0,0,.10); border-radius:16px; padding:10px 10px; margin-top:8px; background: rgba(255,255,255,.75);}
     .optTitle{display:flex; align-items:center; justify-content:space-between; gap:10px;}
     .optTitle b{font-size:13px; color: var(--ink)}
@@ -282,11 +296,16 @@
     }
     .optBtn.active{border-color: rgba(139,30,30,.45); box-shadow:0 0 0 3px rgba(139,30,30,.14);}
 
-    /* ✅ MODAL DE PASOS: compacto + scroll interno + footer visible */
+    /* ✅ MODAL DE PASOS */
     .steps{
       max-height: 88vh;
       display:flex;
       flex-direction:column;
+    }
+    .stepsHead{
+      padding:14px 16px; border-bottom:1px solid rgba(0,0,0,.10);
+      display:flex; justify-content:space-between; align-items:center; gap:10px;
+      background: rgba(0,0,0,.03);
     }
     .stepsBody{
       padding:14px 16px;
@@ -302,25 +321,7 @@
       display:flex; gap:10px; padding:14px 16px; border-top:1px solid rgba(0,0,0,.10); background: rgba(0,0,0,.03);
     }
 
-    .stepsHead{
-      padding:14px 16px; border-bottom:1px solid rgba(0,0,0,.10);
-      display:flex; justify-content:space-between; align-items:center; gap:10px;
-      background: rgba(0,0,0,.03);
-    }
-
-    .closeX{
-      border:1px solid rgba(0,0,0,.14);
-      background: rgba(255,255,255,.75);
-      border-radius:12px;
-      width:40px; height:40px;
-      cursor:pointer;
-      font-weight:1000;
-      color: var(--ink);
-      touch-action: manipulation;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .footerBtns button{flex:1}
+    .footerBtns button, .stepsFoot button{flex:1}
     .btnDark{
       border:none; cursor:pointer;
       padding:12px 14px; border-radius: 14px;
@@ -399,7 +400,7 @@
           <div class="divider"></div>
         </div>
         <div class="items" id="items"></div>
-        <div class="note">Tip: elige tu carne + con/sin + salsas. Si es para llevar, pon nota tipo: <b>“bien dorado”</b>.</div>
+        <div class="note">Tip: si es para llevar, pon nota tipo: <b>“bien dorado”</b>.</div>
       </div>
     </section>
 
@@ -514,9 +515,9 @@ const catalogo = [
   {id:"combo_tacos_bebida", cat:"COMBOS", name:"Combo Taquero", price:75, desc:"3 tacos (lengua/pastor/chorizo) + bebida.", mods:true, img:"combo_tacos_bebida.png"},
   {id:"combo_alambre_bebida", cat:"COMBOS", name:"Combo Alambre", price:115, desc:"1 alambre (mixto o pastor) + bebida.", mods:true, img:"combo_alambre_bebida.png"},
   {id:"combo_pareja", cat:"COMBOS", name:"Paquete para 2", price:210, desc:"6 tacos + 2 bebidas. Para compartir bien.", mods:true, img:"combo_pareja.png"},
-  {id:"taco_lengua",  cat:"TACOS", name:"Taco de lengua",  price:18, desc:"Tortilla a elegir. Lengua bien servida.", mods:true, img:"taco_lengua.jpeg"},
-  {id:"taco_pastor",  cat:"TACOS", name:"Taco al pastor",  price:18, desc:"Clásico pastor, con/sin piña.", mods:true, img:"taco_pastor.jpeg"},
-  {id:"taco_chorizo", cat:"TACOS", name:"Taco de chorizo", price:18, desc:"Bien doradito, con salsa.", mods:true, img:"taco_chorizo.jpeg"},
+  {id:"taco_lengua",  cat:"TACOS", name:"Taco de lengua",  price:18, desc:"Lengua bien servida.", mods:true, img:"taco_lengua.jpeg"},
+  {id:"taco_pastor",  cat:"TACOS", name:"Taco al pastor",  price:18, desc:"Clásico pastor.", mods:true, img:"taco_pastor.jpeg"},
+  {id:"taco_chorizo", cat:"TACOS", name:"Taco de chorizo", price:18, desc:"Bien doradito.", mods:true, img:"taco_chorizo.jpeg"},
   {id:"alambre_mixto",  cat:"ALAMBRES", name:"Alambre mixto",  price:95, desc:"Queso + mixto. Perfecto para el hambre.", mods:true, img:"alambre_mixto.jpeg"},
   {id:"alambre_pastor", cat:"ALAMBRES", name:"Alambre al pastor", price:95, desc:"Queso + pastor. El consentido.", mods:true, img:"alambre_pastor.jpeg"},
   {id:"coca_600ml", cat:"BEBIDAS", name:"Coca 600ml", price:25, desc:"Bien fría.", mods:false, img:"coca_600ml.png"},
@@ -528,26 +529,26 @@ const catalogo = [
 const CATS = ["COMBOS","TACOS","ALAMBRES","BEBIDAS","EXTRAS"];
 
 /** =========================
- *  MODIFICADORES
+ *  MODIFICADORES (✅ quitamos Tortilla, Bebida y Salsas)
  *  ========================= */
 const MODS = {
   carne: { title:"Carne", type:"single", required:true, options:["Lengua","Pastor","Chorizo"] },
-  tortilla: { title:"Tortilla", type:"single", required:true, options:["Maíz","Harina"] },
   conSin: { title:"Con todo / Sin…", type:"multi", required:false, options:["Con todo","Sin cebolla","Sin cilantro","Sin piña","Sin salsa"] },
-  salsas: { title:"Salsas", type:"multi", required:false, options:["Verde","Roja","Habanero","Guacamole","Tatemada"] },
   alambreTipo: { title:"Tipo de alambre", type:"single", required:true, options:["Mixto","Pastor"] },
-  bebida: { title:"Bebida", type:"single", required:false, options:["Coca 600ml","Agua fresca 1/2L"] }
 };
 function modsPara(item){
   if(!item.mods) return [];
+  // COMBOS: solo elegimos carne (para el combo taquero / paquete 2) o tipo de alambre (para combo alambre) + con/sin opcional
   if(item.cat === "COMBOS"){
-    if(item.id === "combo_tacos_bebida") return ["carne","tortilla","conSin","salsas","bebida"];
-    if(item.id === "combo_alambre_bebida") return ["alambreTipo","conSin","salsas","bebida"];
-    if(item.id === "combo_pareja") return ["carne","tortilla","conSin","salsas","bebida"];
-    return ["bebida"];
+    if(item.id === "combo_tacos_bebida") return ["carne","conSin"];
+    if(item.id === "combo_alambre_bebida") return ["alambreTipo","conSin"];
+    if(item.id === "combo_pareja") return ["carne","conSin"];
+    return ["conSin"];
   }
-  if(item.cat === "TACOS") return ["tortilla","conSin","salsas"];
-  if(item.cat === "ALAMBRES") return ["conSin","salsas"];
+  // TACOS: solo con/sin (carne se asigna automático por producto)
+  if(item.cat === "TACOS") return ["conSin"];
+  // ALAMBRES: solo con/sin (tipo se asigna automático por producto)
+  if(item.cat === "ALAMBRES") return ["conSin"];
   return [];
 }
 
@@ -562,6 +563,7 @@ function modsToText(mods){
   const parts = [];
   for(const k of Object.keys(mods||{})){
     const val = mods[k];
+    if(!MODS[k]) continue;
     if(Array.isArray(val) && val.length) parts.push(`${MODS[k].title}: ${val.join(", ")}`);
     if(typeof val==="string" && val) parts.push(`${MODS[k].title}: ${val}`);
   }
@@ -843,9 +845,8 @@ backdrop.addEventListener("pointerdown", (e)=>{ if(e.target===backdrop){ e.preve
 
 mAdd.addEventListener("click", ()=>{
   if(!currentItem || !draft) return;
-  const err = validateRequired(currentItem, draft.mods);
-  if(err){ alert(err); return; }
 
+  // ✅ auto-asignación por producto (para que no exista selector extra)
   if(currentItem.cat==="TACOS"){
     if(currentItem.id==="taco_lengua")  draft.mods["carne"]="Lengua";
     if(currentItem.id==="taco_pastor")  draft.mods["carne"]="Pastor";
@@ -855,6 +856,10 @@ mAdd.addEventListener("click", ()=>{
     if(currentItem.id==="alambre_mixto")  draft.mods["alambreTipo"]="Mixto";
     if(currentItem.id==="alambre_pastor") draft.mods["alambreTipo"]="Pastor";
   }
+
+  const err = validateRequired(currentItem, draft.mods);
+  if(err){ alert(err); return; }
+
   addLine(currentItem, draft.mods, draft.note);
   closeModal();
 }, {passive:true});
@@ -927,10 +932,7 @@ function closeSteps(){
 
 stepsBackdrop.addEventListener("pointerdown", (e)=>{ if(e.target===stepsBackdrop){ e.preventDefault(); closeSteps(); } }, {passive:false});
 stepsClose.addEventListener("click", closeSteps, {passive:true});
-
-btnCambioServicio.addEventListener("click", ()=>{
-  openSteps(0);
-}, {passive:true});
+btnCambioServicio.addEventListener("click", ()=> openSteps(0), {passive:true});
 
 function ensureMapInit(){
   if(mapReady) return;
@@ -1130,7 +1132,7 @@ function renderStep(){
 
       <div class="kpiRow">
         <div class="kpi"><b>Distancia estimada</b><span id="kmTxt">—</span></div>
-        <div class="kpi"><b>Envío</b><span id="envioTxt">${money(envioPrecio)}</span></div>
+        <div class="kpi"><b>Envío</b><span id="envioTxt">$0.00</span></div>
       </div>
 
       <div class="toggleRow">
@@ -1383,19 +1385,12 @@ function buildWhatsAppText(){
  *  ========================= */
 document.getElementById("btnCheckout").addEventListener("click", ()=>{
   if(cart.length===0){ alert("Agrega algo al carrito primero 😄"); return; }
-
-  if(!serviceChosen){
-    openSteps(0);
-    return;
-  }
+  if(!serviceChosen){ openSteps(0); return; }
   openSteps(1);
 }, {passive:true});
 
 btnBack.addEventListener("click", ()=>{
-  if(step>0){
-    step--;
-    renderStep();
-  }
+  if(step>0){ step--; renderStep(); }
 }, {passive:true});
 
 btnNext.addEventListener("click", async ()=>{
@@ -1408,22 +1403,14 @@ btnNext.addEventListener("click", async ()=>{
     renderCart();
     return;
   }
-
-  if(step===1){
-    step = 2;
-    renderStep();
-    return;
-  }
-
+  if(step===1){ step = 2; renderStep(); return; }
   if(step===2){
     if(getCanal()==="domicilio"){
       await recomputeEnvio();
       const r = getTarifa(envioKm, lluvia);
       if(!r.ok){ alert("Tu domicilio está fuera del rango de envío (0–10 km)."); return; }
     }
-    step = 3;
-    renderStep();
-    return;
+    step = 3; renderStep(); return;
   }
 
   const text = cleanWA(buildWhatsAppText());
