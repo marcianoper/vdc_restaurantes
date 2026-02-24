@@ -16,7 +16,6 @@
       --brand1:#8b1e1e; --brand2:#b63a2b; --gold:#d4a373; --green:#2f7d32; --danger:#9b1c1c;
       --shadow: 0 18px 50px rgba(0,0,0,.25);
       --r:18px;
-      --safeB: env(safe-area-inset-bottom, 0px);
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -210,14 +209,10 @@
       background:rgba(0,0,0,.55);
       display:none;
       align-items:center; justify-content:center;
-      padding:16px;
-      padding-bottom: calc(16px + var(--safeB)); /* ✅ deja espacio contra footer del navegador */
-      z-index:999;
+      padding:16px; z-index:999;
       pointer-events:auto;
       touch-action:none;
     }
-
-    /* MODAL (productos) + Steps */
     .modal,.steps{
       width:min(820px, 100%);
       background: linear-gradient(180deg, var(--card), var(--card2));
@@ -229,45 +224,31 @@
       touch-action: manipulation;
     }
 
-    /* ✅ MODAL MODIFICADORES: compacto + scroll interno + footer visible */
-    .modal{
-      max-height: 88vh;
+    /* ✅ MODAL DE PASOS: compacto + scroll interno + footer visible */
+    .steps{
+      max-height: 86vh;           /* un poco más chico */
       display:flex;
       flex-direction:column;
     }
-    #mBody{
+    .stepsBody{
+      padding:12px 14px;          /* más compacto */
       overflow:auto;
       -webkit-overflow-scrolling: touch;
       flex: 1 1 auto;
     }
-    .modalHead{
-      flex: 0 0 auto;
-      position: sticky;
-      top: 0;
-      z-index: 2;
-      padding:14px 16px; border-bottom:1px solid rgba(0,0,0,.10);
-      display:flex; justify-content:space-between; align-items:center; gap:10px;
-      background: rgba(0,0,0,.03);
-    }
-    .footerBtns{
+    .stepsFoot{
       flex: 0 0 auto;
       position: sticky;
       bottom: 0;
       z-index: 2;
-      display:flex; gap:10px;
-      padding:14px 16px;
-      padding-bottom: calc(14px + var(--safeB)); /* ✅ safe area */
-      border-top:1px solid rgba(0,0,0,.10); background: rgba(0,0,0,.03);
-    }
-    .modal::after{
-      content:"";
-      position:absolute;
-      left:0; right:0; bottom:64px;
-      height:16px;
-      pointer-events:none;
-      background: linear-gradient(180deg, rgba(255,246,236,0), rgba(255,246,236,.92));
+      padding-bottom: calc(12px + env(safe-area-inset-bottom));
     }
 
+    .modalHead,.stepsHead{
+      padding:12px 14px; border-bottom:1px solid rgba(0,0,0,.10);
+      display:flex; justify-content:space-between; align-items:center; gap:10px;
+      background: rgba(0,0,0,.03);
+    }
     .closeX{
       border:1px solid rgba(0,0,0,.14);
       background: rgba(255,255,255,.75);
@@ -280,19 +261,19 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* opciones compactas */
-    .optGroup{border:1px solid rgba(0,0,0,.10); border-radius:16px; padding:10px 10px; margin-top:8px; background: rgba(255,255,255,.75);}
+    .optGroup{border:1px solid rgba(0,0,0,.10); border-radius:16px; padding:12px 12px; margin-top:10px; background: rgba(255,255,255,.75);}
     .optTitle{display:flex; align-items:center; justify-content:space-between; gap:10px;}
     .optTitle b{font-size:13px; color: var(--ink)}
     .optTitle span{font-size:12px; color:var(--muted); font-weight:900}
     .optList{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px}
+
     .optBtn{
       appearance:none;
       border:1px solid rgba(0,0,0,.12);
       background: rgba(255,255,255,.90);
-      padding:7px 10px;
+      padding:8px 10px;
       border-radius:999px;
-      font-size:12.5px;
+      font-size:13px;
       cursor:pointer;
       user-select:none;
       font-weight:1000;
@@ -302,35 +283,8 @@
     }
     .optBtn.active{border-color: rgba(139,30,30,.45); box-shadow:0 0 0 3px rgba(139,30,30,.14);}
 
-    /* ✅ MODAL DE PASOS */
-    .steps{
-      max-height: 88vh;
-      display:flex;
-      flex-direction:column;
-    }
-    .stepsHead{
-      padding:14px 16px; border-bottom:1px solid rgba(0,0,0,.10);
-      display:flex; justify-content:space-between; align-items:center; gap:10px;
-      background: rgba(0,0,0,.03);
-    }
-    .stepsBody{
-      padding:14px 16px;
-      overflow:auto;
-      -webkit-overflow-scrolling: touch;
-      flex: 1 1 auto;
-    }
-    .stepsFoot{
-      flex: 0 0 auto;
-      position: sticky;
-      bottom: 0;
-      z-index: 2;
-      display:flex; gap:10px;
-      padding:14px 16px;
-      padding-bottom: calc(14px + var(--safeB)); /* ✅ safe area */
-      border-top:1px solid rgba(0,0,0,.10); background: rgba(0,0,0,.03);
-    }
-
-    .footerBtns button, .stepsFoot button{flex:1}
+    .footerBtns,.stepsFoot{display:flex; gap:10px; padding:12px 14px; border-top:1px solid rgba(0,0,0,.10); background: rgba(0,0,0,.03);}
+    .footerBtns button{flex:1}
     .btnDark{
       border:none; cursor:pointer;
       padding:12px 14px; border-radius: 14px;
@@ -361,8 +315,8 @@
     }
 
     .mapWrap{border:1px solid rgba(0,0,0,.12); border-radius:16px; overflow:hidden; background:#fff; box-shadow: 0 10px 26px rgba(0,0,0,.10);}
-    /* ✅ más pequeño para smartphone */
-    #miniMap{width:100%; height: 140px; background:#eee; touch-action: pan-x pan-y;}
+    /* ✅ Mapa más compacto */
+    #miniMap{width:100%; height: 150px; background:#eee; touch-action: pan-x pan-y;}
 
     .mapBar{display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;}
     .mapBar .btnLight,.mapBar .btnDark{flex:1; min-width: 150px;}
@@ -372,15 +326,19 @@
     .kpi b{display:block; font-size:12px}
     .kpi span{display:block; margin-top:4px; font-weight:1000}
 
-    /* ✅ Ajustes extra solo para teléfonos: más compacto */
-    @media (max-width:520px){
-      .steps{max-height: 92vh;}
-      .stepsBody{padding:10px 12px;}
-      .stepsHead{padding:10px 12px;}
-      .stepsFoot{padding:10px 12px; padding-bottom: calc(12px + var(--safeB));}
-      #miniMap{height: 120px;}
-      .optGroup{padding:9px 9px;}
+    .toggleRow{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      border:1px solid rgba(0,0,0,.10);
+      border-radius:16px;
+      background: rgba(255,255,255,.72);
+      padding:10px 12px;
+      margin-top:10px;
     }
+    .switch{display:inline-flex; align-items:center; gap:10px; font-weight:1000; user-select:none;}
+    .switch input{ width: 46px; height: 26px; padding:0; border-radius:999px; }
+
+    /* ✅ Mostrar/ocultar detalles */
+    .addrDetails[hidden]{ display:none !important; }
   </style>
 </head>
 
@@ -409,7 +367,7 @@
           <div class="divider"></div>
         </div>
         <div class="items" id="items"></div>
-        <div class="note">Tip: si es para llevar, pon nota tipo: <b>“bien dorado”</b>.</div>
+        <div class="note">Tip: Si es para llevar, pon nota tipo: <b>“bien dorado”</b>.</div>
       </div>
     </section>
 
@@ -498,7 +456,7 @@ const TQ_LNG          = -101.3563;
 const IMG_BASE = "";
 
 /** =========================
- *  TARIFAS (tabla fija - sin lluvia)
+ *  TARIFAS
  *  ========================= */
 const TARIFAS = [
   {from:0, to:3, normal:50},
@@ -524,11 +482,11 @@ const catalogo = [
   {id:"combo_tacos_bebida", cat:"COMBOS", name:"Combo Taquero", price:75, desc:"3 tacos (lengua/pastor/chorizo) + bebida.", mods:true, img:"combo_tacos_bebida.png"},
   {id:"combo_alambre_bebida", cat:"COMBOS", name:"Combo Alambre", price:115, desc:"1 alambre (mixto o pastor) + bebida.", mods:true, img:"combo_alambre_bebida.png"},
   {id:"combo_pareja", cat:"COMBOS", name:"Paquete para 2", price:210, desc:"6 tacos + 2 bebidas. Para compartir bien.", mods:true, img:"combo_pareja.png"},
-  {id:"taco_lengua",  cat:"TACOS", name:"Taco de lengua",  price:18, desc:"Lengua bien servida.", mods:true, img:"taco_lengua.jpeg"},
-  {id:"taco_pastor",  cat:"TACOS", name:"Taco al pastor",  price:18, desc:"Clásico pastor.", mods:true, img:"taco_pastor.jpeg"},
-  {id:"taco_chorizo", cat:"TACOS", name:"Taco de chorizo", price:18, desc:"Bien doradito.", mods:true, img:"taco_chorizo.jpeg"},
-  {id:"alambre_mixto",  cat:"ALAMBRES", name:"Alambre mixto",  price:95, desc:"Queso + mixto. Perfecto para el hambre.", mods:true, img:"alambre_mixto.jpeg"},
-  {id:"alambre_pastor", cat:"ALAMBRES", name:"Alambre al pastor", price:95, desc:"Queso + pastor. El consentido.", mods:true, img:"alambre_pastor.jpeg"},
+  {id:"taco_lengua",  cat:"TACOS", name:"Taco de lengua",  price:18, desc:"Lengua bien servida.", mods:false, img:"taco_lengua.jpeg"},
+  {id:"taco_pastor",  cat:"TACOS", name:"Taco al pastor",  price:18, desc:"Clásico pastor.", mods:false, img:"taco_pastor.jpeg"},
+  {id:"taco_chorizo", cat:"TACOS", name:"Taco de chorizo", price:18, desc:"Bien doradito.", mods:false, img:"taco_chorizo.jpeg"},
+  {id:"alambre_mixto",  cat:"ALAMBRES", name:"Alambre mixto",  price:95, desc:"Queso + mixto.", mods:false, img:"alambre_mixto.jpeg"},
+  {id:"alambre_pastor", cat:"ALAMBRES", name:"Alambre al pastor", price:95, desc:"Queso + pastor.", mods:false, img:"alambre_pastor.jpeg"},
   {id:"coca_600ml", cat:"BEBIDAS", name:"Coca 600ml", price:25, desc:"Bien fría.", mods:false, img:"coca_600ml.png"},
   {id:"agua_fresca", cat:"BEBIDAS", name:"Agua fresca 1/2L", price:30, desc:"Del día.", mods:false, img:"agua_fresca.png"},
   {id:"queso_extra", cat:"EXTRAS", name:"Queso extra", price:10, desc:"Agrégalo a tu pedido.", mods:false, img:"queso_extra.png"},
@@ -538,12 +496,13 @@ const catalogo = [
 const CATS = ["COMBOS","TACOS","ALAMBRES","BEBIDAS","EXTRAS"];
 
 /** =========================
- *  MODIFICADORES (sin tortilla / bebida / salsas)
+ *  MODIFICADORES
+ *  (✅ quitados: Tortilla, Salsas, Bebida)
  *  ========================= */
 const MODS = {
   carne: { title:"Carne", type:"single", required:true, options:["Lengua","Pastor","Chorizo"] },
-  conSin: { title:"Con todo / Sin…", type:"multi", required:false, options:["Con todo","Sin cebolla","Sin cilantro","Sin piña","Sin salsa"] },
   alambreTipo: { title:"Tipo de alambre", type:"single", required:true, options:["Mixto","Pastor"] },
+  conSin: { title:"Con todo / Sin…", type:"multi", required:false, options:["Con todo","Sin cebolla","Sin cilantro","Sin piña","Sin salsa"] },
 };
 function modsPara(item){
   if(!item.mods) return [];
@@ -551,10 +510,8 @@ function modsPara(item){
     if(item.id === "combo_tacos_bebida") return ["carne","conSin"];
     if(item.id === "combo_alambre_bebida") return ["alambreTipo","conSin"];
     if(item.id === "combo_pareja") return ["carne","conSin"];
-    return ["conSin"];
+    return [];
   }
-  if(item.cat === "TACOS") return ["conSin"];
-  if(item.cat === "ALAMBRES") return ["conSin"];
   return [];
 }
 
@@ -569,7 +526,6 @@ function modsToText(mods){
   const parts = [];
   for(const k of Object.keys(mods||{})){
     const val = mods[k];
-    if(!MODS[k]) continue;
     if(Array.isArray(val) && val.length) parts.push(`${MODS[k].title}: ${val.join(", ")}`);
     if(typeof val==="string" && val) parts.push(`${MODS[k].title}: ${val}`);
   }
@@ -850,17 +806,6 @@ backdrop.addEventListener("pointerdown", (e)=>{ if(e.target===backdrop){ e.preve
 
 mAdd.addEventListener("click", ()=>{
   if(!currentItem || !draft) return;
-
-  if(currentItem.cat==="TACOS"){
-    if(currentItem.id==="taco_lengua")  draft.mods["carne"]="Lengua";
-    if(currentItem.id==="taco_pastor")  draft.mods["carne"]="Pastor";
-    if(currentItem.id==="taco_chorizo") draft.mods["carne"]="Chorizo";
-  }
-  if(currentItem.cat==="ALAMBRES"){
-    if(currentItem.id==="alambre_mixto")  draft.mods["alambreTipo"]="Mixto";
-    if(currentItem.id==="alambre_pastor") draft.mods["alambreTipo"]="Pastor";
-  }
-
   const err = validateRequired(currentItem, draft.mods);
   if(err){ alert(err); return; }
 
@@ -900,6 +845,14 @@ const btnNext = document.getElementById("btnNext");
 
 let step = 0;
 
+/* ✅ toggle detalles dirección */
+let showAddrDetails = true;
+function toggleAddrDetails(v){
+  showAddrDetails = !!v;
+  const box = document.getElementById("addrDetailsBox");
+  if(box) box.hidden = !showAddrDetails;
+}
+
 const form = {
   nombre: "",
   tel: "",
@@ -936,6 +889,7 @@ function closeSteps(){
 
 stepsBackdrop.addEventListener("pointerdown", (e)=>{ if(e.target===stepsBackdrop){ e.preventDefault(); closeSteps(); } }, {passive:false});
 stepsClose.addEventListener("click", closeSteps, {passive:true});
+
 btnCambioServicio.addEventListener("click", ()=> openSteps(0), {passive:true});
 
 function ensureMapInit(){
@@ -1025,6 +979,7 @@ function renderStep(){
   const subTotal = cartSubTotal();
   const total = cartTotal();
 
+  // STEP 0: servicio
   if(step === 0){
     stepTitle.textContent = "Antes de empezar…";
     stepSub.textContent = "¿Tu pedido es para domicilio o recoger?";
@@ -1039,7 +994,7 @@ function renderStep(){
       </div>
       <div class="note">
         <b>${TAQUERIA_NOMBRE}</b><br>
-        Si eliges <b>Domicilio</b>, al final te pediremos tu ubicación para calcular el envío.
+        Si eliges <b>Domicilio</b>, te pediremos ubicación para calcular el envío.
       </div>
     `;
 
@@ -1069,6 +1024,7 @@ function renderStep(){
     return;
   }
 
+  // STEP 1: datos
   if(step===1){
     stepTitle.textContent = "Paso 1 de 3";
     stepSub.textContent = "Datos personales";
@@ -1100,6 +1056,7 @@ function renderStep(){
     return;
   }
 
+  // STEP 2: mapa (solo domicilio)
   if(step===2){
     btnBack.style.display = "inline-block";
     btnNext.textContent = "CONTINUAR";
@@ -1121,7 +1078,7 @@ function renderStep(){
 
     stepSub.textContent = "Elige tu ubicación";
     stepsBody.innerHTML = `
-      <div class="note" style="margin-top:0">Toca el mapa para poner tu pin o arrástralo. Con eso calculamos el envío.</div>
+      <div class="note" style="margin-top:0">Toca el mapa para poner tu pin o arrástralo.</div>
 
       <div class="mapWrap"><div id="miniMap"></div></div>
 
@@ -1130,33 +1087,42 @@ function renderStep(){
         <button class="btnLight" type="button" id="btnCentrarTq">🏁 Centrar en taquería</button>
       </div>
 
-      <!-- ✅ Quitado "distancia estimada" | dejamos solo Envío -->
       <div class="kpiRow">
-        <div class="kpi" style="grid-column: 1 / -1;">
+        <div class="kpi" style="grid-column:1 / -1;">
           <b>Envío</b>
           <span id="envioTxt">${money(envioPrecio)}</span>
         </div>
       </div>
 
-      <div class="optGroup">
-        <div class="optTitle"><b>Domicilio (auto-llenado)</b><span>puedes corregirlo</span></div>
+      <!-- ✅ Toggle detalles -->
+      <div class="toggleRow">
+        <div>
+          <b>Mostrar detalles de la dirección</b>
+          <div class="muted" style="font-weight:900;font-size:12px">Calle, colonia y CP</div>
+        </div>
+        <label class="switch"><input id="swAddrDetails" type="checkbox" ${showAddrDetails?"checked":""}/></label>
+      </div>
+
+      <!-- ✅ Detalles colapsables -->
+      <div class="optGroup addrDetails" id="addrDetailsBox" ${showAddrDetails ? "" : "hidden"}>
+        <div class="optTitle"><b>Dirección</b><span>puedes corregirlo</span></div>
 
         <div class="stepRow" style="margin-top:10px">
-          <div><label>* Calle</label><input id="s_calle" value="${escapeHtml(form.calle)}" placeholder="Ej. Calle Unión"></div>
-          <div><label>* No. Exterior</label><input id="s_noext" value="${escapeHtml(form.noext)}" placeholder="Ej. 678"></div>
+          <div><label>Calle</label><input id="s_calle" value="${escapeHtml(form.calle)}" placeholder="Ej. Calle Unión"></div>
+          <div><label>No. Exterior</label><input id="s_noext" value="${escapeHtml(form.noext)}" placeholder="Ej. 678"></div>
         </div>
 
         <div class="stepRow">
-          <div><label>* Colonia</label><input id="s_col" value="${escapeHtml(form.col)}" placeholder="Ej. Barrio de la Calzada"></div>
-          <div><label>* CP</label><input id="s_cp" value="${escapeHtml(form.cp)}" placeholder="Ej. 36580"></div>
+          <div><label>Colonia</label><input id="s_col" value="${escapeHtml(form.col)}" placeholder="Ej. Barrio de la Calzada"></div>
+          <div><label>CP</label><input id="s_cp" value="${escapeHtml(form.cp)}" placeholder="Ej. 36580"></div>
         </div>
 
         <div class="stepRow">
-          <div><label>* Ciudad</label><input id="s_ciudad" value="${escapeHtml(form.ciudad)}"></div>
-          <div><label>* Estado</label><input id="s_estado" value="${escapeHtml(form.estado)}"></div>
+          <div><label>Ciudad</label><input id="s_ciudad" value="${escapeHtml(form.ciudad)}"></div>
+          <div><label>Estado</label><input id="s_estado" value="${escapeHtml(form.estado)}"></div>
         </div>
 
-        <label>* Referencias</label>
+        <label>Referencias</label>
         <textarea id="s_refs" placeholder="Entre calles, color de la casa, etc.">${escapeHtml(form.refs)}</textarea>
 
         <div class="note">Coordenadas: <b id="coordsTxt">${(form.lat!=null&&form.lng!=null)?`${form.lat.toFixed(5)}, ${form.lng.toFixed(5)}`:"—"}</b></div>
@@ -1165,6 +1131,13 @@ function renderStep(){
 
     setTimeout(async ()=>{
       ensureMapInit();
+
+      const sw = document.getElementById("swAddrDetails");
+      if(sw){
+        sw.addEventListener("change", ()=>{
+          toggleAddrDetails(sw.checked);
+        }, {passive:true});
+      }
 
       const link = (id, key)=>{
         const el = document.getElementById(id);
@@ -1212,12 +1185,14 @@ function renderStep(){
         await recomputeEnvio();
       }
 
+      toggleAddrDetails(showAddrDetails);
       setTimeout(()=> map.invalidateSize(true), 120);
     }, 0);
 
     return;
   }
 
+  // STEP 3: pago + enviar
   btnBack.style.display = "inline-block";
   btnNext.textContent = "ENVIAR PEDIDO";
   stepTitle.textContent = "Paso 3 de 3";
@@ -1226,7 +1201,7 @@ function renderStep(){
   const envioLine = (canal==="domicilio") ? `
     <div class="kpiRow">
       <div class="kpi"><b>Subtotal</b><span>${money(subTotal)}</span></div>
-      <div class="kpi"><b>Envío</b><span>${money(envioPrecio)} (${envioKm.toFixed(1)} km)</span></div>
+      <div class="kpi"><b>Envío</b><span>${money(envioPrecio)}</span></div>
     </div>
   ` : `
     <div class="kpiRow">
@@ -1281,11 +1256,16 @@ function stepValidate(){
   }
   if(step===2 && canal==="domicilio"){
     if(form.lat==null || form.lng==null) return "Elige tu ubicación en el mapa (o usa “mi ubicación”).";
-    if(!form.calle.trim()) return "Falta la calle.";
-    if(!form.noext.trim()) return "Falta el número exterior.";
-    if(!form.col.trim()) return "Falta la colonia.";
-    if(!form.cp.trim()) return "Falta el CP.";
-    if(!form.refs.trim()) return "Faltan referencias.";
+
+    // ✅ Si muestran detalles, valida; si NO, no obliga (solo pin)
+    if(showAddrDetails){
+      if(!form.calle.trim()) return "Falta la calle.";
+      if(!form.noext.trim()) return "Falta el número exterior.";
+      if(!form.col.trim()) return "Falta la colonia.";
+      if(!form.cp.trim()) return "Falta el CP.";
+      if(!form.refs.trim()) return "Faltan referencias.";
+    }
+
     const r = getTarifa(envioKm);
     if(!r.ok) return "Tu domicilio está fuera del rango de envío (0–10 km).";
   }
@@ -1320,22 +1300,27 @@ function buildWhatsAppText(){
   lines.push(`Contacto: *+52${form.tel.replace(/\D/g,"")}*`);
 
   if(canal==="domicilio"){
-    const dir = [
-      `Calle: ${form.calle} ${form.noext}`,
-      `Colonia: ${form.col}`,
-      `Ciudad: ${form.ciudad}`,
-      `CP: ${form.cp}`,
-      `Estado: ${form.estado}`,
-      `Referencias: ${form.refs}`,
-      `Ubicación: ${Number(form.lat).toFixed(5)}, ${Number(form.lng).toFixed(5)}`
-    ].join("\n");
-
     lines.push(``);
     lines.push(`Domicilio para la entrega:`);
-    lines.push(dir);
+
+    if(showAddrDetails){
+      const dir = [
+        `Calle: ${form.calle} ${form.noext}`,
+        `Colonia: ${form.col}`,
+        `Ciudad: ${form.ciudad}`,
+        `CP: ${form.cp}`,
+        `Estado: ${form.estado}`,
+        `Referencias: ${form.refs}`,
+        `Ubicación: ${Number(form.lat).toFixed(5)}, ${Number(form.lng).toFixed(5)}`
+      ].join("\n");
+      lines.push(dir);
+    }else{
+      lines.push(`Ubicación: ${Number(form.lat).toFixed(5)}, ${Number(form.lng).toFixed(5)}`);
+    }
+
+    const r = getTarifa(envioKm);
     lines.push(``);
-    lines.push(`Distancia estimada: *${envioKm.toFixed(1)} km*`);
-    lines.push(`Envío: *${money(envioPrecio)}*`);
+    lines.push(`Envío: *${r.ok ? money(envioPrecio) : "Fuera de rango"}*`);
   }
 
   lines.push(``);
@@ -1375,12 +1360,19 @@ function buildWhatsAppText(){
  *  ========================= */
 document.getElementById("btnCheckout").addEventListener("click", ()=>{
   if(cart.length===0){ alert("Agrega algo al carrito primero 😄"); return; }
-  if(!serviceChosen){ openSteps(0); return; }
+
+  if(!serviceChosen){
+    openSteps(0);
+    return;
+  }
   openSteps(1);
 }, {passive:true});
 
 btnBack.addEventListener("click", ()=>{
-  if(step>0){ step--; renderStep(); }
+  if(step>0){
+    step--;
+    renderStep();
+  }
 }, {passive:true});
 
 btnNext.addEventListener("click", async ()=>{
@@ -1393,14 +1385,22 @@ btnNext.addEventListener("click", async ()=>{
     renderCart();
     return;
   }
-  if(step===1){ step = 2; renderStep(); return; }
+
+  if(step===1){
+    step = 2;
+    renderStep();
+    return;
+  }
+
   if(step===2){
     if(getCanal()==="domicilio"){
       await recomputeEnvio();
       const r = getTarifa(envioKm);
       if(!r.ok){ alert("Tu domicilio está fuera del rango de envío (0–10 km)."); return; }
     }
-    step = 3; renderStep(); return;
+    step = 3;
+    renderStep();
+    return;
   }
 
   const text = cleanWA(buildWhatsAppText());
