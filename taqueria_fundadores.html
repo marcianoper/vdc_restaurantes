@@ -2,8 +2,11 @@
 <html lang="es">
 <head>
   <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <title>Menú — Tacos Los Fundadores</title>
+
+  <!-- Leaflet (GRATIS) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
   <style>
     :root{
@@ -41,7 +44,8 @@
         radial-gradient(1200px 600px at 20% -10%, rgba(182,58,43,.18), transparent 60%),
         radial-gradient(1000px 600px at 90% 0%, rgba(212,163,115,.18), transparent 60%),
         linear-gradient(180deg, var(--bg), var(--bg2));
-      -webkit-tap-highlight-color: transparent;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
     }
 
     /* TOP BAR */
@@ -140,8 +144,7 @@
     .hero::before{
       content:"";
       position:absolute; inset:0;
-      background:
-        linear-gradient(180deg, rgba(0,0,0,.15), rgba(0,0,0,.45));
+      background: linear-gradient(180deg, rgba(0,0,0,.15), rgba(0,0,0,.45));
       pointer-events:none;
     }
     .hero img{
@@ -216,12 +219,9 @@
       overflow:hidden;
       color: var(--ink);
       touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
-    .tab:hover{
-      box-shadow: 0 14px 28px rgba(0,0,0,.14);
-      transform: translateY(-1px);
-      transition: .15s ease;
-    }
+    .tab:active{transform: translateY(1px)}
     .tab.active{
       border-color: rgba(139,30,30,.35);
       background: linear-gradient(180deg, rgba(182,58,43,.14), rgba(255,255,255,.80));
@@ -266,7 +266,6 @@
       min-height: 178px;
       box-shadow: 0 18px 40px rgba(0,0,0,.10);
       position:relative;
-      isolation:isolate; /* evita “tap-through” raro en móvil */
     }
     .prod::before{
       content:"";
@@ -275,15 +274,14 @@
         radial-gradient(420px 180px at 20% 20%, rgba(182,58,43,.10), transparent 65%),
         radial-gradient(420px 180px at 80% 50%, rgba(212,163,115,.10), transparent 70%);
       pointer-events:none;
-      z-index:0;
     }
-    .prodLeft,.prodRight{position:relative; z-index:1}
-
     .prodLeft{
       padding:14px 14px 12px;
       display:flex;
       flex-direction:column;
       gap:8px;
+      position:relative;
+      z-index:2;
     }
     .prodName{
       font-weight:1000;
@@ -327,6 +325,8 @@
     }
 
     .prodRight{
+      position:relative;
+      z-index:2;
       padding:12px;
       display:flex;
       flex-direction:column;
@@ -364,8 +364,7 @@
       font-size: 15px;
       min-width: 150px;
       touch-action: manipulation;
-      position:relative;
-      z-index:2;
+      -webkit-tap-highlight-color: transparent;
     }
     .btnAdd:active,
     .stickyBtn:active{transform: translateY(1px)}
@@ -390,6 +389,7 @@
       font-weight:1000;
       color: var(--ink);
       touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
     .mini:active{transform: translateY(1px)}
     label{
@@ -458,34 +458,39 @@
       font-weight: 1000;
       cursor:pointer;
       touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
+    .btnGhost:active{transform: translateY(1px)}
 
-    /* MODAL (mods) */
-    .backdrop, .stepsBackdrop{
+    /* MODAL (mods) + STEPS */
+    .backdrop,
+    .stepsBackdrop{
       position:fixed; inset:0;
       background:rgba(0,0,0,.55);
       display:none;
       align-items:center;
       justify-content:center;
       padding:16px;
-      z-index:60;
-      overscroll-behavior: contain;
-    }
-    .backdrop.open, .stepsBackdrop.open{
-      display:flex;
+      z-index:999;
+      pointer-events:auto;
+      touch-action:none; /* evita tap-through */
     }
 
-    .modal{
+    .modal,
+    .steps{
       width:min(820px, 100%);
       background: linear-gradient(180deg, var(--card), var(--card2));
       border-radius:18px;
       overflow:hidden;
       border:1px solid rgba(0,0,0,.12);
       box-shadow: 0 40px 120px rgba(0,0,0,.35);
-      transform: translateZ(0);
-      -webkit-transform: translateZ(0);
+      position:relative;
+      pointer-events:auto;
+      touch-action: manipulation;
     }
-    .modalHead{
+
+    .modalHead,
+    .stepsHead{
       padding:14px 16px;
       border-bottom:1px solid rgba(0,0,0,.10);
       display:flex; justify-content:space-between; align-items:center; gap:10px;
@@ -501,7 +506,10 @@
       font-weight:1000;
       color: var(--ink);
       touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
+    .closeX:active{transform: translateY(1px)}
+
     .optGroup{
       border:1px solid rgba(0,0,0,.10);
       border-radius:16px;
@@ -515,10 +523,12 @@
     .optTitle b{font-size:13px; color: var(--ink)}
     .optTitle span{font-size:12px; color:var(--muted); font-weight:900}
     .optList{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px}
-    .opt{
+
+    .optBtn{
+      appearance:none;
       border:1px solid rgba(0,0,0,.12);
-      background: rgba(255,255,255,.85);
-      padding:10px 12px;
+      background: rgba(255,255,255,.90);
+      padding:8px 10px;
       border-radius:999px;
       font-size:13px;
       cursor:pointer;
@@ -526,14 +536,16 @@
       font-weight:1000;
       color: var(--ink);
       touch-action: manipulation;
-      position:relative;
-      z-index:1;
+      -webkit-tap-highlight-color: transparent;
     }
-    .opt.active{
+    .optBtn:active{transform: translateY(1px)}
+    .optBtn.active{
       border-color: rgba(139,30,30,.45);
       box-shadow:0 0 0 3px rgba(139,30,30,.14);
     }
-    .footerBtns{
+
+    .footerBtns,
+    .stepsFoot{
       display:flex;
       gap:10px;
       padding:14px 16px;
@@ -541,6 +553,7 @@
       background: rgba(0,0,0,.03);
     }
     .footerBtns button{flex:1}
+
     .btnDark{
       border:none;
       cursor:pointer;
@@ -551,6 +564,7 @@
       background: linear-gradient(180deg, var(--brand2), var(--brand1));
       box-shadow: 0 12px 28px rgba(139,30,30,.28);
       touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
     .btnLight{
       border:1px solid rgba(0,0,0,.12);
@@ -561,37 +575,13 @@
       font-weight:1000;
       cursor:pointer;
       touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
+    .btnDark:active,.btnLight:active{transform: translateY(1px)}
 
-    /* CHECKOUT (pasos) */
-    .steps{
-      width:min(760px, 100%);
-      background: linear-gradient(180deg, var(--card), var(--card2));
-      border-radius: 18px;
-      overflow:hidden;
-      border:1px solid rgba(0,0,0,.12);
-      box-shadow: 0 40px 120px rgba(0,0,0,.35);
-      transform: translateZ(0);
-      -webkit-transform: translateZ(0);
-    }
-    .stepsHead{
-      padding:14px 16px;
-      display:flex; justify-content:space-between; align-items:center; gap:10px;
-      border-bottom:1px solid rgba(0,0,0,.10);
-      background: rgba(0,0,0,.03);
-    }
-    .stepsHead .t{display:flex; flex-direction:column; gap:4px;}
-    .stepsHead .t b{font-size:16px; color: var(--ink)}
-    .stepsHead .t span{font-size:12px; color:var(--muted); font-weight:900}
     .stepsBody{padding:14px 16px}
     .stepRow{display:grid; grid-template-columns:1fr 1fr; gap:10px}
     @media (max-width:520px){ .stepRow{grid-template-columns:1fr} }
-    .stepsFoot{
-      display:flex; gap:10px;
-      padding:14px 16px;
-      border-top:1px solid rgba(0,0,0,.10);
-      background: rgba(0,0,0,.03);
-    }
 
     .note{
       font-size:12px;
@@ -604,6 +594,62 @@
       border:1px solid rgba(0,0,0,.10);
       margin-top:12px;
     }
+
+    /* MAPA EN MODAL */
+    .mapWrap{
+      border:1px solid rgba(0,0,0,.12);
+      border-radius:16px;
+      overflow:hidden;
+      background:#fff;
+      box-shadow: 0 10px 26px rgba(0,0,0,.10);
+    }
+    #miniMap{
+      width:100%;
+      height: 220px;
+      background:#eee;
+      touch-action: pan-x pan-y; /* Leaflet */
+    }
+    .mapBar{
+      display:flex;
+      gap:8px;
+      margin-top:10px;
+      flex-wrap:wrap;
+    }
+    .mapBar .btnLight,
+    .mapBar .btnDark{
+      flex: 1;
+      min-width: 150px;
+    }
+
+    .kpiRow{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+      margin-top:10px;
+    }
+    .kpi{
+      border:1px solid rgba(0,0,0,.10);
+      border-radius:16px;
+      background: rgba(255,255,255,.72);
+      padding:10px 12px;
+    }
+    .kpi b{display:block; font-size:12px}
+    .kpi span{display:block; margin-top:4px; font-weight:1000}
+
+    .toggleRow{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:10px;
+      border:1px solid rgba(0,0,0,.10);
+      border-radius:16px;
+      background: rgba(255,255,255,.72);
+      padding:10px 12px;
+      margin-top:10px;
+    }
+    .switch{
+      display:inline-flex; align-items:center; gap:10px; font-weight:1000;
+      user-select:none;
+    }
+    .switch input{ width: 46px; height: 26px; padding:0; border-radius:999px; }
   </style>
 </head>
 
@@ -612,7 +658,7 @@
   <div class="row">
     <div class="brand">
       <h1>🌮 Menú — Tacos Los Fundadores</h1>
-      <div class="sub">Pedido rápido • checkout por pasos • WhatsApp</div>
+      <div class="sub">Pedido rápido • mapa gratis • WhatsApp</div>
     </div>
     <div class="pill" id="cartPill">🛒 <b>0</b> <span class="amt" id="pillTotal">$0.00</span></div>
   </div>
@@ -653,19 +699,17 @@
 
     <!-- CARRITO -->
     <aside class="card">
-      <h2>Tu pedido</h2>
+      <h2>
+        Tu pedido
+        <button class="btnGhost" id="btnCambioServicio" title="Cambiar servicio">Servicio: <span id="servTxt">—</span> ✎</button>
+      </h2>
       <div class="content">
 
-        <label>Servicio</label>
-        <div style="display:flex; gap:10px; align-items:center">
-          <select id="canal">
-            <option value="recoger">Pasar a recoger</option>
-            <option value="domicilio">Envío a domicilio</option>
-          </select>
-          <button class="btnGhost" id="btnCambioServicio" type="button" title="Cambiar servicio">
-            ✎ <span id="servTxt">Recoger</span>
-          </button>
-        </div>
+        <!-- oculto (solo interno) -->
+        <select id="canal" style="display:none">
+          <option value="recoger">Pasar a recoger</option>
+          <option value="domicilio">Envío a domicilio</option>
+        </select>
 
         <div id="cart"></div>
 
@@ -684,8 +728,8 @@
             <span class="amount" id="barTotal">$0.00</span>
           </div>
           <div style="display:flex; gap:8px; align-items:center">
-            <button class="btnGhost" id="btnClear" type="button">Vaciar</button>
-            <button class="stickyBtn" id="btnCheckout" type="button">CONTINUAR</button>
+            <button class="btnGhost" id="btnClear">Vaciar</button>
+            <button class="stickyBtn" id="btnCheckout">CONTINUAR</button>
           </div>
         </div>
 
@@ -720,8 +764,8 @@
   <div class="steps" role="dialog" aria-modal="true">
     <div class="stepsHead">
       <div class="t">
-        <b id="stepTitle">Paso 1 de 3</b>
-        <span id="stepSub">Datos personales</span>
+        <b id="stepTitle">Paso</b>
+        <span id="stepSub">—</span>
       </div>
       <button class="closeX" id="stepsClose" type="button">✕</button>
     </div>
@@ -735,13 +779,38 @@
   </div>
 </div>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 /** =========================
- *  CONFIG
+ *  CONFIG (UNA TAQUERÍA)
  *  ========================= */
 const TAQUERIA_NOMBRE = "Tacos Los Fundadores";
-const WHATSAPP_TAQ = "524621872594"; // 52 + número sin +
+const WHATSAPP_TAQ    = "524621872594"; // 52 + número sin +
+/* 👇 CAMBIA AQUÍ por la ubicación real de la taquería */
+const TQ_LAT          = 20.6767;
+const TQ_LNG          = -101.3563;
+
 const IMG_BASE = "";
+
+/** =========================
+ *  TARIFAS (tu tabla)
+ *  ========================= */
+const TARIFAS = [
+  {from:0, to:3, normal:50, lluvia:65},
+  {from:3, to:4, normal:55, lluvia:75},
+  {from:4, to:5, normal:60, lluvia:85},
+  {from:5, to:6, normal:65, lluvia:95},
+  {from:6, to:7, normal:70, lluvia:105},
+  {from:7, to:8, normal:75, lluvia:115},
+  {from:8, to:9, normal:80, lluvia:125},
+  {from:9, to:10, normal:85, lluvia:135},
+];
+function getTarifa(km, lluvia=false){
+  const k = Number(km);
+  const row = TARIFAS.find(r => k >= r.from && k < r.to) || null;
+  if(!row) return {ok:false, precio:0, limiteKm: 10};
+  return {ok:true, precio: lluvia ? row.lluvia : row.normal};
+}
 
 /** =========================
  *  CATALOGO
@@ -821,6 +890,33 @@ function validateRequired(item, mods){
   }
   return null;
 }
+function haversineKm(lat1, lon1, lat2, lon2) {
+  const R = 6371;
+  const toRad = d => d * Math.PI / 180;
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lon2 - lon1);
+  const a =
+    Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+    Math.sin(dLon/2) * Math.sin(dLon/2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  return R * c;
+}
+async function reverseGeocode(lat,lng){
+  const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lng)}`;
+  const res = await fetch(url, { headers: { "Accept":"application/json" } });
+  if(!res.ok) throw new Error("No se pudo obtener dirección");
+  return res.json();
+}
+function pickAddrParts(addr){
+  const road = addr.road || addr.pedestrian || addr.footway || addr.path || "";
+  const house = addr.house_number || "";
+  const suburb = addr.suburb || addr.neighbourhood || addr.quarter || addr.residential || "";
+  const city = addr.city || addr.town || addr.village || addr.municipality || "";
+  const state = addr.state || "";
+  const postcode = addr.postcode || "";
+  return {road, house, suburb, city, state, postcode};
+}
 
 /** =========================
  *  UI MENU
@@ -836,7 +932,7 @@ function renderTabs(){
   CATS.forEach(c=>{
     const el = document.createElement("div");
     el.className = "tab" + (c===activeCat ? " active":"");
-    el.innerHTML = `<span>${c}</span>`;
+    el.textContent = c;
     el.addEventListener("click", ()=>{ activeCat=c; renderTabs(); renderItems(); }, {passive:true});
     tabs.appendChild(el);
   });
@@ -863,13 +959,10 @@ function renderItems(){
         <div class="price">MXN <b>${money(it.price)}</b></div>
       </div>
       <div class="prodRight">
-        <div class="prodImg">
-          <img src="${IMG_BASE + it.img}" alt="${escapeHtml(it.name)}">
-        </div>
+        <div class="prodImg"><img src="${IMG_BASE + it.img}" alt="${escapeHtml(it.name)}"></div>
         <button class="btnAdd" type="button">Agregar</button>
       </div>
     `;
-
     card.querySelector("button").addEventListener("click", ()=> onAddClicked(it), {passive:true});
     itemsBox.appendChild(card);
   });
@@ -878,7 +971,7 @@ function renderItems(){
     itemsBox.innerHTML = `<div class="muted" style="font-weight:1000">No hay resultados.</div>`;
   }
 }
-q.addEventListener("input", renderItems, {passive:true});
+q.addEventListener("input", renderItems);
 
 /** =========================
  *  CARRITO
@@ -891,7 +984,15 @@ const pillTotal = document.getElementById("pillTotal");
 const barTotal = document.getElementById("barTotal");
 
 function cartCount(){ return cart.reduce((a,x)=>a + x.qty, 0); }
-function cartTotal(){ return cart.reduce((a,x)=>a + x.qty*(x.basePrice), 0); }
+function cartSubTotal(){ return cart.reduce((a,x)=>a + x.qty*(x.basePrice), 0); }
+
+let envioPrecio = 0;
+let envioKm = 0;
+let lluvia = false;
+
+function cartTotal(){
+  return cartSubTotal() + (getCanal()==="domicilio" ? envioPrecio : 0);
+}
 
 function renderCart(){
   const count = cartCount();
@@ -922,12 +1023,12 @@ function renderCart(){
       </div>
       <div style="text-align:right">
         <div class="qtyRow">
-          <button class="mini" data-act="dec" type="button">−</button>
+          <button class="mini" type="button" data-act="dec">−</button>
           <div style="min-width:24px; text-align:center; font-weight:1000">${line.qty}</div>
-          <button class="mini" data-act="inc" type="button">+</button>
+          <button class="mini" type="button" data-act="inc">+</button>
         </div>
         <div style="margin-top:6px; font-weight:1000">${money(lineTotal)}</div>
-        <button class="mini" style="margin-top:8px;width:100%;height:34px;border-radius:12px;font-weight:1000" type="button">✕</button>
+        <button class="mini" type="button" style="margin-top:8px;width:100%;height:34px;border-radius:12px;font-weight:1000">✕</button>
       </div>
     `;
     wrap.querySelector('[data-act="dec"]').addEventListener("click", ()=>{ line.qty=Math.max(1,line.qty-1); renderCart(); }, {passive:true});
@@ -971,13 +1072,22 @@ function openModal(item){
       <div class="optList" data-k="${k}"></div>
     `;
     const list = box.querySelector(".optList");
+
     g.options.forEach(opt=>{
-      const o = document.createElement("div");
-      o.className = "opt";
-      o.textContent = opt;
-      o.addEventListener("click", ()=> toggleOpt(k, opt, o), {passive:true});
-      list.appendChild(o);
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "optBtn";
+      btn.textContent = opt;
+
+      btn.addEventListener("pointerdown", (e)=>{
+        e.preventDefault();
+        e.stopPropagation();
+        toggleOpt(k, opt, btn);
+      }, {passive:false});
+
+      list.appendChild(btn);
     });
+
     mBody.appendChild(box);
   });
 
@@ -994,27 +1104,27 @@ function openModal(item){
   `;
   mBody.appendChild(n);
 
-  backdrop.classList.add("open");
+  backdrop.style.display = "flex";
   backdrop.setAttribute("aria-hidden","false");
   document.body.style.overflow = "hidden";
 
   setTimeout(()=> {
     const inp = document.getElementById("noteProd");
-    if(inp) inp.addEventListener("input", (e)=> draft.note = e.target.value, {passive:true});
+    if(inp) inp.oninput = ()=> draft.note = inp.value;
   }, 0);
 }
 function closeModal(){
-  backdrop.classList.remove("open");
+  backdrop.style.display = "none";
   backdrop.setAttribute("aria-hidden","true");
-  document.body.style.overflow = "";
   currentItem = null;
   draft = null;
+  document.body.style.overflow = "";
 }
 function toggleOpt(k, opt, el){
   const g = MODS[k];
   if(g.type==="single"){
     draft.mods[k] = opt;
-    el.parentElement.querySelectorAll(".opt").forEach(x=>x.classList.remove("active"));
+    el.parentElement.querySelectorAll(".optBtn").forEach(x=>x.classList.remove("active"));
     el.classList.add("active");
   }else{
     draft.mods[k] = draft.mods[k] || [];
@@ -1050,7 +1160,6 @@ mAdd.addEventListener("click", ()=>{
   const err = validateRequired(currentItem, draft.mods);
   if(err){ alert(err); return; }
 
-  // autocompletar “carne” y “alambre tipo” por producto individual
   if(currentItem.cat==="TACOS"){
     if(currentItem.id==="taco_lengua")  draft.mods["carne"]="Lengua";
     if(currentItem.id==="taco_pastor")  draft.mods["carne"]="Pastor";
@@ -1066,14 +1175,25 @@ mAdd.addEventListener("click", ()=>{
 }, {passive:true});
 
 /** =========================
- *  CHECKOUT POR PASOS
- *  - Solo pregunta Recoger/Domicilio UNA VEZ al entrar
- *  - Ya NO vuelve a preguntar al darle CONTINUAR
+ *  SERVICIO: preguntar siempre al entrar
  *  ========================= */
 const canalEl = document.getElementById("canal");
 const servTxt = document.getElementById("servTxt");
 const btnCambioServicio = document.getElementById("btnCambioServicio");
 
+function getCanal(){ return canalEl.value; }
+function setCanal(v){
+  canalEl.value = (v==="domicilio") ? "domicilio" : "recoger";
+  servTxt.textContent = (getCanal()==="domicilio") ? "Domicilio" : "Recoger";
+  if(getCanal()!=="domicilio"){
+    envioPrecio = 0; envioKm = 0;
+  }
+  renderCart();
+}
+
+/** =========================
+ *  CHECKOUT POR PASOS + MAPA
+ *  ========================= */
 const stepsBackdrop = document.getElementById("stepsBackdrop");
 const stepsClose = document.getElementById("stepsClose");
 const stepsBody = document.getElementById("stepsBody");
@@ -1082,68 +1202,162 @@ const stepSub = document.getElementById("stepSub");
 const btnBack = document.getElementById("btnBack");
 const btnNext = document.getElementById("btnNext");
 
-let step = 0;                 // 0=servicio, 1..3 checkout
-let serviceChosen = false;    // ya eligió servicio (en esta sesión de página)
+let step = 0; // 0 = servicio
 
 const form = {
   nombre: "",
   tel: "",
   calle: "",
   noext: "",
-  noint: "",
   col: "",
   ciudad: "Irapuato",
   cp: "",
   estado: "Guanajuato",
   refs: "",
+  lat: null,
+  lng: null,
   metodo: "efectivo",
   pagareCon: "",
   notas: ""
 };
 
-function setCanal(v){
-  canalEl.value = (v==="domicilio") ? "domicilio" : "recoger";
-  servTxt.textContent = (canalEl.value==="domicilio") ? "Domicilio" : "Recoger";
-}
+// Leaflet
+let map = null;
+let marker = null;
+let mapReady = false;
 
-function openSteps(startAt){
-  step = (typeof startAt==="number") ? startAt : 1;
-  stepsBackdrop.classList.add("open");
+function openSteps(){
+  step = 0; // SIEMPRE preguntar servicio al entrar
+  stepsBackdrop.style.display = "flex";
   stepsBackdrop.setAttribute("aria-hidden","false");
   document.body.style.overflow = "hidden";
   renderStep();
 }
 function closeSteps(){
-  stepsBackdrop.classList.remove("open");
+  stepsBackdrop.style.display = "none";
   stepsBackdrop.setAttribute("aria-hidden","true");
   document.body.style.overflow = "";
 }
 
-stepsClose.addEventListener("click", closeSteps, {passive:true});
 stepsBackdrop.addEventListener("pointerdown", (e)=>{
   if(e.target===stepsBackdrop){
     e.preventDefault();
     closeSteps();
   }
 }, {passive:false});
+stepsClose.addEventListener("click", closeSteps, {passive:true});
 
 btnCambioServicio.addEventListener("click", ()=>{
-  openSteps(0);
+  step = 0;
+  stepsBackdrop.style.display = "flex";
+  stepsBackdrop.setAttribute("aria-hidden","false");
+  document.body.style.overflow = "hidden";
+  renderStep();
 }, {passive:true});
 
+function ensureMapInit(){
+  if(mapReady) return;
+
+  const centerLat = (form.lat ?? TQ_LAT);
+  const centerLng = (form.lng ?? TQ_LNG);
+
+  map = L.map('miniMap', { zoomControl:true, attributionControl:false }).setView([centerLat, centerLng], 14);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom:19 }).addTo(map);
+
+  marker = L.marker([centerLat, centerLng], { draggable:true }).addTo(map);
+
+  marker.on('dragend', async ()=>{
+    const p = marker.getLatLng();
+    await setDomFromLatLng(p.lat, p.lng, true);
+  });
+
+  map.on('click', async (e)=>{
+    marker.setLatLng(e.latlng);
+    await setDomFromLatLng(e.latlng.lat, e.latlng.lng, true);
+  });
+
+  setTimeout(()=> { map.invalidateSize(true); }, 80);
+  mapReady = true;
+}
+
+async function setDomFromLatLng(lat,lng, recompute=true){
+  form.lat = lat;
+  form.lng = lng;
+
+  const elCoords = document.getElementById("coordsTxt");
+  if(elCoords) elCoords.textContent = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+
+  try{
+    const data = await reverseGeocode(lat,lng);
+    const addr = data.address || {};
+    const parts = pickAddrParts(addr);
+
+    form.calle = (parts.road || form.calle || "");
+    if(parts.house) form.noext = parts.house;
+    form.col = (parts.suburb || form.col || "");
+    form.ciudad = (parts.city || form.ciudad || "Irapuato");
+    form.estado = (parts.state || form.estado || "Guanajuato");
+    form.cp = (parts.postcode || form.cp || "");
+
+    const f = (id,val)=>{ const el=document.getElementById(id); if(el) el.value = val || ""; };
+    f("s_calle", form.calle);
+    f("s_noext", form.noext);
+    f("s_col", form.col);
+    f("s_ciudad", form.ciudad);
+    f("s_estado", form.estado);
+    f("s_cp", form.cp);
+  }catch(err){}
+
+  if(recompute) await recomputeEnvio();
+}
+
+async function recomputeEnvio(){
+  if(getCanal()!=="domicilio"){
+    envioPrecio = 0; envioKm = 0;
+    renderCart();
+    const kmTxt = document.getElementById("kmTxt");
+    const envioTxt = document.getElementById("envioTxt");
+    if(kmTxt) kmTxt.textContent = "—";
+    if(envioTxt) envioTxt.textContent = money(0);
+    return;
+  }
+
+  if(form.lat==null || form.lng==null){
+    envioPrecio = 0; envioKm = 0;
+    renderCart();
+    return;
+  }
+
+  envioKm = haversineKm(TQ_LAT, TQ_LNG, Number(form.lat), Number(form.lng));
+  envioKm = Math.round(envioKm*10)/10;
+
+  const r = getTarifa(envioKm, lluvia);
+  envioPrecio = r.ok ? r.precio : 0;
+
+  const kmTxt = document.getElementById("kmTxt");
+  const envioTxt = document.getElementById("envioTxt");
+  if(kmTxt) kmTxt.textContent = `${envioKm.toFixed(1)} km`;
+  if(envioTxt) envioTxt.textContent = r.ok ? money(envioPrecio) : `Fuera de rango (0–${r.limiteKm} km)`;
+
+  renderCart();
+}
+
 function renderStep(){
-  const canal = canalEl.value;
+  const canal = getCanal();
+  const subTotal = cartSubTotal();
   const total = cartTotal();
 
-  // PASO 0: elegir servicio
-  if(step===0){
+  // STEP 0: servicio
+  if(step === 0){
     stepTitle.textContent = "Antes de empezar…";
-    stepSub.textContent = "¿Será a domicilio o recoger?";
+    stepSub.textContent = "¿Tu pedido es para domicilio o recoger?";
     btnBack.style.display = "none";
     btnNext.textContent = "LISTO";
 
     stepsBody.innerHTML = `
-      <div class="note" style="margin-top:0">Elige una opción:</div>
+      <div class="note" style="margin-top:0">
+        Selecciona una opción para continuar.
+      </div>
 
       <div class="optGroup" style="margin-top:12px">
         <div class="optTitle">
@@ -1152,6 +1366,11 @@ function renderStep(){
         </div>
         <div class="optList" id="canalOpts"></div>
       </div>
+
+      <div class="note">
+        <b>${TAQUERIA_NOMBRE}</b><br>
+        Si eliges <b>Domicilio</b>, te pediremos tu ubicación en el mapa para calcular el envío.
+      </div>
     `;
 
     const opts = document.getElementById("canalOpts");
@@ -1159,38 +1378,35 @@ function renderStep(){
       {val:"recoger", label:"🚶‍♂️ Pasar a recoger"},
       {val:"domicilio", label:"🏠 Envío a domicilio"}
     ];
+
     opts.innerHTML = "";
     opciones.forEach(o=>{
-      const b = document.createElement("div");
-      b.className = "opt" + (canalEl.value===o.val ? " active":"");
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "optBtn" + (canalEl.value===o.val ? " active":"");
       b.textContent = o.label;
-      b.addEventListener("click", ()=>{
-        setCanal(o.val);
-        opts.querySelectorAll(".opt").forEach(x=>x.classList.remove("active"));
+
+      b.addEventListener("pointerdown", (e)=>{
+        e.preventDefault();
+        e.stopPropagation();
+        opts.querySelectorAll(".optBtn").forEach(x=>x.classList.remove("active"));
         b.classList.add("active");
-      }, {passive:true});
+        setCanal(o.val);
+      }, {passive:false});
+
       opts.appendChild(b);
     });
 
     return;
   }
 
-  // Paso 1..3 normales
+  // STEP 1: datos
   if(step===1){
     stepTitle.textContent = "Paso 1 de 3";
     stepSub.textContent = "Datos personales";
-  } else if(step===2){
-    stepTitle.textContent = "Paso 2 de 3";
-    stepSub.textContent = (canal==="domicilio") ? "Dirección de entrega" : "Confirmación rápida";
-  } else {
-    stepTitle.textContent = "Paso 3 de 3";
-    stepSub.textContent = "Pago y enviar pedido";
-  }
+    btnBack.style.display = "none";
+    btnNext.textContent = "CONTINUAR";
 
-  btnBack.style.display = (step===1) ? "none" : "inline-block";
-  btnNext.textContent = (step===3) ? "ENVIAR PEDIDO" : "CONTINUAR";
-
-  if(step===1){
     stepsBody.innerHTML = `
       <div class="stepRow">
         <div>
@@ -1203,81 +1419,200 @@ function renderStep(){
         </div>
       </div>
       <div class="note">
-        Servicio: <b>${canal==="recoger"?"Pasar a recoger":"Envío a domicilio"}</b><br>
-        Total actual: <b>${money(total)}</b>
+        Servicio: <b>${canal==="domicilio"?"Domicilio":"Recoger"}</b><br>
+        Subtotal: <b>${money(subTotal)}</b>
       </div>
     `;
     setTimeout(()=>{
-      document.getElementById("s_nombre").addEventListener("input", e=> form.nombre = e.target.value, {passive:true});
-      document.getElementById("s_tel").addEventListener("input", e=> form.tel = e.target.value, {passive:true});
+      const a = document.getElementById("s_nombre");
+      const b = document.getElementById("s_tel");
+      if(a) a.oninput = e=> form.nombre = e.target.value;
+      if(b) b.oninput = e=> form.tel = e.target.value;
     },0);
     return;
   }
 
+  // STEP 2: mapa (solo domicilio)
   if(step===2){
+    btnBack.style.display = "inline-block";
+    btnNext.textContent = "CONTINUAR";
+    stepTitle.textContent = "Paso 2 de 3";
+
     if(canal!=="domicilio"){
-      stepsBody.innerHTML = `<div class="note">Como tu servicio es recoger, este paso se brinca y pasamos al pago.</div>`;
+      stepSub.textContent = "Confirmación rápida";
+      stepsBody.innerHTML = `
+        <div class="note" style="margin-top:0">
+          Servicio <b>Recoger</b>: no necesitamos domicilio. Continuamos al pago.
+        </div>
+        <div class="kpiRow">
+          <div class="kpi"><b>Subtotal</b><span>${money(subTotal)}</span></div>
+          <div class="kpi"><b>Total</b><span>${money(total)}</span></div>
+        </div>
+      `;
       return;
     }
 
+    stepSub.textContent = "Elige tu ubicación";
     stepsBody.innerHTML = `
-      <div class="stepRow">
-        <div>
-          <label>* Calle</label>
-          <input id="s_calle" value="${escapeHtml(form.calle)}" placeholder="Ej. Calle Unión">
+      <div class="note" style="margin-top:0">
+        Toca el mapa para poner tu pin o arrástralo. Con eso calculamos el envío.
+      </div>
+
+      <div class="mapWrap"><div id="miniMap"></div></div>
+
+      <div class="mapBar">
+        <button class="btnLight" type="button" id="btnMiUbicacion">📍 Usar mi ubicación</button>
+        <button class="btnLight" type="button" id="btnCentrarTq">🏁 Centrar en taquería</button>
+      </div>
+
+      <div class="kpiRow">
+        <div class="kpi"><b>Distancia estimada</b><span id="kmTxt">—</span></div>
+        <div class="kpi"><b>Envío</b><span id="envioTxt">${money(envioPrecio)}</span></div>
+      </div>
+
+      <div class="toggleRow">
+        <div><b>Lluvia</b><div class="muted" style="font-weight:900;font-size:12px">Aplica tabla “con lluvia”</div></div>
+        <label class="switch">
+          <input id="swLluvia" type="checkbox" ${lluvia?"checked":""}/>
+        </label>
+      </div>
+
+      <div class="optGroup">
+        <div class="optTitle">
+          <b>Domicilio (auto-llenado)</b>
+          <span>puedes corregirlo</span>
         </div>
-        <div class="stepRow" style="grid-template-columns:1fr 1fr; gap:10px">
+
+        <div class="stepRow" style="margin-top:10px">
+          <div>
+            <label>* Calle</label>
+            <input id="s_calle" value="${escapeHtml(form.calle)}" placeholder="Ej. Calle Unión">
+          </div>
           <div>
             <label>* No. Exterior</label>
             <input id="s_noext" value="${escapeHtml(form.noext)}" placeholder="Ej. 678">
           </div>
+        </div>
+
+        <div class="stepRow">
           <div>
-            <label>No. Interior</label>
-            <input id="s_noint" value="${escapeHtml(form.noint)}" placeholder="Departamento, casa...">
+            <label>* Colonia</label>
+            <input id="s_col" value="${escapeHtml(form.col)}" placeholder="Ej. Barrio de la Calzada">
+          </div>
+          <div>
+            <label>* CP</label>
+            <input id="s_cp" value="${escapeHtml(form.cp)}" placeholder="Ej. 36580">
           </div>
         </div>
-      </div>
 
-      <div class="stepRow">
-        <div>
-          <label>* Colonia</label>
-          <input id="s_col" value="${escapeHtml(form.col)}" placeholder="Ej. Barrio de la Calzada">
+        <div class="stepRow">
+          <div>
+            <label>* Ciudad</label>
+            <input id="s_ciudad" value="${escapeHtml(form.ciudad)}">
+          </div>
+          <div>
+            <label>* Estado</label>
+            <input id="s_estado" value="${escapeHtml(form.estado)}">
+          </div>
         </div>
-        <div>
-          <label>* CP</label>
-          <input id="s_cp" value="${escapeHtml(form.cp)}" placeholder="Ej. 36580">
-        </div>
-      </div>
 
-      <div class="stepRow">
-        <div>
-          <label>* Ciudad</label>
-          <input id="s_ciudad" value="${escapeHtml(form.ciudad)}">
-        </div>
-        <div>
-          <label>* Estado</label>
-          <input id="s_estado" value="${escapeHtml(form.estado)}">
-        </div>
-      </div>
+        <label>* Referencias</label>
+        <textarea id="s_refs" placeholder="Entre calles, color de la casa, etc.">${escapeHtml(form.refs)}</textarea>
 
-      <label>* Referencias</label>
-      <textarea id="s_refs" placeholder="Entre calles, color de la casa, etc.">${escapeHtml(form.refs)}</textarea>
+        <div class="note">Coordenadas: <b id="coordsTxt">${(form.lat!=null&&form.lng!=null)?`${form.lat.toFixed(5)}, ${form.lng.toFixed(5)}`:"—"}</b></div>
+      </div>
     `;
-    setTimeout(()=>{
-      document.getElementById("s_calle").addEventListener("input", e=> form.calle = e.target.value, {passive:true});
-      document.getElementById("s_noext").addEventListener("input", e=> form.noext = e.target.value, {passive:true});
-      document.getElementById("s_noint").addEventListener("input", e=> form.noint = e.target.value, {passive:true});
-      document.getElementById("s_col").addEventListener("input", e=> form.col = e.target.value, {passive:true});
-      document.getElementById("s_cp").addEventListener("input", e=> form.cp = e.target.value, {passive:true});
-      document.getElementById("s_ciudad").addEventListener("input", e=> form.ciudad = e.target.value, {passive:true});
-      document.getElementById("s_estado").addEventListener("input", e=> form.estado = e.target.value, {passive:true});
-      document.getElementById("s_refs").addEventListener("input", e=> form.refs = e.target.value, {passive:true});
-    },0);
+
+    setTimeout(async ()=>{
+      ensureMapInit();
+
+      const link = (id, key)=>{
+        const el = document.getElementById(id);
+        if(!el) return;
+        el.addEventListener("input", ()=> form[key] = el.value);
+      };
+      link("s_calle","calle");
+      link("s_noext","noext");
+      link("s_col","col");
+      link("s_cp","cp");
+      link("s_ciudad","ciudad");
+      link("s_estado","estado");
+      link("s_refs","refs");
+
+      const sw = document.getElementById("swLluvia");
+      if(sw){
+        sw.addEventListener("change", async ()=>{
+          lluvia = !!sw.checked;
+          await recomputeEnvio();
+        }, {passive:true});
+      }
+
+      const btnMi = document.getElementById("btnMiUbicacion");
+      if(btnMi){
+        btnMi.addEventListener("click", ()=>{
+          if(!navigator.geolocation){
+            alert("Tu navegador no soporta ubicación.");
+            return;
+          }
+          navigator.geolocation.getCurrentPosition(async (pos)=>{
+            const lat = pos.coords.latitude;
+            const lng = pos.coords.longitude;
+            marker.setLatLng([lat,lng]);
+            map.setView([lat,lng], 16, {animate:true});
+            await setDomFromLatLng(lat,lng,true);
+          }, ()=>{
+            alert("No se pudo obtener tu ubicación. Revisa permisos.");
+          }, { enableHighAccuracy:true, timeout:12000, maximumAge:0 });
+        }, {passive:true});
+      }
+
+      const btnC = document.getElementById("btnCentrarTq");
+      if(btnC){
+        btnC.addEventListener("click", ()=>{
+          marker.setLatLng([TQ_LAT,TQ_LNG]);
+          map.setView([TQ_LAT,TQ_LNG], 14, {animate:true});
+        }, {passive:true});
+      }
+
+      // Si no hay coords guardadas, deja el pin en taquería (pero el cliente lo mueve)
+      if(form.lat==null || form.lng==null){
+        marker.setLatLng([TQ_LAT,TQ_LNG]);
+        map.setView([TQ_LAT,TQ_LNG], 14);
+        await recomputeEnvio();
+      }else{
+        marker.setLatLng([form.lat, form.lng]);
+        map.setView([form.lat, form.lng], 16);
+        await recomputeEnvio();
+      }
+
+      setTimeout(()=> map.invalidateSize(true), 120);
+    }, 0);
+
     return;
   }
 
+  // STEP 3: pago + enviar
+  btnBack.style.display = "inline-block";
+  btnNext.textContent = "ENVIAR PEDIDO";
+  stepTitle.textContent = "Paso 3 de 3";
+  stepSub.textContent = "Pago y enviar pedido";
+
+  const envioLine = (canal==="domicilio") ? `
+    <div class="kpiRow">
+      <div class="kpi"><b>Subtotal</b><span>${money(subTotal)}</span></div>
+      <div class="kpi"><b>Envío</b><span>${money(envioPrecio)} (${envioKm.toFixed(1)} km)</span></div>
+    </div>
+  ` : `
+    <div class="kpiRow">
+      <div class="kpi"><b>Subtotal</b><span>${money(subTotal)}</span></div>
+      <div class="kpi"><b>Total</b><span>${money(total)}</span></div>
+    </div>
+  `;
+
   stepsBody.innerHTML = `
-    <div class="stepRow">
+    ${envioLine}
+
+    <div class="stepRow" style="margin-top:10px">
       <div>
         <label>Método de pago</label>
         <select id="s_metodo">
@@ -1298,25 +1633,36 @@ function renderStep(){
     <label>Notas / Indicaciones</label>
     <textarea id="s_notas" placeholder="Ej. bien dorado / sin salsa / para llevar">${escapeHtml(form.notas)}</textarea>
   `;
+
   setTimeout(()=>{
-    document.getElementById("s_metodo").addEventListener("change", e=> form.metodo = e.target.value, {passive:true});
-    document.getElementById("s_pagare").addEventListener("input", e=> form.pagareCon = e.target.value, {passive:true});
-    document.getElementById("s_notas").addEventListener("input", e=> form.notas = e.target.value, {passive:true});
+    const m = document.getElementById("s_metodo");
+    const p = document.getElementById("s_pagare");
+    const n = document.getElementById("s_notas");
+    if(m) m.onchange = e=> form.metodo = e.target.value;
+    if(p) p.oninput  = e=> form.pagareCon = e.target.value;
+    if(n) n.oninput  = e=> form.notas = e.target.value;
   },0);
 }
 
 function stepValidate(){
-  const canal = canalEl.value;
+  const canal = getCanal();
+
+  if(step===0){
+    if(canal!=="domicilio" && canal!=="recoger") return "Elige domicilio o recoger.";
+  }
   if(step===1){
     if(!form.nombre.trim()) return "Pon tu nombre.";
     if(!form.tel.trim()) return "Pon tu celular.";
   }
   if(step===2 && canal==="domicilio"){
+    if(form.lat==null || form.lng==null) return "Elige tu ubicación en el mapa (o usa “mi ubicación”).";
     if(!form.calle.trim()) return "Falta la calle.";
     if(!form.noext.trim()) return "Falta el número exterior.";
     if(!form.col.trim()) return "Falta la colonia.";
     if(!form.cp.trim()) return "Falta el CP.";
     if(!form.refs.trim()) return "Faltan referencias.";
+    const r = getTarifa(envioKm, lluvia);
+    if(!r.ok) return "Tu domicilio está fuera del rango de envío (0–10 km).";
   }
   if(step===3){
     const p = form.pagareCon.trim();
@@ -1334,8 +1680,9 @@ function cleanWA(text){
 }
 
 function buildWhatsAppText(){
-  const canal = canalEl.value;
+  const canal = getCanal();
   const canalTxt = canal==="recoger" ? "Pasar a recoger" : "Domicilio";
+  const sub = cartSubTotal();
   const total = cartTotal();
   const orderNo = String(Date.now()).slice(-6);
 
@@ -1345,21 +1692,25 @@ function buildWhatsAppText(){
   lines.push(``);
   lines.push(`Número de pedido: *${orderNo}*`);
   lines.push(`Servicio: *${canalTxt}*`);
-  lines.push(`Número de contacto: *+52${form.tel.replace(/\D/g,"")}*`);
+  lines.push(`Contacto: *+52${form.tel.replace(/\D/g,"")}*`);
 
   if(canal==="domicilio"){
     const dir = [
-      `Calle: ${form.calle} ${form.noext}${form.noint?(" Int. "+form.noint):""}`,
+      `Calle: ${form.calle} ${form.noext}`,
       `Colonia: ${form.col}`,
       `Ciudad: ${form.ciudad}`,
       `CP: ${form.cp}`,
       `Estado: ${form.estado}`,
-      `Referencias: ${form.refs}`
+      `Referencias: ${form.refs}`,
+      `Ubicación: ${Number(form.lat).toFixed(5)}, ${Number(form.lng).toFixed(5)}`
     ].join("\n");
 
     lines.push(``);
     lines.push(`Domicilio para la entrega:`);
     lines.push(dir);
+    lines.push(``);
+    lines.push(`Distancia estimada: *${envioKm.toFixed(1)} km*`);
+    lines.push(`Envío ${lluvia ? "(lluvia)" : "(normal)"}: *${money(envioPrecio)}*`);
   }
 
   lines.push(``);
@@ -1371,14 +1722,14 @@ function buildWhatsAppText(){
     if(x.note) lines.push(`  • Nota: ${x.note}`);
   });
   lines.push(`--------------------------`);
-  lines.push(`SubTotal: ${money(total)}`);
-  lines.push(`Envío: $0.00`);
+  lines.push(`Subtotal: ${money(sub)}`);
+  if(canal==="domicilio") lines.push(`Envío: ${money(envioPrecio)}`);
   lines.push(`Total: *${money(total)}*`);
 
   if(form.metodo==="efectivo"){
     lines.push(``);
     if(form.pagareCon.trim()){
-      lines.push(`Pagaré con: *$${Number(form.pagareCon).toFixed(2)}* en Efectivo`);
+      lines.push(`Pagaré con: *$${Number(form.pagareCon).toFixed(2)}* en efectivo`);
     }else{
       lines.push(`Método de pago: *Efectivo*`);
     }
@@ -1394,38 +1745,30 @@ function buildWhatsAppText(){
   return lines.join("\n");
 }
 
-/** BOTONES (IMPORTANTE: ya NO vuelve a preguntar servicio al continuar) */
+/** BOTONES */
 document.getElementById("btnCheckout").addEventListener("click", ()=>{
   if(cart.length===0){ alert("Agrega algo al carrito primero 😄"); return; }
-
-  // si por alguna razón aún no eligió servicio, lo mandas a paso 0
-  if(!serviceChosen){
-    openSteps(0);
-    return;
-  }
-  // si ya eligió servicio, arranca directo en paso 1
-  openSteps(1);
+  openSteps();
 }, {passive:true});
 
-btnBack.addEventListener("click", ()=>{ if(step>1){ step--; renderStep(); } }, {passive:true});
+btnBack.addEventListener("click", ()=>{
+  if(step>0){ step--; renderStep(); }
+}, {passive:true});
 
-btnNext.addEventListener("click", ()=>{
-  // Paso 0: SOLO guardar en memoria de la página y cerrar (NO localStorage)
-  if(step===0){
-    if(canalEl.value!=="domicilio" && canalEl.value!=="recoger"){
-      alert("Elige domicilio o recoger.");
-      return;
-    }
-    serviceChosen = true;
-    closeSteps();
-    return;
-  }
-
+btnNext.addEventListener("click", async ()=>{
   const err = stepValidate();
   if(err){ alert(err); return; }
 
+  if(step===0){ closeSteps(); return; }        // solo elegir servicio
   if(step===1){ step=2; renderStep(); return; }
-  if(step===2){ step=3; renderStep(); return; }
+  if(step===2){
+    if(getCanal()==="domicilio"){
+      await recomputeEnvio();
+      const r = getTarifa(envioKm, lluvia);
+      if(!r.ok){ alert("Tu domicilio está fuera del rango de envío (0–10 km)."); return; }
+    }
+    step=3; renderStep(); return;
+  }
 
   const text = cleanWA(buildWhatsAppText());
   const url = `https://wa.me/${WHATSAPP_TAQ}?text=${encodeURIComponent(text)}`;
@@ -1447,12 +1790,15 @@ renderTabs();
 renderItems();
 renderCart();
 
-// Al entrar a la página: SIEMPRE preguntar solo “domicilio o recoger” una vez
+// SIEMPRE preguntar servicio al entrar
 window.addEventListener("load", ()=>{
-  setCanal("recoger");     // default
-  serviceChosen = false;   // siempre preguntar al entrar
-  openSteps(0);            // abre modal de servicio
-}, {passive:true});
+  setCanal("recoger");
+  step = 0;
+  stepsBackdrop.style.display = "flex";
+  stepsBackdrop.setAttribute("aria-hidden","false");
+  document.body.style.overflow = "hidden";
+  renderStep();
+});
 </script>
 
 </body>
