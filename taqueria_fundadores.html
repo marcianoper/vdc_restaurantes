@@ -1,8 +1,8 @@
-<!-- ✅ CAMBIOS CLAVE:
-1) YA NO reinicia step=0 cada vez que abres checkout.
-2) LISTO (paso 0) ahora SÍ avanza a Paso 1 (y NO cierra).
-3) btnCheckout entra al paso 1 (si ya hay servicio) o al paso 0 (si aún no).
-4) Al cargar la página SÍ pregunta servicio (paso 0), pero después ya no se repite.
+<!-- ✅ NUEVO CÓDIGO (CAMBIOS):
+1) Al entrar: SOLO pregunta Servicio (Paso 0) y al dar LISTO CIERRA (no avanza).
+2) Checkout: si NO hay servicio elegido -> abre Paso 0; si ya hay -> arranca en Paso 1.
+3) Modal de pasos compacto: max-height + scroll interno; footer siempre visible.
+4) Mapa más pequeño para que en zoom normal SIEMPRE se vea "Continuar".
 -->
 
 <!doctype html>
@@ -230,6 +230,26 @@
       pointer-events:auto;
       touch-action: manipulation;
     }
+
+    /* ✅ MODAL DE PASOS: compacto + scroll interno + footer visible */
+    .steps{
+      max-height: 88vh;
+      display:flex;
+      flex-direction:column;
+    }
+    .stepsBody{
+      padding:14px 16px;
+      overflow:auto;
+      -webkit-overflow-scrolling: touch;
+      flex: 1 1 auto;
+    }
+    .stepsFoot{
+      flex: 0 0 auto;
+      position: sticky;
+      bottom: 0;
+      z-index: 2;
+    }
+
     .modalHead,.stepsHead{
       padding:14px 16px; border-bottom:1px solid rgba(0,0,0,.10);
       display:flex; justify-content:space-between; align-items:center; gap:10px;
@@ -288,7 +308,6 @@
       cursor:pointer;
     }
 
-    .stepsBody{padding:14px 16px}
     .stepRow{display:grid; grid-template-columns:1fr 1fr; gap:10px}
     @media (max-width:520px){ .stepRow{grid-template-columns:1fr} }
 
@@ -302,7 +321,9 @@
     }
 
     .mapWrap{border:1px solid rgba(0,0,0,.12); border-radius:16px; overflow:hidden; background:#fff; box-shadow: 0 10px 26px rgba(0,0,0,.10);}
-    #miniMap{width:100%; height: 220px; background:#eee; touch-action: pan-x pan-y;}
+    /* ✅ Mapa más compacto */
+    #miniMap{width:100%; height: 170px; background:#eee; touch-action: pan-x pan-y;}
+
     .mapBar{display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;}
     .mapBar .btnLight,.mapBar .btnDark{flex:1; min-width: 150px;}
 
@@ -631,6 +652,7 @@ let envioPrecio = 0;
 let envioKm = 0;
 let lluvia = false;
 
+function getCanal(){ return canalEl.value; }
 function cartTotal(){
   return cartSubTotal() + (getCanal()==="domicilio" ? envioPrecio : 0);
 }
@@ -815,13 +837,12 @@ const canalEl = document.getElementById("canal");
 const servTxt = document.getElementById("servTxt");
 const btnCambioServicio = document.getElementById("btnCambioServicio");
 
-function getCanal(){ return canalEl.value; }
 function setCanal(v){
   canalEl.value = (v==="domicilio") ? "domicilio" : "recoger";
   servTxt.textContent = (getCanal()==="domicilio") ? "Domicilio" : "Recoger";
   if(getCanal()!=="domicilio"){
     envioPrecio = 0; envioKm = 0;
-    form.lat = null; form.lng = null; // opcional: limpiar coords si no es domicilio
+    form.lat = null; form.lng = null;
   }
   renderCart();
 }
@@ -879,7 +900,7 @@ stepsBackdrop.addEventListener("pointerdown", (e)=>{ if(e.target===stepsBackdrop
 stepsClose.addEventListener("click", closeSteps, {passive:true});
 
 btnCambioServicio.addEventListener("click", ()=>{
-  openSteps(0); // ✅ solo para cambiar
+  openSteps(0); // cambiar servicio
 }, {passive:true});
 
 function ensureMapInit(){
@@ -973,7 +994,7 @@ function renderStep(){
   const subTotal = cartSubTotal();
   const total = cartTotal();
 
-  // STEP 0: servicio
+  // STEP 0: servicio (solo eso y listo)
   if(step === 0){
     stepTitle.textContent = "Antes de empezar…";
     stepSub.textContent = "¿Tu pedido es para domicilio o recoger?";
@@ -988,7 +1009,7 @@ function renderStep(){
       </div>
       <div class="note">
         <b>${TAQUERIA_NOMBRE}</b><br>
-        Si eliges <b>Domicilio</b>, te pediremos tu ubicación en el mapa para calcular el envío.
+        Si eliges <b>Domicilio</b>, al final te pediremos tu ubicación para calcular el envío.
       </div>
     `;
 
@@ -1333,14 +1354,19 @@ function buildWhatsAppText(){
 }
 
 /** =========================
- *  BOTONES (ARREGLADOS)
+ *  BOTONES
  *  ========================= */
 document.getElementById("btnCheckout").addEventListener("click", ()=>{
   if(cart.length===0){ alert("Agrega algo al carrito primero 😄"); return; }
 
-  // ✅ Si ya eligió servicio, entra directo al Paso 1
-  // ✅ Si NO, pide servicio (Paso 0)
-  openSteps(serviceChosen ? 1 : 0);
+  // ✅ Si NO han elegido servicio todavía -> solo Paso 0
+  if(!serviceChosen){
+    openSteps(0);
+    return;
+  }
+
+  // ✅ Si ya eligieron -> Paso 1
+  openSteps(1);
 }, {passive:true});
 
 btnBack.addEventListener("click", ()=>{
@@ -1354,11 +1380,11 @@ btnNext.addEventListener("click", async ()=>{
   const err = stepValidate();
   if(err){ alert(err); return; }
 
-  // ✅ Paso 0: ahora SÍ continúa a paso 1 (no cierra)
+  // ✅ Paso 0: SOLO guardar servicio y CERRAR (no avanzar)
   if(step===0){
     serviceChosen = true;
-    step = 1;
-    renderStep();
+    closeSteps();
+    renderCart();
     return;
   }
 
@@ -1400,7 +1426,7 @@ renderTabs();
 renderItems();
 renderCart();
 
-// ✅ SOLO una vez al entrar: preguntar servicio
+// ✅ SOLO al entrar: pregunta servicio y se cierra en LISTO
 window.addEventListener("load", ()=>{
   setCanal("recoger");
   serviceChosen = false;
