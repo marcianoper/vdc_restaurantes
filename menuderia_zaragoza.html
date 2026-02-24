@@ -598,7 +598,7 @@
       margin-top:12px;
     }
 
-    /* ✅ MAPA (mismo que el otro) */
+    /* ✅ MAPA */
     .mapWrap{
       border:1px solid rgba(42,30,22,.18);
       border-radius:16px;
@@ -608,7 +608,7 @@
     }
     #miniMap{
       width:100%;
-      height:170px; /* compacto para que SIEMPRE se vea el botón */
+      height:170px;
       background:#eee;
       touch-action: pan-x pan-y;
     }
@@ -751,7 +751,7 @@
   </div>
 </div>
 
-<!-- ✅ CHECKOUT (con Paso 0 + mapa + tarifas) -->
+<!-- ✅ CHECKOUT -->
 <div class="stepsBackdrop" id="stepsBackdrop">
   <div class="steps">
     <div class="stepsHead">
@@ -780,12 +780,12 @@ const TAQUERIA_NOMBRE = "Menudería Zaragoza";
 const WHATSAPP_TAQ    = "524621872594";
 const IMG_BASE = "";
 
-/* ✅ COORDENADAS (PRUEBA): mismas que la taquería del otro código */
+/* ✅ COORDENADAS BASE */
 const TQ_LAT = 20.6767;
 const TQ_LNG = -101.3563;
 
 /** =========================
- *  TARIFAS (del otro código)
+ *  TARIFAS
  *  ========================= */
 const TARIFAS = [
   {from:0, to:3, normal:50, lluvia:65},
@@ -1111,7 +1111,7 @@ mAdd.addEventListener("click", ()=>{
 }, {passive:true});
 
 /** =========================
- *  CHECKOUT POR PASOS + PASO 0 (SERVICIO) + MAPA + TARIFAS
+ *  CHECKOUT POR PASOS + MAPA
  *  ========================= */
 const canalEl = document.getElementById("canal");
 const stepsBackdrop = document.getElementById("stepsBackdrop");
@@ -1143,7 +1143,7 @@ const form = {
   notas: ""
 };
 
-/* ✅ MEMORIA DEL CANAL (igual que tu código) */
+/* ✅ guardamos canal, pero OJO: ya NO lo usamos para saltar el Paso 0 */
 const CANAL_KEY = "menuderia_canal";
 function getSavedCanal(){
   const v = localStorage.getItem(CANAL_KEY);
@@ -1157,6 +1157,16 @@ function setSavedCanal(v){
 let map = null;
 let marker = null;
 let mapReady = false;
+
+/* ✅ FIX: destruir mapa al re-entrar para evitar “mapa en blanco” */
+function destroyMap(){
+  if(map){
+    try{ map.remove(); }catch(e){}
+  }
+  map = null;
+  marker = null;
+  mapReady = false;
+}
 
 function ensureMapInit(){
   if(mapReady) return;
@@ -1179,12 +1189,12 @@ function ensureMapInit(){
     await setDomFromLatLng(e.latlng.lat, e.latlng.lng, true);
   });
 
-  setTimeout(()=> map.invalidateSize(true), 120);
+  // ✅ más estable en modales
+  setTimeout(()=> map.invalidateSize(true), 200);
   mapReady = true;
 }
 
 async function setDomFromLatLng(lat,lng, recompute=true){
-  // ✅ PRUEBA: permitimos seleccionar, pero si quieres fijo al punto, descomenta el return de abajo
   form.lat = lat;
   form.lng = lng;
 
@@ -1251,22 +1261,17 @@ function openSteps(startAt){
   stepsBackdrop.setAttribute("aria-hidden","false");
   document.body.style.overflow = "hidden";
   renderStep();
+
+  // ✅ refuerzo
+  setTimeout(()=>{ if(map) map.invalidateSize(true); }, 250);
 }
 function closeSteps(){
   stepsBackdrop.style.display = "none";
   stepsBackdrop.setAttribute("aria-hidden","true");
   document.body.style.overflow = "";
-}
 
-/* ✅ PASO 0: preguntar canal solo una vez (y recordar) */
-function openCanalFirst(){
-  const saved = getSavedCanal();
-  if(saved){
-    canalEl.value = saved;
-    serviceChosen = true;
-    return;
-  }
-  openSteps(0);
+  // ✅ opcional pero recomendado: liberar mapa al cerrar
+  destroyMap();
 }
 
 function renderStep(){
@@ -1274,7 +1279,7 @@ function renderStep(){
   const subTotal = cartSubTotal();
   const total = cartTotal();
 
-  // PASO 0
+  // PASO 0 (SIEMPRE SE PREGUNTA)
   if(step === 0){
     stepTitle.textContent = "Antes de empezar…";
     stepSub.textContent = "¿Envío a domicilio o recoger?";
@@ -1367,8 +1372,11 @@ function renderStep(){
       return;
     }
 
+    // ✅ FIX mapa blanco: destruir antes de recrear el div
+    destroyMap();
+
     stepsBody.innerHTML = `
-      <div class="note" style="margin-top:0">Toca el mapa para poner tu pin o arrástralo. (Modo prueba: mismas coordenadas base que la taquería)</div>
+      <div class="note" style="margin-top:0">Toca el mapa para poner tu pin o arrástralo.</div>
 
       <div class="mapWrap"><div id="miniMap"></div></div>
 
@@ -1392,10 +1400,7 @@ function renderStep(){
 
         <div class="stepRow" style="margin-top:10px">
           <div><label>* Calle</label><input id="s_calle" value="${escapeHtml(form.calle)}" placeholder="Ej. Calle Unión"></div>
-          <div>
-            <label>* No. Exterior</label>
-            <input id="s_noext" value="${escapeHtml(form.noext)}" placeholder="Ej. 678">
-          </div>
+          <div><label>* No. Exterior</label><input id="s_noext" value="${escapeHtml(form.noext)}" placeholder="Ej. 678"></div>
         </div>
 
         <div class="stepRow">
@@ -1467,12 +1472,18 @@ function renderStep(){
         }, {passive:true});
       }
 
-      // ✅ PRUEBA: por default coloca el pin en el punto base (taquería)
-      marker.setLatLng([TQ_LAT, TQ_LNG]);
-      map.setView([TQ_LAT, TQ_LNG], 14);
-      await setDomFromLatLng(TQ_LAT, TQ_LNG, true);
+      // ✅ si no hay coords aún, coloca en el punto base
+      if(form.lat==null || form.lng==null){
+        marker.setLatLng([TQ_LAT, TQ_LNG]);
+        map.setView([TQ_LAT, TQ_LNG], 14);
+        await setDomFromLatLng(TQ_LAT, TQ_LNG, true);
+      }else{
+        marker.setLatLng([form.lat, form.lng]);
+        map.setView([form.lat, form.lng], 14);
+        await recomputeEnvio();
+      }
 
-      setTimeout(()=> map.invalidateSize(true), 120);
+      setTimeout(()=> map.invalidateSize(true), 200);
     }, 0);
 
     return;
@@ -1619,13 +1630,12 @@ function buildWhatsAppText(){
 document.getElementById("btnCheckout").addEventListener("click", ()=>{
   if(cart.length===0){ alert("Agrega algo al carrito primero 😄"); return; }
 
-  // ✅ Si NO han elegido servicio todavía -> Paso 0
+  // ✅ si aún no eligió servicio en esta sesión -> paso 0
   if(!serviceChosen){
     openSteps(0);
     return;
   }
 
-  // ✅ Si ya eligieron -> Paso 1
   openSteps(1);
 }, {passive:true});
 
@@ -1637,11 +1647,23 @@ btnBack.addEventListener("click", ()=>{
 }, {passive:true});
 
 btnNext.addEventListener("click", async ()=>{
-  // Paso 0: guardar canal y cerrar
+  // Paso 0: guardar canal, marcar elegido y pasar a paso 1
   if(step === 0){
+    if(getCanal()!=="domicilio" && getCanal()!=="recoger"){
+      alert("Elige domicilio o recoger.");
+      return;
+    }
     setSavedCanal(getCanal());
     serviceChosen = true;
-    closeSteps();
+
+    // si eligió recoger, limpiar coords/envío
+    if(getCanal()!=="domicilio"){
+      envioPrecio = 0; envioKm = 0;
+      form.lat = null; form.lng = null;
+    }
+
+    step = 1;
+    renderStep();
     renderCart();
     return;
   }
@@ -1682,18 +1704,18 @@ renderTabs();
 renderItems();
 renderCart();
 
-/* ✅ al cargar: si no hay canal guardado, preguntar primero */
+/* ✅ SIEMPRE preguntar al entrar (aunque haya guardado antes) */
 window.addEventListener("load", ()=>{
   const saved = getSavedCanal();
-  canalEl.value = saved || "recoger";
-  if(saved) serviceChosen = true;
-  else openCanalFirst();
+  canalEl.value = saved || "recoger"; // preselecciona, pero NO se salta el paso 0
+  serviceChosen = false;            // <- clave: siempre vuelve a preguntar
+  openSteps(0);
 }, {passive:true});
 
-/* ✅ Si cambian el select manual, recalcular envío */
+/* si cambian el select manual */
 canalEl.addEventListener("change", ()=>{
   setSavedCanal(getCanal());
-  serviceChosen = true;
+  serviceChosen = true; // si lo cambian manual, ya cuenta como elegido
   if(getCanal()!=="domicilio"){
     envioPrecio = 0; envioKm = 0;
     form.lat = null; form.lng = null;
