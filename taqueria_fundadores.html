@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <title>Menú — Tacos Los Fundadores</title>
 
+  <!-- Leaflet (GRATIS) -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
   <style>
@@ -12,7 +13,7 @@
       --bg:#1a0f0c; --bg2:#24130f;
       --card:#fff6ec; --card2:#fff1e2;
       --ink:#2b1a14; --muted:#6a4a3c; --line: rgba(0,0,0,.10);
-      --brand1:#8b1e1e; --brand2:#b63a2b; --gold:#d4a373; --green:#2f7d32;
+      --brand1:#8b1e1e; --brand2:#b63a2b; --gold:#d4a373; --green:#2f7d32; --danger:#9b1c1c;
       --shadow: 0 18px 50px rgba(0,0,0,.25);
       --r:18px;
     }
@@ -223,6 +224,7 @@
       touch-action: manipulation;
     }
 
+    /* ✅ MODAL DE PASOS: compacto + scroll interno + footer visible */
     .steps{
       max-height: 86vh;
       display:flex;
@@ -239,7 +241,7 @@
       position: sticky;
       bottom: 0;
       z-index: 2;
-      padding-bottom: calc(12px + env(safe-area-inset-bottom));
+      padding-bottom: calc(14px + env(safe-area-inset-bottom));
     }
 
     .modalHead,.stepsHead{
@@ -281,8 +283,10 @@
     }
     .optBtn.active{border-color: rgba(139,30,30,.45); box-shadow:0 0 0 3px rgba(139,30,30,.14);}
 
-    .footerBtns,.stepsFoot{display:flex; gap:10px; padding:12px 14px; border-top:1px solid rgba(0,0,0,.10); background: rgba(0,0,0,.03);}
+    .footerBtns,.stepsFoot{display:flex; gap:10px; padding:14px 16px; border-top:1px solid rgba(0,0,0,.10); background: rgba(0,0,0,.03);}
     .footerBtns button{flex:1}
+    .stepsFoot button{flex:1}
+
     .btnDark{
       border:none; cursor:pointer;
       padding:12px 14px; border-radius: 14px;
@@ -309,10 +313,11 @@
       padding:10px 12px;
       border-radius:14px;
       border:1px solid rgba(0,0,0,.10);
-      margin-top:10px;
+      margin-top:12px;
     }
 
     .mapWrap{border:1px solid rgba(0,0,0,.12); border-radius:16px; overflow:hidden; background:#fff; box-shadow: 0 10px 26px rgba(0,0,0,.10);}
+    /* ✅ Mapa más compacto */
     #miniMap{width:100%; height: 150px; background:#eee; touch-action: pan-x pan-y;}
 
     .mapBar{display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;}
@@ -323,39 +328,23 @@
     .kpi b{display:block; font-size:12px}
     .kpi span{display:block; margin-top:4px; font-weight:1000}
 
-    /* ✅ Detalles colapsables */
-    .addrDetails[hidden]{ display:none !important; }
-
-    /* ✅ Flechas tipo acordeón */
-    .addrToggle{
-      margin-top:10px;
+    /* ✅ Toggle flechas */
+    .detailsToggle{
       width:100%;
-      border:1px solid rgba(0,0,0,.10);
-      border-radius:16px;
-      background: rgba(255,255,255,.72);
-      padding:10px 12px;
       display:flex; align-items:center; justify-content:space-between; gap:10px;
-      cursor:pointer;
-      user-select:none;
-      font-weight:1000;
-      touch-action: manipulation;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .addrToggle .left{
-      display:flex; flex-direction:column; gap:2px;
-    }
-    .addrToggle .left b{font-size:13px}
-    .addrToggle .left span{font-size:12px; color:var(--muted); font-weight:900}
-    .addrToggle .chev{
-      width:38px; height:38px;
-      border-radius:12px;
       border:1px solid rgba(0,0,0,.12);
       background: rgba(255,255,255,.78);
-      display:flex; align-items:center; justify-content:center;
-      font-size:18px;
-      line-height:1;
+      padding:10px 12px;
+      border-radius:14px;
+      font-weight:1000;
+      cursor:pointer;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      margin-top:10px;
     }
-    .addrToggle[aria-expanded="true"] .chev{ transform: rotate(180deg); }
+    .detailsToggle .arrow{font-size:18px; line-height:1}
+    .detailsWrap{display:none}
+    .detailsWrap.show{display:block}
   </style>
 </head>
 
@@ -384,7 +373,7 @@
           <div class="divider"></div>
         </div>
         <div class="items" id="items"></div>
-        <div class="note">Tip: Si es para llevar, pon nota tipo: <b>“bien dorado”</b>.</div>
+        <div class="note">Tip: si es para llevar, pon nota tipo: <b>“bien dorado”</b>.</div>
       </div>
     </section>
 
@@ -428,7 +417,7 @@
   <div class="modal" role="dialog" aria-modal="true">
     <div class="modalHead">
       <div>
-        <h3 id="mTitle">Producto</h3>
+        <h3 id="mTitle" style="margin:0">Producto</h3>
         <div class="muted" id="mSub" style="font-size:12px;font-weight:900">Configura como lo quieres</div>
       </div>
       <button class="closeX" id="mClose" type="button">✕</button>
@@ -464,7 +453,7 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 /** =========================
- *  CONFIG
+ *  CONFIG (UNA TAQUERÍA)
  *  ========================= */
 const TAQUERIA_NOMBRE = "Tacos Los Fundadores";
 const WHATSAPP_TAQ    = "524621872594";
@@ -473,23 +462,23 @@ const TQ_LNG          = -101.3563;
 const IMG_BASE = "";
 
 /** =========================
- *  TARIFAS (sin lluvia)
+ *  TARIFAS (tu tabla)
  *  ========================= */
 const TARIFAS = [
-  {from:0, to:3, normal:50},
-  {from:3, to:4, normal:55},
-  {from:4, to:5, normal:60},
-  {from:5, to:6, normal:65},
-  {from:6, to:7, normal:70},
-  {from:7, to:8, normal:75},
-  {from:8, to:9, normal:80},
-  {from:9, to:10, normal:85},
+  {from:0, to:3, normal:50, lluvia:65},
+  {from:3, to:4, normal:55, lluvia:75},
+  {from:4, to:5, normal:60, lluvia:85},
+  {from:5, to:6, normal:65, lluvia:95},
+  {from:6, to:7, normal:70, lluvia:105},
+  {from:7, to:8, normal:75, lluvia:115},
+  {from:8, to:9, normal:80, lluvia:125},
+  {from:9, to:10, normal:85, lluvia:135},
 ];
-function getTarifa(km){
+function getTarifa(km, lluvia=false){
   const k = Number(km);
   const row = TARIFAS.find(r => k >= r.from && k < r.to) || null;
   if(!row) return {ok:false, precio:0, limiteKm: 10};
-  return {ok:true, precio: row.normal};
+  return {ok:true, precio: lluvia ? row.lluvia : row.normal};
 }
 
 /** =========================
@@ -499,11 +488,11 @@ const catalogo = [
   {id:"combo_tacos_bebida", cat:"COMBOS", name:"Combo Taquero", price:75, desc:"3 tacos (lengua/pastor/chorizo) + bebida.", mods:true, img:"combo_tacos_bebida.png"},
   {id:"combo_alambre_bebida", cat:"COMBOS", name:"Combo Alambre", price:115, desc:"1 alambre (mixto o pastor) + bebida.", mods:true, img:"combo_alambre_bebida.png"},
   {id:"combo_pareja", cat:"COMBOS", name:"Paquete para 2", price:210, desc:"6 tacos + 2 bebidas. Para compartir bien.", mods:true, img:"combo_pareja.png"},
-  {id:"taco_lengua",  cat:"TACOS", name:"Taco de lengua",  price:18, desc:"Lengua bien servida.", mods:false, img:"taco_lengua.jpeg"},
-  {id:"taco_pastor",  cat:"TACOS", name:"Taco al pastor",  price:18, desc:"Clásico pastor.", mods:false, img:"taco_pastor.jpeg"},
-  {id:"taco_chorizo", cat:"TACOS", name:"Taco de chorizo", price:18, desc:"Bien doradito.", mods:false, img:"taco_chorizo.jpeg"},
-  {id:"alambre_mixto",  cat:"ALAMBRES", name:"Alambre mixto",  price:95, desc:"Queso + mixto.", mods:false, img:"alambre_mixto.jpeg"},
-  {id:"alambre_pastor", cat:"ALAMBRES", name:"Alambre al pastor", price:95, desc:"Queso + pastor.", mods:false, img:"alambre_pastor.jpeg"},
+  {id:"taco_lengua",  cat:"TACOS", name:"Taco de lengua",  price:18, desc:"Lengua bien servida.", mods:true, img:"taco_lengua.jpeg"},
+  {id:"taco_pastor",  cat:"TACOS", name:"Taco al pastor",  price:18, desc:"Clásico pastor.", mods:true, img:"taco_pastor.jpeg"},
+  {id:"taco_chorizo", cat:"TACOS", name:"Taco de chorizo", price:18, desc:"Bien doradito.", mods:true, img:"taco_chorizo.jpeg"},
+  {id:"alambre_mixto",  cat:"ALAMBRES", name:"Alambre mixto",  price:95, desc:"Queso + mixto.", mods:true, img:"alambre_mixto.jpeg"},
+  {id:"alambre_pastor", cat:"ALAMBRES", name:"Alambre al pastor", price:95, desc:"Queso + pastor.", mods:true, img:"alambre_pastor.jpeg"},
   {id:"coca_600ml", cat:"BEBIDAS", name:"Coca 600ml", price:25, desc:"Bien fría.", mods:false, img:"coca_600ml.png"},
   {id:"agua_fresca", cat:"BEBIDAS", name:"Agua fresca 1/2L", price:30, desc:"Del día.", mods:false, img:"agua_fresca.png"},
   {id:"queso_extra", cat:"EXTRAS", name:"Queso extra", price:10, desc:"Agrégalo a tu pedido.", mods:false, img:"queso_extra.png"},
@@ -513,20 +502,24 @@ const catalogo = [
 const CATS = ["COMBOS","TACOS","ALAMBRES","BEBIDAS","EXTRAS"];
 
 /** =========================
- *  MODIFICADORES (quitados: tortilla, salsas, bebida)
+ *  MODIFICADORES (✅ quitamos tortilla / salsas / bebida)
  *  ========================= */
 const MODS = {
   carne: { title:"Carne", type:"single", required:true, options:["Lengua","Pastor","Chorizo"] },
-  alambreTipo: { title:"Tipo de alambre", type:"single", required:true, options:["Mixto","Pastor"] },
   conSin: { title:"Con todo / Sin…", type:"multi", required:false, options:["Con todo","Sin cebolla","Sin cilantro","Sin piña","Sin salsa"] },
+  alambreTipo: { title:"Tipo de alambre", type:"single", required:true, options:["Mixto","Pastor"] },
 };
 function modsPara(item){
   if(!item.mods) return [];
   if(item.cat === "COMBOS"){
+    // ✅ ya no tortilla / salsa / bebida
     if(item.id === "combo_tacos_bebida") return ["carne","conSin"];
     if(item.id === "combo_alambre_bebida") return ["alambreTipo","conSin"];
     if(item.id === "combo_pareja") return ["carne","conSin"];
+    return [];
   }
+  if(item.cat === "TACOS") return ["conSin"];      // ✅ no tortilla / salsa
+  if(item.cat === "ALAMBRES") return ["conSin"];   // ✅ no salsa
   return [];
 }
 
@@ -541,6 +534,7 @@ function modsToText(mods){
   const parts = [];
   for(const k of Object.keys(mods||{})){
     const val = mods[k];
+    if(!MODS[k]) continue;
     if(Array.isArray(val) && val.length) parts.push(`${MODS[k].title}: ${val.join(", ")}`);
     if(typeof val==="string" && val) parts.push(`${MODS[k].title}: ${val}`);
   }
@@ -658,10 +652,10 @@ function cartSubTotal(){ return cart.reduce((a,x)=>a + x.qty*(x.basePrice), 0); 
 
 let envioPrecio = 0;
 let envioKm = 0;
+// ✅ lluvia removido del UI, se queda fijo en false
+let lluvia = false;
 
-const canalEl = document.getElementById("canal");
 function getCanal(){ return canalEl.value; }
-
 function cartTotal(){
   return cartSubTotal() + (getCanal()==="domicilio" ? envioPrecio : 0);
 }
@@ -711,7 +705,7 @@ function renderCart(){
 }
 
 /** =========================
- *  MODAL MODS
+ *  MODAL MODS (más compacto)
  *  ========================= */
 const backdrop = document.getElementById("backdrop");
 const mTitle = document.getElementById("mTitle");
@@ -767,7 +761,7 @@ function openModal(item){
   n.innerHTML = `
     <div class="optTitle">
       <b>Nota (opcional)</b>
-      <span>ej. “bien doradito”, “sin grasa”, etc.</span>
+      <span>ej. “bien doradito”</span>
     </div>
     <div style="margin-top:10px">
       <input id="noteProd" placeholder="Escribe una nota para este producto..."/>
@@ -825,6 +819,17 @@ mAdd.addEventListener("click", ()=>{
   if(!currentItem || !draft) return;
   const err = validateRequired(currentItem, draft.mods);
   if(err){ alert(err); return; }
+
+  // ✅ auto-fija carne/alambre según producto (aunque ya no mostremos tortilla/salsa/bebida)
+  if(currentItem.cat==="TACOS"){
+    if(currentItem.id==="taco_lengua")  draft.mods["carne"]="Lengua";
+    if(currentItem.id==="taco_pastor")  draft.mods["carne"]="Pastor";
+    if(currentItem.id==="taco_chorizo") draft.mods["carne"]="Chorizo";
+  }
+  if(currentItem.cat==="ALAMBRES"){
+    if(currentItem.id==="alambre_mixto")  draft.mods["alambreTipo"]="Mixto";
+    if(currentItem.id==="alambre_pastor") draft.mods["alambreTipo"]="Pastor";
+  }
   addLine(currentItem, draft.mods, draft.note);
   closeModal();
 }, {passive:true});
@@ -832,6 +837,7 @@ mAdd.addEventListener("click", ()=>{
 /** =========================
  *  SERVICIO
  *  ========================= */
+const canalEl = document.getElementById("canal");
 const servTxt = document.getElementById("servTxt");
 const btnCambioServicio = document.getElementById("btnCambioServicio");
 
@@ -859,9 +865,6 @@ const btnNext = document.getElementById("btnNext");
 
 let step = 0;
 
-/* ✅ estado de detalles dirección */
-let showAddrDetails = true;
-
 const form = {
   nombre: "",
   tel: "",
@@ -883,6 +886,18 @@ let map = null;
 let marker = null;
 let mapReady = false;
 
+function destroyMap(){
+  try{
+    if(map){
+      map.off();
+      map.remove();
+    }
+  }catch(e){}
+  map = null;
+  marker = null;
+  mapReady = false;
+}
+
 function openSteps(startAt){
   step = (typeof startAt==="number") ? startAt : 1;
   stepsBackdrop.style.display = "flex";
@@ -894,16 +909,30 @@ function closeSteps(){
   stepsBackdrop.style.display = "none";
   stepsBackdrop.setAttribute("aria-hidden","true");
   document.body.style.overflow = "";
+  // ✅ evita mapa “huérfano”
+  destroyMap();
 }
 
 stepsBackdrop.addEventListener("pointerdown", (e)=>{ if(e.target===stepsBackdrop){ e.preventDefault(); closeSteps(); } }, {passive:false});
 stepsClose.addEventListener("click", closeSteps, {passive:true});
-btnCambioServicio.addEventListener("click", ()=> openSteps(0), {passive:true});
+
+btnCambioServicio.addEventListener("click", ()=>{
+  openSteps(0);
+}, {passive:true});
 
 function ensureMapInit(){
-  if(mapReady) return;
+  const el = document.getElementById("miniMap");
+  if(!el) return;
+
+  if(mapReady){
+    setTimeout(()=> map && map.invalidateSize(true), 80);
+    return;
+  }
+
   const centerLat = (form.lat ?? TQ_LAT);
   const centerLng = (form.lng ?? TQ_LNG);
+
+  el.innerHTML = "";
 
   map = L.map('miniMap', { zoomControl:true, attributionControl:false }).setView([centerLat, centerLng], 14);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom:19 }).addTo(map);
@@ -920,16 +949,13 @@ function ensureMapInit(){
     await setDomFromLatLng(e.latlng.lat, e.latlng.lng, true);
   });
 
-  setTimeout(()=> { map.invalidateSize(true); }, 80);
+  setTimeout(()=> map.invalidateSize(true), 140);
   mapReady = true;
 }
 
 async function setDomFromLatLng(lat,lng, recompute=true){
   form.lat = lat;
   form.lng = lng;
-
-  const elCoords = document.getElementById("coordsTxt");
-  if(elCoords) elCoords.textContent = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
 
   try{
     const data = await reverseGeocode(lat,lng);
@@ -973,7 +999,7 @@ async function recomputeEnvio(){
   envioKm = haversineKm(TQ_LAT, TQ_LNG, Number(form.lat), Number(form.lng));
   envioKm = Math.round(envioKm*10)/10;
 
-  const r = getTarifa(envioKm);
+  const r = getTarifa(envioKm, lluvia);
   envioPrecio = r.ok ? r.precio : 0;
 
   const envioTxt = document.getElementById("envioTxt");
@@ -982,25 +1008,14 @@ async function recomputeEnvio(){
   renderCart();
 }
 
-/* ✅ toggle con flecha */
-function setAddrExpanded(expanded){
-  showAddrDetails = !!expanded;
-  const box = document.getElementById("addrDetailsBox");
-  const btn = document.getElementById("addrToggleBtn");
-  if(box) box.hidden = !showAddrDetails;
-  if(btn){
-    btn.setAttribute("aria-expanded", showAddrDetails ? "true":"false");
-    btn.querySelector(".chev").textContent = showAddrDetails ? "▲" : "▼";
-    btn.querySelector(".left b").textContent = showAddrDetails ? "Ocultar detalles de la dirección" : "Mostrar detalles de la dirección";
-  }
-}
+let showAddrDetails = true;
 
 function renderStep(){
   const canal = getCanal();
   const subTotal = cartSubTotal();
   const total = cartTotal();
 
-  // STEP 0
+  // STEP 0: servicio
   if(step === 0){
     stepTitle.textContent = "Antes de empezar…";
     stepSub.textContent = "¿Tu pedido es para domicilio o recoger?";
@@ -1009,13 +1024,13 @@ function renderStep(){
 
     stepsBody.innerHTML = `
       <div class="note" style="margin-top:0">Selecciona una opción para continuar.</div>
-      <div class="optGroup" style="margin-top:10px">
+      <div class="optGroup" style="margin-top:12px">
         <div class="optTitle"><b>Servicio</b><span>elige 1</span></div>
         <div class="optList" id="canalOpts"></div>
       </div>
       <div class="note">
         <b>${TAQUERIA_NOMBRE}</b><br>
-        Si eliges <b>Domicilio</b>, te pediremos ubicación para calcular el envío.
+        Si eliges <b>Domicilio</b>, te pediremos tu ubicación para calcular el envío.
       </div>
     `;
 
@@ -1045,7 +1060,7 @@ function renderStep(){
     return;
   }
 
-  // STEP 1
+  // STEP 1: datos
   if(step===1){
     stepTitle.textContent = "Paso 1 de 3";
     stepSub.textContent = "Datos personales";
@@ -1077,7 +1092,7 @@ function renderStep(){
     return;
   }
 
-  // STEP 2
+  // STEP 2: mapa (solo domicilio)
   if(step===2){
     btnBack.style.display = "inline-block";
     btnNext.textContent = "CONTINUAR";
@@ -1099,7 +1114,7 @@ function renderStep(){
 
     stepSub.textContent = "Elige tu ubicación";
     stepsBody.innerHTML = `
-      <div class="note" style="margin-top:0">Toca el mapa para poner tu pin o arrástralo.</div>
+      <div class="note" style="margin-top:0">Toca el mapa para poner tu pin o arrástralo. Con eso calculamos el envío.</div>
 
       <div class="mapWrap"><div id="miniMap"></div></div>
 
@@ -1109,63 +1124,44 @@ function renderStep(){
       </div>
 
       <div class="kpiRow">
-        <div class="kpi" style="grid-column:1 / -1;">
-          <b>Envío</b>
-          <span id="envioTxt">${money(envioPrecio)}</span>
-        </div>
+        <div class="kpi"><b>Envío</b><span id="envioTxt">${money(envioPrecio)}</span></div>
+        <div class="kpi"><b>Total (estimado)</b><span>${money(total)}</span></div>
       </div>
 
-      <!-- ✅ Flecha: ▲ muestra, ▼ oculta -->
-      <div class="addrToggle" id="addrToggleBtn" role="button" tabindex="0" aria-expanded="${showAddrDetails ? "true":"false"}">
-        <div class="left">
-          <b>${showAddrDetails ? "Ocultar detalles de la dirección" : "Mostrar detalles de la dirección"}</b>
-          <span>Calle, colonia y CP</span>
+      <button class="detailsToggle" id="btnAddrToggle" type="button" aria-expanded="${showAddrDetails ? "true":"false"}">
+        <span>Detalles de la dirección</span>
+        <span class="arrow" id="addrArrow">${showAddrDetails ? "▲" : "▼"}</span>
+      </button>
+
+      <div class="detailsWrap ${showAddrDetails ? "show":""}" id="addrDetails">
+        <div class="optGroup" style="margin-top:10px">
+          <div class="optTitle"><b>Domicilio</b><span>puedes corregirlo</span></div>
+
+          <div class="stepRow" style="margin-top:10px">
+            <div><label>* Calle</label><input id="s_calle" value="${escapeHtml(form.calle)}" placeholder="Ej. Calle Unión"></div>
+            <div><label>* No. Exterior</label><input id="s_noext" value="${escapeHtml(form.noext)}" placeholder="Ej. 678"></div>
+          </div>
+
+          <div class="stepRow">
+            <div><label>* Colonia</label><input id="s_col" value="${escapeHtml(form.col)}" placeholder="Ej. Barrio de la Calzada"></div>
+            <div><label>* CP</label><input id="s_cp" value="${escapeHtml(form.cp)}" placeholder="Ej. 36580"></div>
+          </div>
+
+          <div class="stepRow">
+            <div><label>* Ciudad</label><input id="s_ciudad" value="${escapeHtml(form.ciudad)}"></div>
+            <div><label>* Estado</label><input id="s_estado" value="${escapeHtml(form.estado)}"></div>
+          </div>
+
+          <label>* Referencias</label>
+          <textarea id="s_refs" placeholder="Entre calles, color de la casa, etc.">${escapeHtml(form.refs)}</textarea>
         </div>
-        <div class="chev">${showAddrDetails ? "▲" : "▼"}</div>
-      </div>
-
-      <div class="optGroup addrDetails" id="addrDetailsBox" ${showAddrDetails ? "" : "hidden"}>
-        <div class="optTitle"><b>Dirección</b><span>puedes corregirlo</span></div>
-
-        <div class="stepRow" style="margin-top:10px">
-          <div><label>Calle</label><input id="s_calle" value="${escapeHtml(form.calle)}" placeholder="Ej. Calle Unión"></div>
-          <div><label>No. Exterior</label><input id="s_noext" value="${escapeHtml(form.noext)}" placeholder="Ej. 678"></div>
-        </div>
-
-        <div class="stepRow">
-          <div><label>Colonia</label><input id="s_col" value="${escapeHtml(form.col)}" placeholder="Ej. Barrio de la Calzada"></div>
-          <div><label>CP</label><input id="s_cp" value="${escapeHtml(form.cp)}" placeholder="Ej. 36580"></div>
-        </div>
-
-        <div class="stepRow">
-          <div><label>Ciudad</label><input id="s_ciudad" value="${escapeHtml(form.ciudad)}"></div>
-          <div><label>Estado</label><input id="s_estado" value="${escapeHtml(form.estado)}"></div>
-        </div>
-
-        <label>Referencias</label>
-        <textarea id="s_refs" placeholder="Entre calles, color de la casa, etc.">${escapeHtml(form.refs)}</textarea>
-
-        <div class="note">Coordenadas: <b id="coordsTxt">${(form.lat!=null&&form.lng!=null)?`${form.lat.toFixed(5)}, ${form.lng.toFixed(5)}`:"—"}</b></div>
       </div>
     `;
 
     setTimeout(async ()=>{
+      // ✅ FIX MAPA BLANCO: el DOM del mapa se rehace con innerHTML, por eso lo recreamos siempre
+      destroyMap();
       ensureMapInit();
-
-      // ✅ click y teclado (Enter/Espacio) para toggle
-      const btnT = document.getElementById("addrToggleBtn");
-      const toggle = ()=> setAddrExpanded(!showAddrDetails);
-      if(btnT){
-        btnT.addEventListener("click", toggle, {passive:true});
-        btnT.addEventListener("keydown", (e)=>{
-          if(e.key==="Enter" || e.key===" "){
-            e.preventDefault();
-            toggle();
-          }
-        });
-      }
-      // asegurar estado visual
-      setAddrExpanded(showAddrDetails);
 
       const link = (id, key)=>{
         const el = document.getElementById(id);
@@ -1179,6 +1175,20 @@ function renderStep(){
       link("s_ciudad","ciudad");
       link("s_estado","estado");
       link("s_refs","refs");
+
+      const btnToggle = document.getElementById("btnAddrToggle");
+      const wrap = document.getElementById("addrDetails");
+      const arrow = document.getElementById("addrArrow");
+      if(btnToggle && wrap && arrow){
+        btnToggle.addEventListener("click", ()=>{
+          showAddrDetails = !showAddrDetails;
+          wrap.classList.toggle("show", showAddrDetails);
+          arrow.textContent = showAddrDetails ? "▲" : "▼";
+          btnToggle.setAttribute("aria-expanded", showAddrDetails ? "true":"false");
+          // por si cambia la altura, recalculamos el mapa
+          setTimeout(()=> map && map.invalidateSize(true), 120);
+        }, {passive:true});
+      }
 
       const btnMi = document.getElementById("btnMiUbicacion");
       if(btnMi){
@@ -1213,13 +1223,13 @@ function renderStep(){
         await recomputeEnvio();
       }
 
-      setTimeout(()=> map.invalidateSize(true), 120);
+      setTimeout(()=> map && map.invalidateSize(true), 160);
     }, 0);
 
     return;
   }
 
-  // STEP 3
+  // STEP 3: pago + enviar
   btnBack.style.display = "inline-block";
   btnNext.textContent = "ENVIAR PEDIDO";
   stepTitle.textContent = "Paso 3 de 3";
@@ -1283,17 +1293,12 @@ function stepValidate(){
   }
   if(step===2 && canal==="domicilio"){
     if(form.lat==null || form.lng==null) return "Elige tu ubicación en el mapa (o usa “mi ubicación”).";
-
-    // ✅ Si están visibles, valida; si no, no obliga
-    if(showAddrDetails){
-      if(!form.calle.trim()) return "Falta la calle.";
-      if(!form.noext.trim()) return "Falta el número exterior.";
-      if(!form.col.trim()) return "Falta la colonia.";
-      if(!form.cp.trim()) return "Falta el CP.";
-      if(!form.refs.trim()) return "Faltan referencias.";
-    }
-
-    const r = getTarifa(envioKm);
+    if(!form.calle.trim()) return "Falta la calle.";
+    if(!form.noext.trim()) return "Falta el número exterior.";
+    if(!form.col.trim()) return "Falta la colonia.";
+    if(!form.cp.trim()) return "Falta el CP.";
+    if(!form.refs.trim()) return "Faltan referencias.";
+    const r = getTarifa(envioKm, lluvia);
     if(!r.ok) return "Tu domicilio está fuera del rango de envío (0–10 km).";
   }
   if(step===3){
@@ -1327,25 +1332,21 @@ function buildWhatsAppText(){
   lines.push(`Contacto: *+52${form.tel.replace(/\D/g,"")}*`);
 
   if(canal==="domicilio"){
+    const dir = [
+      `Calle: ${form.calle} ${form.noext}`,
+      `Colonia: ${form.col}`,
+      `Ciudad: ${form.ciudad}`,
+      `CP: ${form.cp}`,
+      `Estado: ${form.estado}`,
+      `Referencias: ${form.refs}`,
+      `Ubicación: ${Number(form.lat).toFixed(5)}, ${Number(form.lng).toFixed(5)}`
+    ].join("\n");
+
     lines.push(``);
     lines.push(`Domicilio para la entrega:`);
-    if(showAddrDetails){
-      const dir = [
-        `Calle: ${form.calle} ${form.noext}`,
-        `Colonia: ${form.col}`,
-        `Ciudad: ${form.ciudad}`,
-        `CP: ${form.cp}`,
-        `Estado: ${form.estado}`,
-        `Referencias: ${form.refs}`,
-        `Ubicación: ${Number(form.lat).toFixed(5)}, ${Number(form.lng).toFixed(5)}`
-      ].join("\n");
-      lines.push(dir);
-    }else{
-      lines.push(`Ubicación: ${Number(form.lat).toFixed(5)}, ${Number(form.lng).toFixed(5)}`);
-    }
-    const r = getTarifa(envioKm);
+    lines.push(dir);
     lines.push(``);
-    lines.push(`Envío: *${r.ok ? money(envioPrecio) : "Fuera de rango"}*`);
+    lines.push(`Envío: *${money(envioPrecio)}*`);
   }
 
   lines.push(``);
@@ -1385,12 +1386,20 @@ function buildWhatsAppText(){
  *  ========================= */
 document.getElementById("btnCheckout").addEventListener("click", ()=>{
   if(cart.length===0){ alert("Agrega algo al carrito primero 😄"); return; }
-  if(!serviceChosen){ openSteps(0); return; }
+
+  if(!serviceChosen){
+    openSteps(0);
+    return;
+  }
+
   openSteps(1);
 }, {passive:true});
 
 btnBack.addEventListener("click", ()=>{
-  if(step>0){ step--; renderStep(); }
+  if(step>0){
+    step--;
+    renderStep();
+  }
 }, {passive:true});
 
 btnNext.addEventListener("click", async ()=>{
@@ -1403,14 +1412,22 @@ btnNext.addEventListener("click", async ()=>{
     renderCart();
     return;
   }
-  if(step===1){ step = 2; renderStep(); return; }
+
+  if(step===1){
+    step = 2;
+    renderStep();
+    return;
+  }
+
   if(step===2){
     if(getCanal()==="domicilio"){
       await recomputeEnvio();
-      const r = getTarifa(envioKm);
+      const r = getTarifa(envioKm, lluvia);
       if(!r.ok){ alert("Tu domicilio está fuera del rango de envío (0–10 km)."); return; }
     }
-    step = 3; renderStep(); return;
+    step = 3;
+    renderStep();
+    return;
   }
 
   const text = cleanWA(buildWhatsAppText());
