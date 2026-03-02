@@ -3,27 +3,31 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>VDC Restaurantes — Central</title>
+  <title>PICAPIEDRA — Central</title>
 
   <style>
     :root{
-      /* ===== TEMA MODESTO CREMA + CAFÉ ===== */
-      --bg:#f3e7d4;
-      --bg2:#efe0c9;
-      --paper:#fbf2e2;
-      --card:#fff7ea;
-      --line:rgba(59,42,31,.14);
+      /* ====== PICAPIEDRA THEME (negro + naranja) ====== */
+      --bg0:#050507;        /* negro profundo */
+      --bg1:#0b0b10;        /* negro azulado */
+      --card:#0f1117;       /* panel */
+      --card2:#121521;
+      --line:rgba(255,255,255,.10);
 
-      --ink:#3b2a1f;
-      --muted:#6e5646;
+      --ink:#f5f7ff;
+      --muted:rgba(245,247,255,.72);
 
-      --brand:#3b2a1f;
-      --brand2:#c98a1e;
-      --ok:#1f6b2a;
+      --orange:#ff7a00;
+      --orange2:#ff9a1f;
+      --amber:#ffb648;
 
-      --shadow: 0 18px 50px rgba(32,24,16,.18);
-      --shadow2: 0 10px 24px rgba(32,24,16,.14);
+      --good:#1fbf66;
+
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
+      --shadow2: 0 10px 30px rgba(0,0,0,.45);
       --r: 18px;
+
+      --ring: 0 0 0 2px rgba(255,122,0,.16), 0 0 0 8px rgba(255,122,0,.08);
     }
 
     *{box-sizing:border-box}
@@ -33,21 +37,23 @@
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
       color:var(--ink);
       background:
-        radial-gradient(900px 520px at 12% -10%, rgba(201,138,30,.14), transparent 60%),
-        radial-gradient(900px 520px at 96% 0%, rgba(31,107,42,.10), transparent 55%),
-        linear-gradient(180deg, var(--bg), var(--bg2));
+        radial-gradient(900px 520px at 18% -10%, rgba(255,122,0,.18), transparent 60%),
+        radial-gradient(900px 520px at 86% 0%, rgba(255,154,31,.10), transparent 55%),
+        radial-gradient(760px 420px at 50% 110%, rgba(255,122,0,.10), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
     }
 
-    /* ===== Top bar ===== */
+    /* ====== Top header ====== */
     header{
       position:sticky; top:0; z-index:50;
-      background: rgba(251,242,226,.86);
-      backdrop-filter: blur(12px);
-      border-bottom:1px solid var(--line);
-      box-shadow: 0 12px 26px rgba(32,24,16,.10);
+      background: rgba(10,10,14,.72);
+      backdrop-filter: blur(14px);
+      border-bottom:1px solid rgba(255,255,255,.08);
+      box-shadow: 0 12px 26px rgba(0,0,0,.40);
     }
     .top{
-      max-width: 1240px;
+      max-width: 1260px;
       margin:0 auto;
       padding:12px 14px 10px;
       display:flex;
@@ -57,53 +63,53 @@
 
     .brand{
       display:flex; align-items:center; gap:10px;
-      min-width: 260px;
+      min-width: 280px;
     }
     .mark{
-      width:42px; height:42px;
+      width:44px; height:44px;
       border-radius: 14px;
-      background: linear-gradient(180deg, rgba(59,42,31,.92), rgba(59,42,31,.78));
+      background:
+        radial-gradient(18px 18px at 30% 20%, rgba(255,255,255,.22), transparent 55%),
+        linear-gradient(180deg, rgba(255,122,0,.92), rgba(255,154,31,.74));
       display:grid; place-items:center;
-      color:#fff;
+      color:#0b0b10;
       font-weight:1000;
-      box-shadow: 0 16px 34px rgba(32,24,16,.18);
+      box-shadow: 0 16px 38px rgba(255,122,0,.18);
       letter-spacing:.5px;
       user-select:none;
     }
-    .brand .t{
-      display:flex; flex-direction:column; line-height:1.1;
-    }
+    .brand .t{display:flex; flex-direction:column; line-height:1.1}
     .brand .t b{font-size:14px; letter-spacing:.2px}
-    .brand .t span{font-size:12px; color:var(--muted); font-weight:800}
+    .brand .t span{font-size:12px; color:rgba(245,247,255,.70); font-weight:850}
 
     .search{
       flex:1;
       display:flex;
       align-items:center;
       gap:10px;
-      background: rgba(255,255,255,.65);
-      border:1px solid var(--line);
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
       border-radius: 999px;
       padding:10px 12px;
       box-shadow: var(--shadow2);
       min-width: 240px;
     }
-    .search svg{width:18px;height:18px;opacity:.9;color:var(--muted)}
+    .search svg{width:18px;height:18px;opacity:.95;color:rgba(245,247,255,.70)}
     .search input{
       border:none; outline:none;
       width:100%;
       font-size:14px;
       background: transparent;
       color: var(--ink);
-      font-weight:800;
+      font-weight:850;
     }
-    .search input::placeholder{color: rgba(110,86,70,.75); font-weight:800}
+    .search input::placeholder{color: rgba(245,247,255,.55); font-weight:800}
     .kbd{
       font-size:12px;
-      color: rgba(110,86,70,.85);
+      color: rgba(245,247,255,.62);
       font-weight:900;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.55);
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
       padding:6px 10px;
       border-radius:999px;
       white-space:nowrap;
@@ -113,41 +119,29 @@
       display:flex; align-items:center; gap:10px;
       padding:10px 12px;
       border-radius:999px;
-      background: rgba(31,107,42,.10);
-      border:1px solid rgba(31,107,42,.22);
-      font-weight:1000;
-      color: rgba(31,107,42,.95);
+      background: rgba(31,191,102,.10);
+      border:1px solid rgba(31,191,102,.18);
+      font-weight:950;
+      color: rgba(31,191,102,.98);
       white-space:nowrap;
     }
-    .dot{
-      width:10px; height:10px; border-radius:999px;
-      background: var(--ok);
-      box-shadow: 0 0 0 6px rgba(31,107,42,.12);
-    }
+    .dot{width:10px;height:10px;border-radius:999px;background:var(--good); box-shadow: 0 0 0 6px rgba(31,191,102,.12)}
 
-    /* ===== UberEats-like category bar (más interactiva) ===== */
+    /* ====== Category bar (Picapiedra chips) ====== */
     .catsBar{
-      max-width: 1240px;
+      max-width: 1260px;
       margin:0 auto;
       padding: 8px 14px 12px;
       display:flex;
       align-items:center;
       gap:10px;
     }
-
-    .catsWrap{
-      position:relative;
-      flex:1;
-      min-width: 0;
-    }
-
+    .catsWrap{position:relative;flex:1;min-width:0}
     .cats{
-      display:flex;
-      gap:10px;
-      overflow:auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      padding: 2px 0 6px;
+      display:flex; gap:10px;
+      overflow:auto; -webkit-overflow-scrolling: touch;
+      scrollbar-width:none;
+      padding: 2px 0 8px;
       scroll-behavior:smooth;
       scroll-snap-type: x mandatory;
       overscroll-behavior-x: contain;
@@ -156,78 +150,78 @@
 
     .catBtn{
       flex:0 0 auto;
-      display:flex;
-      align-items:center;
-      gap:10px;
+      display:flex; align-items:center; gap:10px;
       padding:10px 14px;
       border-radius: 999px;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.62);
-      box-shadow: 0 10px 22px rgba(32,24,16,.10);
+      border:1px solid rgba(255,255,255,.12);
+      background:
+        radial-gradient(16px 16px at 30% 25%, rgba(255,255,255,.10), transparent 60%),
+        rgba(255,255,255,.06);
+      box-shadow: 0 10px 22px rgba(0,0,0,.35);
       cursor:pointer;
-      font-weight:1000;
-      color: rgba(59,42,31,.92);
+      font-weight:950;
+      color: rgba(245,247,255,.92);
       user-select:none;
-      transition: transform .06s ease, filter .12s ease, background .12s ease;
+      transition: transform .06s ease, filter .12s ease, background .12s ease, border-color .12s ease;
       white-space:nowrap;
       scroll-snap-align: start;
     }
     .catBtn:active{transform: translateY(1px)}
     .catIcon{
-      width:34px; height:34px;
-      border-radius: 999px;
+      width:34px; height:34px; border-radius:999px;
       display:grid; place-items:center;
-      background: rgba(201,138,30,.14);
-      border: 1px solid rgba(201,138,30,.22);
+      background: rgba(255,122,0,.14);
+      border: 1px solid rgba(255,122,0,.20);
       font-size:18px;
+      box-shadow: 0 10px 20px rgba(255,122,0,.10);
     }
     .catBtn.active{
-      background: rgba(59,42,31,.90);
-      border-color: rgba(59,42,31,.70);
-      color:#fff;
-      box-shadow: 0 18px 40px rgba(32,24,16,.18);
+      background:
+        radial-gradient(18px 18px at 30% 20%, rgba(255,255,255,.16), transparent 60%),
+        linear-gradient(180deg, rgba(255,122,0,.92), rgba(255,154,31,.70));
+      border-color: rgba(255,122,0,.60);
+      color:#140b06;
+      box-shadow: 0 18px 40px rgba(255,122,0,.14);
     }
     .catBtn.active .catIcon{
-      background: rgba(255,255,255,.14);
-      border-color: rgba(255,255,255,.22);
+      background: rgba(20,11,6,.16);
+      border-color: rgba(20,11,6,.22);
+      box-shadow:none;
     }
 
-    /* sombras laterales para indicar scroll */
     .catsFadeL,.catsFadeR{
       position:absolute; top:-2px; bottom:-2px;
-      width: 60px;
+      width: 64px;
       pointer-events:none;
-      z-index: 3;
+      z-index:3;
       transition: opacity .15s ease;
     }
-    .catsFadeL{ left:-2px; background: linear-gradient(90deg, rgba(251,242,226,1), rgba(251,242,226,0)); opacity:0; }
-    .catsFadeR{ right:-2px; background: linear-gradient(270deg, rgba(251,242,226,1), rgba(251,242,226,0)); opacity:1; }
+    .catsFadeL{left:-2px; background: linear-gradient(90deg, rgba(10,10,14,1), rgba(10,10,14,0)); opacity:0;}
+    .catsFadeR{right:-2px; background: linear-gradient(270deg, rgba(10,10,14,1), rgba(10,10,14,0)); opacity:1;}
 
-    /* botones flecha (desktop) */
     .catsNav{
       width:40px; height:40px;
       border-radius: 999px;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.62);
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
       box-shadow: var(--shadow2);
       cursor:pointer;
       display:grid; place-items:center;
-      font-weight:1000;
-      color: rgba(59,42,31,.90);
+      color: rgba(245,247,255,.92);
       transition: transform .06s ease, filter .12s ease, opacity .12s ease;
       user-select:none;
     }
     .catsNav:active{transform: translateY(1px)}
-    .catsNav:hover{filter: brightness(1.03)}
+    .catsNav:hover{filter: brightness(1.06)}
     .catsNav[disabled]{opacity:.35; cursor:default; filter:none}
     .catsNav svg{width:18px;height:18px}
 
     .catHint{
       font-size:12px;
       font-weight:900;
-      color: rgba(110,86,70,.85);
-      border:1px dashed rgba(59,42,31,.20);
-      background: rgba(255,255,255,.35);
+      color: rgba(245,247,255,.70);
+      border:1px dashed rgba(255,122,0,.25);
+      background: rgba(255,122,0,.06);
       padding:10px 12px;
       border-radius: 14px;
       white-space:nowrap;
@@ -235,64 +229,164 @@
 
     /* ===== Layout ===== */
     .wrap{
-      max-width:1240px;
+      max-width:1260px;
       margin:0 auto;
-      padding:16px 14px 42px;
+      padding:16px 14px 46px;
       display:grid;
       gap:14px;
     }
 
-    /* ===== Hero ===== */
+    /* ====== HERO con logo que luce ====== */
     .hero{
-      border-radius: var(--r);
-      border:1px solid var(--line);
+      border-radius: calc(var(--r) + 6px);
+      border:1px solid rgba(255,255,255,.10);
       background:
-        radial-gradient(900px 260px at 12% 0%, rgba(201,138,30,.16), transparent 60%),
-        radial-gradient(900px 260px at 92% 0%, rgba(31,107,42,.10), transparent 60%),
-        rgba(255,255,255,.55);
+        radial-gradient(920px 260px at 12% 0%, rgba(255,122,0,.18), transparent 60%),
+        radial-gradient(920px 260px at 92% 0%, rgba(255,154,31,.12), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
       box-shadow: var(--shadow);
-      padding:20px 16px;
-      text-align:center;
+      padding:18px 16px;
       overflow:hidden;
       position:relative;
     }
-    .hero h1{
-      margin:0;
-      font-size: 28px;
-      letter-spacing: -.6px;
+
+    .heroGrid{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:14px;
+      align-items:center;
     }
-    .hero p{
-      margin:10px auto 0;
+    @media (max-width: 920px){
+      .heroGrid{grid-template-columns: 1fr; text-align:center;}
+    }
+
+    .heroText h1{
+      margin:0;
+      font-size: 30px;
+      letter-spacing: -.8px;
+      line-height:1.05;
+    }
+    .heroText p{
+      margin:10px 0 0;
       max-width: 780px;
-      color: rgba(59,42,31,.85);
+      color: rgba(245,247,255,.74);
       font-weight: 800;
       line-height: 1.35;
     }
-    .hero .mini{
+
+    .heroBadges{
       margin-top:14px;
       display:flex;
-      justify-content:center;
       flex-wrap:wrap;
       gap:10px;
     }
     .chip{
       display:inline-flex; align-items:center; gap:8px;
-      padding:8px 12px;
+      padding:9px 12px;
       border-radius: 999px;
-      background: rgba(255,255,255,.62);
-      border:1px solid var(--line);
-      font-weight:1000;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+      font-weight:950;
       font-size:12px;
-      color: rgba(59,42,31,.90);
-      box-shadow: 0 10px 22px rgba(32,24,16,.10);
+      color: rgba(245,247,255,.90);
+      box-shadow: 0 10px 22px rgba(0,0,0,.28);
+    }
+    .chip strong{color: rgba(255,154,31,.95)}
+    .chip.orange{
+      background: rgba(255,122,0,.08);
+      border-color: rgba(255,122,0,.18);
+    }
+
+    /* Logo showcase box */
+    .logoShow{
+      border-radius: 22px;
+      border:1px solid rgba(255,122,0,.22);
+      background:
+        radial-gradient(240px 240px at 30% 20%, rgba(255,122,0,.18), transparent 60%),
+        radial-gradient(260px 260px at 80% 60%, rgba(255,154,31,.14), transparent 62%),
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      box-shadow:
+        0 22px 70px rgba(255,122,0,.12),
+        0 18px 60px rgba(0,0,0,.55);
+      padding:14px;
+      position:relative;
+      overflow:hidden;
+    }
+    .logoShow::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(420px 160px at 20% 0%, rgba(255,255,255,.10), transparent 60%),
+        radial-gradient(420px 160px at 80% 100%, rgba(255,122,0,.12), transparent 62%);
+      pointer-events:none;
+    }
+
+    .logoFrame{
+      border-radius: 18px;
+      background: #060608;
+      border:1px solid rgba(255,255,255,.10);
+      padding:14px;
+      display:grid;
+      place-items:center;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+    }
+    .logoFrame img{
+      width:min(360px, 100%);
+      height:auto;
+      display:block;
+      filter: drop-shadow(0 18px 34px rgba(0,0,0,.55));
+    }
+
+    .logoCaption{
+      margin-top:10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .logoTitle{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+    }
+    .logoTitle b{
+      letter-spacing:.4px;
+      font-size:14px;
+      font-weight:1000;
+    }
+    .logoTitle span{
+      font-size:12px;
+      color: rgba(245,247,255,.68);
+      font-weight:850;
+    }
+
+    .logoCTA{
+      display:flex; gap:10px;
+      align-items:center;
+    }
+    .pill{
+      font-size:12px;
+      font-weight:1000;
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.06);
+      color: rgba(245,247,255,.90);
+    }
+    .pill.orange{
+      border-color: rgba(255,122,0,.22);
+      background: rgba(255,122,0,.08);
     }
 
     /* ===== Section ===== */
     .sec{
       border-radius: var(--r);
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.52);
-      box-shadow: 0 14px 36px rgba(32,24,16,.12);
+      border:1px solid rgba(255,255,255,.10);
+      background:
+        radial-gradient(700px 260px at 10% 0%, rgba(255,122,0,.10), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+      box-shadow: var(--shadow2);
       padding: 12px 12px 8px;
       overflow:hidden;
     }
@@ -317,17 +411,17 @@
       align-items:center;
       gap:10px;
     }
-    .pill{
+    .count{
       font-size:12px;
       font-weight:1000;
       padding:6px 10px;
       border-radius:999px;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.65);
-      color: rgba(59,42,31,.92);
+      border:1px solid rgba(255,122,0,.22);
+      background: rgba(255,122,0,.08);
+      color: rgba(255,154,31,.95);
     }
     .sub{
-      color: var(--muted);
+      color: rgba(245,247,255,.66);
       font-weight:900;
       font-size:12px;
     }
@@ -338,18 +432,17 @@
       display:flex;
       gap:12px;
       overflow:hidden;
-      padding: 12px 6px 8px;
+      padding: 12px 6px 10px;
       scroll-behavior:smooth;
     }
-
     .fadeL,.fadeR{
       position:absolute; top:0; bottom:0;
       width: 70px;
       pointer-events:none;
       z-index: 3;
     }
-    .fadeL{ left:-2px; background: linear-gradient(90deg, rgba(243,231,212,1), rgba(243,231,212,0)); }
-    .fadeR{ right:-2px; background: linear-gradient(270deg, rgba(243,231,212,1), rgba(243,231,212,0)); }
+    .fadeL{ left:-2px; background: linear-gradient(90deg, rgba(5,5,7,1), rgba(5,5,7,0)); }
+    .fadeR{ right:-2px; background: linear-gradient(270deg, rgba(5,5,7,1), rgba(5,5,7,0)); }
 
     @media (max-width: 700px){
       .cards{ overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling: touch; }
@@ -360,12 +453,21 @@
     .rCard{
       flex: 0 0 360px;
       border-radius: 20px;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.72);
-      box-shadow: var(--shadow);
+      border:1px solid rgba(255,255,255,.10);
+      background:
+        radial-gradient(520px 180px at 20% 0%, rgba(255,122,0,.10), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      box-shadow: var(--shadow2);
       overflow:hidden;
       scroll-snap-align: start;
+      transition: transform .10s ease, box-shadow .12s ease, border-color .12s ease;
     }
+    .rCard:hover{
+      transform: translateY(-2px);
+      border-color: rgba(255,122,0,.22);
+      box-shadow: 0 22px 70px rgba(0,0,0,.55);
+    }
+
     @media (max-width: 920px){
       .brand{min-width:auto}
       .status{display:none}
@@ -380,10 +482,20 @@
     .cover{
       height: 110px;
       background:
-        linear-gradient(180deg, rgba(59,42,31,.12), rgba(59,42,31,0)),
-        radial-gradient(520px 190px at 15% 0%, rgba(201,138,30,.18), transparent 60%),
-        radial-gradient(520px 190px at 85% 0%, rgba(31,107,42,.10), transparent 60%),
-        rgba(255,255,255,.38);
+        linear-gradient(180deg, rgba(0,0,0,.00), rgba(0,0,0,.45)),
+        radial-gradient(520px 190px at 15% 0%, rgba(255,122,0,.18), transparent 60%),
+        radial-gradient(520px 190px at 85% 0%, rgba(255,154,31,.10), transparent 60%),
+        rgba(255,255,255,.02);
+      position:relative;
+    }
+    .cover::after{
+      content:"";
+      position:absolute; inset:0;
+      background-image: radial-gradient(rgba(255,255,255,.06) 1px, transparent 1px);
+      background-size: 16px 16px;
+      opacity:.20;
+      pointer-events:none;
+      mix-blend-mode: screen;
     }
 
     .rBody{ padding:14px 14px 14px; text-align:center; }
@@ -394,16 +506,19 @@
       gap:10px;
       margin-top: -34px;
     }
+
     .avatar{
-      width:60px; height:60px;
-      border-radius: 16px;
-      border:1px solid var(--line);
-      background: rgba(59,42,31,.10);
-      box-shadow: 0 16px 34px rgba(32,24,16,.16);
+      width:62px; height:62px;
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.12);
+      background:
+        radial-gradient(18px 18px at 30% 20%, rgba(255,255,255,.10), transparent 60%),
+        rgba(255,122,0,.10);
+      box-shadow: 0 14px 32px rgba(0,0,0,.55);
       display:grid;
       place-items:center;
       font-weight:1000;
-      color: var(--brand);
+      color: var(--orange2);
       overflow:hidden;
       font-size: 22px;
     }
@@ -421,7 +536,7 @@
     }
     .rDesc{
       margin:6px 0 0;
-      color: rgba(110,86,70,.92);
+      color: rgba(245,247,255,.70);
       font-weight:850;
       line-height:1.3;
       font-size:13px;
@@ -438,19 +553,19 @@
       font-weight:1000;
       padding:7px 10px;
       border-radius: 999px;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.62);
-      color: rgba(59,42,31,.88);
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      color: rgba(245,247,255,.88);
     }
     .tag.hot{
-      background: rgba(201,138,30,.16);
-      border-color: rgba(201,138,30,.28);
-      color: rgba(120,72,10,.95);
+      background: rgba(255,122,0,.10);
+      border-color: rgba(255,122,0,.20);
+      color: rgba(255,154,31,.95);
     }
     .tag.cool{
-      background: rgba(31,107,42,.10);
-      border-color: rgba(31,107,42,.22);
-      color: rgba(31,107,42,.95);
+      background: rgba(255,255,255,.06);
+      border-color: rgba(255,255,255,.12);
+      color: rgba(245,247,255,.88);
     }
 
     .rActions{
@@ -464,21 +579,23 @@
       border-radius: 14px;
       font-weight:1000;
       font-size:14px;
-      transition: transform .06s ease, filter .12s ease;
+      transition: transform .06s ease, filter .12s ease, box-shadow .12s ease;
     }
     .btn:active{transform: translateY(1px)}
     .btnEnter{
       border:none;
-      background: linear-gradient(180deg, rgba(59,42,31,.92), rgba(59,42,31,.78));
-      color:#fff;
-      box-shadow: 0 16px 34px rgba(32,24,16,.18);
+      color:#140b06;
+      background:
+        radial-gradient(18px 18px at 30% 20%, rgba(255,255,255,.20), transparent 60%),
+        linear-gradient(180deg, rgba(255,122,0,.94), rgba(255,154,31,.74));
+      box-shadow: 0 14px 28px rgba(255,122,0,.14);
     }
     .btnGhost{
-      background: rgba(255,255,255,.62);
-      border:1px solid var(--line);
-      color: rgba(59,42,31,.92);
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      color: rgba(245,247,255,.92);
     }
-    .btn:hover{filter: brightness(1.04);}
+    .btn:hover{filter: brightness(1.06);}
 
     .hidden{display:none!important}
   </style>
@@ -488,10 +605,10 @@
 <header>
   <div class="top">
     <div class="brand">
-      <div class="mark">VDC</div>
+      <div class="mark">PP</div>
       <div class="t">
-        <b>Central de Servicios</b>
-        <span>Menús + pedidos + mayoreo</span>
+        <b>PICAPIEDRA Central</b>
+        <span>Comida a domicilio • menús • pedidos</span>
       </div>
     </div>
 
@@ -510,7 +627,6 @@
     </div>
   </div>
 
-  <!-- ===== Barra de categorías tipo Uber Eats ===== -->
   <div class="catsBar">
     <button class="catsNav" id="catsPrev" aria-label="Anterior">
       <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -523,39 +639,16 @@
       <div class="catsFadeR" id="catsFadeR"></div>
 
       <div class="cats" id="cats">
-        <button class="catBtn active" data-cat="all">
-          <span class="catIcon">🏠</span> Todo
-        </button>
-
-        <button class="catBtn" data-cat="taquerias">
-          <span class="catIcon">🌮</span> Taquerías
-        </button>
-        <button class="catBtn" data-cat="menuderias">
-          <span class="catIcon">🥣</span> Menuderías
-        </button>
-        <button class="catBtn" data-cat="carniceria">
-          <span class="catIcon">🥩</span> Carnicería
-        </button>
-        <button class="catBtn" data-cat="mayoreo">
-          <span class="catIcon">📦</span> Venta Mayoreo
-        </button>
-
-        <!-- NUEVAS CATEGORÍAS -->
-        <button class="catBtn" data-cat="alitas">
-          <span class="catIcon">🍗</span> Alitas
-        </button>
-        <button class="catBtn" data-cat="pizza">
-          <span class="catIcon">🍕</span> Pizza
-        </button>
-        <button class="catBtn" data-cat="carne_asada">
-          <span class="catIcon">🔥</span> Carne Asada
-        </button>
-        <button class="catBtn" data-cat="sushi">
-          <span class="catIcon">🍣</span> Sushi
-        </button>
-        <button class="catBtn" data-cat="bebidas">
-          <span class="catIcon">🥤</span> Bebidas
-        </button>
+        <button class="catBtn active" data-cat="all"><span class="catIcon">🪨</span> Todo</button>
+        <button class="catBtn" data-cat="taquerias"><span class="catIcon">🌮</span> Taquerías</button>
+        <button class="catBtn" data-cat="menuderias"><span class="catIcon">🥣</span> Menuderías</button>
+        <button class="catBtn" data-cat="carniceria"><span class="catIcon">🥩</span> Carnicería</button>
+        <button class="catBtn" data-cat="mayoreo"><span class="catIcon">📦</span> Venta Mayoreo</button>
+        <button class="catBtn" data-cat="alitas"><span class="catIcon">🍗</span> Alitas</button>
+        <button class="catBtn" data-cat="pizza"><span class="catIcon">🍕</span> Pizza</button>
+        <button class="catBtn" data-cat="carne_asada"><span class="catIcon">🔥</span> Carne Asada</button>
+        <button class="catBtn" data-cat="sushi"><span class="catIcon">🍣</span> Sushi</button>
+        <button class="catBtn" data-cat="bebidas"><span class="catIcon">🥤</span> Bebidas</button>
       </div>
     </div>
 
@@ -565,21 +658,44 @@
       </svg>
     </button>
 
-    <div class="catHint">Tip: desliza la barra • o usa ← →</div>
+    <div class="catHint">Tip: desliza • o usa ← →</div>
   </div>
 </header>
 
 <main class="wrap">
 
+  <!-- HERO con logo grande -->
   <section class="hero">
-    <h1>Panel Central de Servicios</h1>
-    <p>Elige una categoría arriba y entra a cada negocio en segundos. Todo listo para ordenar y operar.</p>
-    <div class="mini">
-      <div class="chip">⚡ Enter abre el primer resultado</div>
-      <div class="chip">🔎 Busca por nombre o tag</div>
-      <div class="chip">📲 WhatsApp listo para enviar</div>
-      <div class="chip">🧭 Barra tipo Uber Eats</div>
-      <div class="chip">🫰 La barra se mueve sola</div>
+    <div class="heroGrid">
+      <div class="heroText">
+        <h1>🪨 Bienvenido a <span style="color:var(--orange2)">PICAPIEDRA</span></h1>
+        <p>Un panel central con vibra “piedra + fuego”: rápido, claro y listo para que el cliente entre a ordenar en segundos.</p>
+
+        <div class="heroBadges">
+          <div class="chip orange">⚡ <strong>Enter</strong> abre el primer resultado</div>
+          <div class="chip">🔎 Busca por nombre o tag</div>
+          <div class="chip orange">📲 WhatsApp listo</div>
+          <div class="chip">🧭 Barra tipo Uber Eats</div>
+        </div>
+      </div>
+
+      <aside class="logoShow">
+        <div class="logoFrame">
+          <!-- ✅ Cambia esta ruta por tu imagen -->
+          <img id="logoPicapiedra" src="" alt="PICAPIEDRA Logo">
+        </div>
+
+        <div class="logoCaption">
+          <div class="logoTitle">
+            <b>PICAPIEDRA</b>
+            <span>Comida a domicilio • estilo cavernícola moderno</span>
+          </div>
+          <div class="logoCTA">
+            <span class="pill orange">🔥 Naranja</span>
+            <span class="pill">⚫ Negro</span>
+          </div>
+        </div>
+      </aside>
     </div>
   </section>
 
@@ -587,12 +703,11 @@
   <section class="sec" data-sec="taquerias">
     <div class="secHead">
       <div class="left">
-        <h2>🌮 Taquerías <span class="pill" id="count_taquerias">0</span></h2>
+        <h2>🌮 Taquerías <span class="count" id="count_taquerias">0</span></h2>
         <div class="sub">Catálogos de tacos y pedidos</div>
       </div>
       <div class="sub">Se mueve solo • estilo panel</div>
     </div>
-
     <div class="carouselWrap">
       <div class="fadeL"></div><div class="fadeR"></div>
       <div class="cards" id="cards_taquerias"></div>
@@ -603,12 +718,11 @@
   <section class="sec" data-sec="menuderias">
     <div class="secHead">
       <div class="left">
-        <h2>🥣 Menuderías <span class="pill" id="count_menuderias">0</span></h2>
+        <h2>🥣 Menuderías <span class="count" id="count_menuderias">0</span></h2>
         <div class="sub">Menús de menudo, quesadillas y extras</div>
       </div>
       <div class="sub">Se mueve solo • estilo panel</div>
     </div>
-
     <div class="carouselWrap">
       <div class="fadeL"></div><div class="fadeR"></div>
       <div class="cards" id="cards_menuderias"></div>
@@ -619,12 +733,11 @@
   <section class="sec" data-sec="carniceria">
     <div class="secHead">
       <div class="left">
-        <h2>🥩 Carnicería <span class="pill" id="count_carniceria">0</span></h2>
+        <h2>🥩 Carnicería <span class="count" id="count_carniceria">0</span></h2>
         <div class="sub">Catálogos de carne, cortes y pedidos</div>
       </div>
       <div class="sub">Se mueve solo • estilo panel</div>
     </div>
-
     <div class="carouselWrap">
       <div class="fadeL"></div><div class="fadeR"></div>
       <div class="cards" id="cards_carniceria"></div>
@@ -635,12 +748,11 @@
   <section class="sec" data-sec="mayoreo">
     <div class="secHead">
       <div class="left">
-        <h2>📦 Venta Mayoreo <span class="pill" id="count_mayoreo">0</span></h2>
+        <h2>📦 Venta Mayoreo <span class="count" id="count_mayoreo">0</span></h2>
         <div class="sub">Accesos a compra y pedidos por volumen</div>
       </div>
       <div class="sub">Se mueve solo • estilo panel</div>
     </div>
-
     <div class="carouselWrap">
       <div class="fadeL"></div><div class="fadeR"></div>
       <div class="cards" id="cards_mayoreo"></div>
@@ -651,7 +763,7 @@
   <section class="sec" data-sec="alitas">
     <div class="secHead">
       <div class="left">
-        <h2>🍗 Alitas <span class="pill" id="count_alitas">0</span></h2>
+        <h2>🍗 Alitas <span class="count" id="count_alitas">0</span></h2>
         <div class="sub">Alitas, boneless, combos y extras</div>
       </div>
       <div class="sub">Se mueve solo • estilo panel</div>
@@ -666,7 +778,7 @@
   <section class="sec" data-sec="pizza">
     <div class="secHead">
       <div class="left">
-        <h2>🍕 Pizza <span class="pill" id="count_pizza">0</span></h2>
+        <h2>🍕 Pizza <span class="count" id="count_pizza">0</span></h2>
         <div class="sub">Pizzas, rebanadas, promo y bebidas</div>
       </div>
       <div class="sub">Se mueve solo • estilo panel</div>
@@ -681,7 +793,7 @@
   <section class="sec" data-sec="carne_asada">
     <div class="secHead">
       <div class="left">
-        <h2>🔥 Carne Asada <span class="pill" id="count_carne_asada">0</span></h2>
+        <h2>🔥 Carne Asada <span class="count" id="count_carne_asada">0</span></h2>
         <div class="sub">Parrilla, tacos, papas, salsas</div>
       </div>
       <div class="sub">Se mueve solo • estilo panel</div>
@@ -696,7 +808,7 @@
   <section class="sec" data-sec="sushi">
     <div class="secHead">
       <div class="left">
-        <h2>🍣 Sushi <span class="pill" id="count_sushi">0</span></h2>
+        <h2>🍣 Sushi <span class="count" id="count_sushi">0</span></h2>
         <div class="sub">Rollos, bowls, combos y bebidas</div>
       </div>
       <div class="sub">Se mueve solo • estilo panel</div>
@@ -711,7 +823,7 @@
   <section class="sec" data-sec="bebidas">
     <div class="secHead">
       <div class="left">
-        <h2>🥤 Bebidas <span class="pill" id="count_bebidas">0</span></h2>
+        <h2>🥤 Bebidas <span class="count" id="count_bebidas">0</span></h2>
         <div class="sub">Aguas, refrescos, jugos, café</div>
       </div>
       <div class="sub">Se mueve solo • estilo panel</div>
@@ -725,6 +837,17 @@
 </main>
 
 <script>
+/** =========================
+ *  LOGO (pon aquí tu ruta)
+ *  =========================
+ * Opción 1 (recomendado): sube el logo a tu repo y pon ruta relativa:
+ *   const logoSrc = "./assets/picapiedra.png";
+ * Opción 2: URL completa (si está alojado en tu GitHub Pages):
+ *   const logoSrc = "https://tusitio.github.io/tuRepo/assets/picapiedra.png";
+ */
+const logoSrc = "./assets/picapiedra.png";
+document.getElementById("logoPicapiedra").src = logoSrc;
+
 /** =========================
  *  DATA (por categorías)
  *  ========================= */
@@ -782,62 +905,20 @@ const CATALOG = {
       flavor:"hot"
     }
   ],
-
-  /* ===== NUEVAS ===== */
   alitas: [
-    {
-      id:"alitas_demo",
-      name:"Alitas (demo)",
-      desc:"Ejemplo: alitas, boneless, papas, salsas.",
-      tags:["Alitas","Combos","Pedidos"],
-      route:"#",
-      logoText:"🍗",
-      flavor:"hot"
-    }
+    { id:"alitas_demo", name:"Alitas (demo)", desc:"Ejemplo: alitas, boneless, papas, salsas.", tags:["Alitas","Combos","Pedidos"], route:"#", logoText:"🍗", flavor:"hot" }
   ],
   pizza: [
-    {
-      id:"pizza_demo",
-      name:"Pizza (demo)",
-      desc:"Ejemplo: pizzas, promo 2x1, rebanadas.",
-      tags:["Pizza","Promos","Pedidos"],
-      route:"#",
-      logoText:"🍕",
-      flavor:"cool"
-    }
+    { id:"pizza_demo", name:"Pizza (demo)", desc:"Ejemplo: pizzas, promo 2x1, rebanadas.", tags:["Pizza","Promos","Pedidos"], route:"#", logoText:"🍕", flavor:"cool" }
   ],
   carne_asada: [
-    {
-      id:"asada_demo",
-      name:"Carne Asada (demo)",
-      desc:"Ejemplo: parrilladas, tacos, papas, salsas.",
-      tags:["Parrilla","Tacos","Pedidos"],
-      route:"#",
-      logoText:"🔥",
-      flavor:"hot"
-    }
+    { id:"asada_demo", name:"Carne Asada (demo)", desc:"Ejemplo: parrilladas, tacos, papas, salsas.", tags:["Parrilla","Tacos","Pedidos"], route:"#", logoText:"🔥", flavor:"hot" }
   ],
   sushi: [
-    {
-      id:"sushi_demo",
-      name:"Sushi (demo)",
-      desc:"Ejemplo: rollos, bowls, combos.",
-      tags:["Sushi","Combos","Pedidos"],
-      route:"#",
-      logoText:"🍣",
-      flavor:"cool"
-    }
+    { id:"sushi_demo", name:"Sushi (demo)", desc:"Ejemplo: rollos, bowls, combos.", tags:["Sushi","Combos","Pedidos"], route:"#", logoText:"🍣", flavor:"cool" }
   ],
   bebidas: [
-    {
-      id:"bebidas_demo",
-      name:"Bebidas (demo)",
-      desc:"Ejemplo: aguas, refrescos, jugos, café.",
-      tags:["Bebidas","Extras","Pedidos"],
-      route:"#",
-      logoText:"🥤",
-      flavor:"cool"
-    }
+    { id:"bebidas_demo", name:"Bebidas (demo)", desc:"Ejemplo: aguas, refrescos, jugos, café.", tags:["Bebidas","Extras","Pedidos"], route:"#", logoText:"🥤", flavor:"cool" }
   ]
 };
 
@@ -854,7 +935,6 @@ const sections = [
   { key:"menuderias", secEl: document.querySelector('[data-sec="menuderias"]'), el: document.getElementById("cards_menuderias"), count: document.getElementById("count_menuderias") },
   { key:"carniceria", secEl: document.querySelector('[data-sec="carniceria"]'), el: document.getElementById("cards_carniceria"), count: document.getElementById("count_carniceria") },
   { key:"mayoreo",    secEl: document.querySelector('[data-sec="mayoreo"]'),    el: document.getElementById("cards_mayoreo"),    count: document.getElementById("count_mayoreo") },
-
   { key:"alitas",      secEl: document.querySelector('[data-sec="alitas"]'),      el: document.getElementById("cards_alitas"),      count: document.getElementById("count_alitas") },
   { key:"pizza",       secEl: document.querySelector('[data-sec="pizza"]'),       el: document.getElementById("cards_pizza"),       count: document.getElementById("count_pizza") },
   { key:"carne_asada", secEl: document.querySelector('[data-sec="carne_asada"]'), el: document.getElementById("cards_carne_asada"), count: document.getElementById("count_carne_asada") },
@@ -862,9 +942,6 @@ const sections = [
   { key:"bebidas",     secEl: document.querySelector('[data-sec="bebidas"]'),     el: document.getElementById("cards_bebidas"),     count: document.getElementById("count_bebidas") }
 ];
 
-/** =========================
- *  Estado de filtros
- *  ========================= */
 let activeCategory = "all";
 
 /** =========================
@@ -878,7 +955,7 @@ function tagHtml(tag, flavor){
 function cardHtml(item){
   const avatar = item.logoImg
     ? `<div class="avatar"><img src="${item.logoImg}" alt="${escapeHtml(item.name)}"></div>`
-    : `<div class="avatar">${escapeHtml(item.logoText || "VDC")}</div>`;
+    : `<div class="avatar">${escapeHtml(item.logoText || "🪨")}</div>`;
 
   return `
     <article class="rCard" data-route="${item.route}" data-name="${(item.name||"").toLowerCase()}">
@@ -962,7 +1039,6 @@ function applyFilter(){
 
 q.addEventListener("input", applyFilter);
 
-/** Ctrl/Cmd + K focus + Enter abre primer resultado visible */
 document.addEventListener("keydown", (e)=>{
   const isK = (e.key||"").toLowerCase()==="k";
   if((e.ctrlKey || e.metaKey) && isK){
@@ -979,7 +1055,7 @@ document.addEventListener("keydown", (e)=>{
 });
 
 /** =========================
- *  Barra de categorías (con scroll + flechas + auto)
+ *  Barra de categorías (scroll + flechas + auto)
  *  ========================= */
 const catsEl = document.getElementById("cats");
 const catsPrev = document.getElementById("catsPrev");
@@ -992,11 +1068,9 @@ let catsPausedUntil = 0;
 
 function setActiveCat(cat){
   activeCategory = cat;
-
   document.querySelectorAll(".catBtn").forEach(b=>{
     b.classList.toggle("active", b.getAttribute("data-cat") === cat);
   });
-
   applyFilter();
 }
 
@@ -1004,8 +1078,6 @@ catsEl.addEventListener("click", (e)=>{
   const btn = e.target.closest(".catBtn");
   if(!btn) return;
   setActiveCat(btn.getAttribute("data-cat"));
-
-  // pequeño “focus” visual: centrar el chip seleccionado
   centerChip(btn);
 });
 
@@ -1025,7 +1097,6 @@ function updateCatsUI(){
 }
 
 function catsStep(){
-  // usa tamaño aproximado de 3 chips
   const first = catsEl.querySelector(".catBtn");
   const gap = parseFloat(getComputedStyle(catsEl).gap || "10");
   const w = first ? first.getBoundingClientRect().width : 140;
@@ -1035,7 +1106,6 @@ function catsStep(){
 function scrollCatsBy(dx){
   catsEl.scrollTo({ left: catsEl.scrollLeft + dx, behavior:"smooth" });
 }
-
 catsPrev.addEventListener("click", ()=> scrollCatsBy(-catsStep()));
 catsNext.addEventListener("click", ()=> scrollCatsBy(catsStep()));
 
@@ -1049,7 +1119,6 @@ function centerChip(btn){
   catsEl.scrollTo({ left: catsEl.scrollLeft + offset, behavior:"smooth" });
 }
 
-/* Auto-scroll suave de la barra (se pausa con interacción) */
 const CATS_AUTO_MS = 2600;
 const CATS_PAUSE_MS = 5200;
 
@@ -1065,7 +1134,6 @@ function catsTick(){
     catsEl.scrollTo({left: next, behavior:"smooth"});
   }
 }
-
 function startCatsAuto(){
   stopCatsAuto();
   catsAutoTimer = setInterval(catsTick, CATS_AUTO_MS);
@@ -1093,11 +1161,9 @@ function stepPx(cardsEl){
   const gap = parseFloat(getComputedStyle(cardsEl).gap || "12");
   return first.getBoundingClientRect().width + gap;
 }
-
 function maxScroll(cardsEl){
   return Math.max(0, cardsEl.scrollWidth - cardsEl.clientWidth);
 }
-
 function tick(key){
   const sec = sections.find(s=>s.key===key);
   const cardsEl = sec?.el;
@@ -1107,7 +1173,6 @@ function tick(key){
 
   const state = auto[key];
   if(!state) return;
-
   if(Date.now() < state.pausedUntil) return;
 
   const max = maxScroll(cardsEl);
@@ -1120,24 +1185,18 @@ function tick(key){
     cardsEl.scrollTo({ left: next, behavior:"smooth" });
   }
 }
-
 function startAuto(key){
   stopAuto(key);
   auto[key] = auto[key] || { timer:null, pausedUntil:0 };
   auto[key].timer = setInterval(()=>tick(key), AUTO_MS);
 }
-
 function stopAuto(key){
   if(auto[key]?.timer){
     clearInterval(auto[key].timer);
     auto[key].timer = null;
   }
 }
-
-function resetAuto(key){
-  startAuto(key);
-}
-
+function resetAuto(key){ startAuto(key); }
 function bindPause(key, cardsEl){
   auto[key] = auto[key] || { timer:null, pausedUntil:0 };
   ["wheel","touchstart","pointerdown","mouseenter"].forEach(ev=>{
