@@ -464,6 +464,13 @@
  *  ========================= */
 const TAQUERIA_NOMBRE = "Tacos Los Conquistadores";
 const WHATSAPP_TAQ    = "524621872594"; // cambia si quieres
+// Servidor local de impresión. Si tu impresión_local usa otro puerto/ruta, cambia aquí.
+const LOCAL_PRINT_URLS = [
+  "http://localhost:3000/print",
+  "http://127.0.0.1:3000/print",
+  "http://localhost:3000/imprimir",
+  "http://127.0.0.1:3000/imprimir"
+];
 const TQ_LAT          = 20.6767;
 const TQ_LNG          = -101.3563;
 const IMG_BASE = "";
@@ -576,6 +583,22 @@ function modsPara(item){
  *  HELPERS
  *  ========================= */
 function money(n){ return "$" + Number(n||0).toFixed(2); }
+function localDateISO(d=new Date()){
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,"0");
+  const day = String(d.getDate()).padStart(2,"0");
+  return `${y}-${m}-${day}`;
+}
+function suggestedPickupTime(){
+  const d = new Date(Date.now() + 25*60000);
+  const h = String(d.getHours()).padStart(2,"0");
+  const m = String(d.getMinutes()).padStart(2,"0");
+  return `${h}:${m}`;
+}
+function fechaHumana(iso){
+  if(!iso) return "Hoy";
+  try{ return new Date(iso + "T00:00:00").toLocaleDateString("es-MX", {weekday:"short", day:"2-digit", month:"short"}); }catch(e){ return iso; }
+}
 function escapeHtml(s){
   return (s||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
 }
@@ -933,6 +956,8 @@ const form = {
   cp: "",
   estado: "Guanajuato",
   refs: "",
+  recogerFecha: localDateISO(),
+  recogerHora: "",
   lat: null,
   lng: null,
   metodo: "efectivo",
@@ -1153,16 +1178,37 @@ function renderStep(){
     stepTitle.textContent = "Paso 2 de 3";
 
     if(canal!=="domicilio"){
-      stepSub.textContent = "Confirmación rápida";
+      stepSub.textContent = "Programa tu hora de pickup";
+      if(!form.recogerFecha) form.recogerFecha = localDateISO();
+      if(!form.recogerHora) form.recogerHora = suggestedPickupTime();
       stepsBody.innerHTML = `
         <div class="note" style="margin-top:0">
-          Servicio <b>Recoger</b>: no necesitamos domicilio. Continuamos al pago.
+          Servicio <b>Pickup / pasar a recoger</b>. Programa la hora exacta en la que el cliente va a pasar, estilo Uber/Didi.
+        </div>
+        <div class="stepRow" style="margin-top:10px">
+          <div>
+            <label>* Día para recoger</label>
+            <input type="date" id="s_rec_fecha" value="${escapeHtml(form.recogerFecha)}">
+          </div>
+          <div>
+            <label>* Hora para recoger</label>
+            <input type="time" id="s_rec_hora" value="${escapeHtml(form.recogerHora)}">
+          </div>
         </div>
         <div class="kpiRow">
-          <div class="kpi"><b>Subtotal</b><span>${money(subTotal)}</span></div>
+          <div class="kpi"><b>Pickup</b><span>${fechaHumana(form.recogerFecha)} ${form.recogerHora || "—"}</span></div>
           <div class="kpi"><b>Total</b><span>${money(total)}</span></div>
         </div>
+        <div class="note">
+          Al finalizar se manda el WhatsApp y también se genera el ticket para cocina/taquería.
+        </div>
       `;
+      setTimeout(()=>{
+        const f = document.getElementById("s_rec_fecha");
+        const h = document.getElementById("s_rec_hora");
+        if(f) f.oninput = e=> form.recogerFecha = e.target.value;
+        if(h) h.oninput = e=> form.recogerHora = e.target.value;
+      },0);
       return;
     }
 
@@ -1313,7 +1359,7 @@ function renderStep(){
       <div>
         <div class="note">
           Total a pagar: <b>${money(total)}</b><br>
-          Al enviar, se abrirá WhatsApp con el mensaje listo.
+          Al enviar, se abrirá WhatsApp y se imprimirá el ticket en la taquería.
         </div>
       </div>
     </div>
@@ -1342,6 +1388,10 @@ function stepValidate(){
     if(!form.nombre.trim()) return "Pon tu nombre.";
     if(!form.tel.trim()) return "Pon tu celular.";
   }
+  if(step===2 && canal!=="domicilio"){
+    if(!form.recogerFecha) return "Elige el día para recoger.";
+    if(!form.recogerHora) return "Elige la hora para recoger.";
+  }
   if(step===2 && canal==="domicilio"){
     if(form.lat==null || form.lng==null) return "Elige tu ubicación en el mapa (o usa “mi ubicación”).";
     if(!form.calle.trim()) return "Falta la calle.";
@@ -1367,12 +1417,12 @@ function cleanWA(text){
     .trim();
 }
 
-function buildWhatsAppText(){
+function buildWhatsAppText(orderNo){
   const canal = getCanal();
   const canalTxt = canal==="recoger" ? "Pasar a recoger" : "Domicilio";
   const sub = cartSubTotal();
   const total = cartTotal();
-  const orderNo = String(Date.now()).slice(-6);
+  orderNo = orderNo || String(Date.now()).slice(-6);
 
   const lines = [];
   lines.push(`*${TAQUERIA_NOMBRE}*`);
@@ -1380,6 +1430,7 @@ function buildWhatsAppText(){
   lines.push(``);
   lines.push(`Número de pedido: *${orderNo}*`);
   lines.push(`Servicio: *${canalTxt}*`);
+  if(canal==="recoger") lines.push(`Pickup programado: *${fechaHumana(form.recogerFecha)} ${form.recogerHora}*`);
   lines.push(`Contacto: *+52${form.tel.replace(/\D/g,"")}*`);
 
   if(canal==="domicilio"){
@@ -1432,6 +1483,101 @@ function buildWhatsAppText(){
   return lines.join("\n");
 }
 
+
+/** =========================
+ *  TICKET 80MM / IMPRESIÓN LOCAL
+ *  ========================= */
+function buildTicketText(orderNo){
+  const canal = getCanal();
+  const sub = cartSubTotal();
+  const total = cartTotal();
+  const now = new Date().toLocaleString("es-MX");
+  const lines = [];
+  lines.push("================================");
+  lines.push("   TACOS LOS CONQUISTADORES");
+  lines.push("================================");
+  lines.push(`PEDIDO: #${orderNo}`);
+  lines.push(`LEVANTADO: ${now}`);
+  lines.push(`CLIENTE: ${form.nombre}`);
+  lines.push(`TEL: ${form.tel}`);
+  lines.push(`SERVICIO: ${canal === "recoger" ? "PICKUP / RECOGER" : "DOMICILIO"}`);
+  if(canal === "recoger"){
+    lines.push(`PROGRAMADO: ${fechaHumana(form.recogerFecha)} ${form.recogerHora}`);
+  }else{
+    lines.push(`ENVIO: ${money(envioPrecio)}`);
+    lines.push(`DIR: ${form.calle} ${form.noext}, ${form.col}`);
+    lines.push(`REF: ${form.refs}`);
+  }
+  lines.push("--------------------------------");
+  cart.forEach(x=>{
+    lines.push(`${x.qty} x ${x.name}`);
+    lines.push(`    ${money(x.basePrice)} c/u = ${money(x.qty*x.basePrice)}`);
+    const mt = modsToText(x.mods);
+    if(mt) lines.push(`    ${mt}`);
+    if(x.note) lines.push(`    NOTA PROD: ${x.note}`);
+  });
+  lines.push("--------------------------------");
+  lines.push(`SUBTOTAL: ${money(sub)}`);
+  if(canal === "domicilio") lines.push(`ENVIO: ${money(envioPrecio)}`);
+  lines.push(`TOTAL: ${money(total)}`);
+  if(form.pagareCon.trim()) lines.push(`PAGA CON: $${Number(form.pagareCon).toFixed(2)}`);
+  if(form.notas.trim()){
+    lines.push("--------------------------------");
+    lines.push(`NOTAS: ${form.notas}`);
+  }
+  lines.push("================================");
+  lines.push("       PREPARAR PEDIDO");
+  lines.push("================================");
+  return lines.join("\n");
+}
+
+function ticketTextToHtml(ticket){
+  return `<!doctype html><html><head><meta charset="utf-8">
+  <title>Ticket pedido</title>
+  <style>
+    body{margin:0;font-family:ui-monospace,Menlo,Consolas,monospace;background:#fff;color:#000}
+    pre{width:80mm;box-sizing:border-box;margin:0;padding:3mm 2mm;font-size:12px;line-height:1.25;white-space:pre-wrap;word-break:break-word}
+    @media print{@page{size:80mm auto;margin:0} body{margin:0}}
+  </style></head><body><pre>${escapeHtml(ticket)}</pre>
+  <script>window.addEventListener('load',()=>setTimeout(()=>window.print(),250));<\/script>
+  </body></html>`;
+}
+
+function imprimirTicketNavegador(ticket){
+  const win = window.open("", "_blank", "width=420,height=650");
+  if(!win) return false;
+  win.document.open();
+  win.document.write(ticketTextToHtml(ticket));
+  win.document.close();
+  win.focus();
+  return true;
+}
+
+async function imprimirPedidoLocal(orderNo){
+  const ticket = buildTicketText(orderNo);
+  const payloads = [
+    { ticket, text: ticket, raw: ticket, width: 80, printer: "taqueria" },
+    { texto: ticket, ancho: 80, impresora: "taqueria" }
+  ];
+
+  for(const url of LOCAL_PRINT_URLS){
+    for(const body of payloads){
+      try{
+        const res = await fetch(url, {
+          method:"POST",
+          headers:{"Content-Type":"application/json"},
+          body: JSON.stringify(body)
+        });
+        if(res && res.ok) return true;
+      }catch(e){}
+    }
+  }
+
+  // Respaldo: si el servidor local no está encendido, abre vista de impresión del navegador.
+  imprimirTicketNavegador(ticket);
+  return false;
+}
+
 /** =========================
  *  BOTONES
  *  ========================= */
@@ -1481,7 +1627,9 @@ btnNext.addEventListener("click", async ()=>{
     return;
   }
 
-  const text = cleanWA(buildWhatsAppText());
+  const orderNo = String(Date.now()).slice(-6);
+  await imprimirPedidoLocal(orderNo);
+  const text = cleanWA(buildWhatsAppText(orderNo));
   const url = `https://wa.me/${WHATSAPP_TAQ}?text=${encodeURIComponent(text)}`;
   window.open(url, "_blank");
   closeSteps();
@@ -1502,6 +1650,7 @@ renderItems();
 renderCart();
 
 window.addEventListener("load", ()=>{
+  if(!form.recogerHora) form.recogerHora = suggestedPickupTime();
   setCanal("recoger");
   serviceChosen = false;
   openSteps(0);
