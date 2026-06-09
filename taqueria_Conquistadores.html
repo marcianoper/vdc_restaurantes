@@ -1578,7 +1578,7 @@ async function enviarTicketACola(orderNo){
   const html = buildTicketHTML(orderNo);
   const payload = {
     html,
-    tipo: "pedido_web_pickup",
+    tipo: "ticket",
     estado: "pendiente",
     origen_dispositivo: "CLIENTE WEB | " + (navigator.userAgent || ""),
     origen_device_id: getDeviceId(),
