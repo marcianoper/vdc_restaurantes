@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <title>Menú — Tacos Los Conquistadores</title>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <!-- Leaflet (GRATIS) -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
@@ -402,7 +404,7 @@
           <strong id="total">$0.00</strong>
         </div>
 
-        <div class="note">Al dar <b>CONTINUAR</b> te sale el checkout por pasos y al final abre WhatsApp con el pedido listo.</div>
+        <div class="note">Al dar <b>CONTINUAR</b> el cliente puede programar su pedido y al enviarlo se manda a impresión en la taquería.</div>
 
         <div class="stickyBar">
           <div class="left">
@@ -463,17 +465,28 @@
  *  CONFIG (UNA TAQUERÍA)
  *  ========================= */
 const TAQUERIA_NOMBRE = "Tacos Los Conquistadores";
-const WHATSAPP_TAQ    = "524621872594"; // cambia si quieres
-// Servidor local de impresión. Si tu impresión_local usa otro puerto/ruta, cambia aquí.
-const LOCAL_PRINT_URLS = [
-  "http://localhost:3000/print",
-  "http://127.0.0.1:3000/print",
-  "http://localhost:3000/imprimir",
-  "http://127.0.0.1:3000/imprimir"
-];
+const WHATSAPP_TAQ    = "524621872594"; // respaldo por WhatsApp si lo necesitas
 const TQ_LAT          = 20.6767;
 const TQ_LNG          = -101.3563;
 const IMG_BASE = "";
+
+// Supabase: usa la misma cola_impresion que ya imprime en la taquería
+const SUPABASE_URL = "https://rcegikeiaxptolrduguc.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJjZWdpa2VpYXhwdG9scmR1Z3VjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU2NTMyMDcsImV4cCI6MjA3MTIyOTIwN30.jbPM9F977zeITEmFA_xvVU6SCxlWWVCi3Dx7ZhFfTp8";
+const IMPRESION_QUEUE_TABLE = "cola_impresion";
+const DEVICE_ID_KEY = "web_cliente_conquistadores_device_id";
+
+let supabase = null;
+let supabaseReady = false;
+
+try{
+  if(SUPABASE_URL && SUPABASE_ANON_KEY && window.supabase){
+    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    supabaseReady = true;
+  }
+}catch(err){
+  console.error("No se pudo inicializar Supabase:", err);
+}
 
 /** =========================
  *  TARIFAS (tu tabla)
@@ -582,23 +595,16 @@ function modsPara(item){
 /** =========================
  *  HELPERS
  *  ========================= */
+function getDeviceId(){
+  let id = localStorage.getItem(DEVICE_ID_KEY);
+  if(!id){
+    id = (crypto?.randomUUID?.() || ("web_" + Date.now() + "_" + Math.random().toString(16).slice(2)));
+    localStorage.setItem(DEVICE_ID_KEY, id);
+  }
+  return id;
+}
+
 function money(n){ return "$" + Number(n||0).toFixed(2); }
-function localDateISO(d=new Date()){
-  const y = d.getFullYear();
-  const m = String(d.getMonth()+1).padStart(2,"0");
-  const day = String(d.getDate()).padStart(2,"0");
-  return `${y}-${m}-${day}`;
-}
-function suggestedPickupTime(){
-  const d = new Date(Date.now() + 25*60000);
-  const h = String(d.getHours()).padStart(2,"0");
-  const m = String(d.getMinutes()).padStart(2,"0");
-  return `${h}:${m}`;
-}
-function fechaHumana(iso){
-  if(!iso) return "Hoy";
-  try{ return new Date(iso + "T00:00:00").toLocaleDateString("es-MX", {weekday:"short", day:"2-digit", month:"short"}); }catch(e){ return iso; }
-}
 function escapeHtml(s){
   return (s||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
 }
@@ -956,12 +962,11 @@ const form = {
   cp: "",
   estado: "Guanajuato",
   refs: "",
-  recogerFecha: localDateISO(),
-  recogerHora: "",
   lat: null,
   lng: null,
   metodo: "efectivo",
   pagareCon: "",
+  horaProgramada: "",
   notas: ""
 };
 
@@ -1178,37 +1183,16 @@ function renderStep(){
     stepTitle.textContent = "Paso 2 de 3";
 
     if(canal!=="domicilio"){
-      stepSub.textContent = "Programa tu hora de pickup";
-      if(!form.recogerFecha) form.recogerFecha = localDateISO();
-      if(!form.recogerHora) form.recogerHora = suggestedPickupTime();
+      stepSub.textContent = "Confirmación rápida";
       stepsBody.innerHTML = `
         <div class="note" style="margin-top:0">
-          Servicio <b>Pickup / pasar a recoger</b>. Programa la hora exacta en la que el cliente va a pasar, estilo Uber/Didi.
-        </div>
-        <div class="stepRow" style="margin-top:10px">
-          <div>
-            <label>* Día para recoger</label>
-            <input type="date" id="s_rec_fecha" value="${escapeHtml(form.recogerFecha)}">
-          </div>
-          <div>
-            <label>* Hora para recoger</label>
-            <input type="time" id="s_rec_hora" value="${escapeHtml(form.recogerHora)}">
-          </div>
+          Servicio <b>Recoger</b>: no necesitamos domicilio. Continuamos al pago.
         </div>
         <div class="kpiRow">
-          <div class="kpi"><b>Pickup</b><span>${fechaHumana(form.recogerFecha)} ${form.recogerHora || "—"}</span></div>
+          <div class="kpi"><b>Subtotal</b><span>${money(subTotal)}</span></div>
           <div class="kpi"><b>Total</b><span>${money(total)}</span></div>
         </div>
-        <div class="note">
-          Al finalizar se manda el WhatsApp y también se genera el ticket para cocina/taquería.
-        </div>
       `;
-      setTimeout(()=>{
-        const f = document.getElementById("s_rec_fecha");
-        const h = document.getElementById("s_rec_hora");
-        if(f) f.oninput = e=> form.recogerFecha = e.target.value;
-        if(h) h.oninput = e=> form.recogerHora = e.target.value;
-      },0);
       return;
     }
 
@@ -1348,6 +1332,9 @@ function renderStep(){
     ${envioLine}
     <div class="stepRow" style="margin-top:10px">
       <div>
+        <label>* Hora programada</label>
+        <input id="s_hora" type="time" value="${escapeHtml(form.horaProgramada)}">
+
         <label>Método de pago</label>
         <select id="s_metodo">
           <option value="efectivo" ${form.metodo==="efectivo"?"selected":""}>Efectivo</option>
@@ -1359,7 +1346,7 @@ function renderStep(){
       <div>
         <div class="note">
           Total a pagar: <b>${money(total)}</b><br>
-          Al enviar, se abrirá WhatsApp y se imprimirá el ticket en la taquería.
+          Al enviar, el pedido se manda a la impresora de la taquería como ticket. Servicio: <b>${canal==="recoger" ? "Pickup / pasar a recoger" : "Domicilio"}</b>.
         </div>
       </div>
     </div>
@@ -1369,9 +1356,11 @@ function renderStep(){
   `;
 
   setTimeout(()=>{
+    const h = document.getElementById("s_hora");
     const m = document.getElementById("s_metodo");
     const p = document.getElementById("s_pagare");
     const n = document.getElementById("s_notas");
+    if(h) h.oninput = e=> form.horaProgramada = e.target.value;
     if(m) m.onchange = e=> form.metodo = e.target.value;
     if(p) p.oninput  = e=> form.pagareCon = e.target.value;
     if(n) n.oninput  = e=> form.notas = e.target.value;
@@ -1388,10 +1377,6 @@ function stepValidate(){
     if(!form.nombre.trim()) return "Pon tu nombre.";
     if(!form.tel.trim()) return "Pon tu celular.";
   }
-  if(step===2 && canal!=="domicilio"){
-    if(!form.recogerFecha) return "Elige el día para recoger.";
-    if(!form.recogerHora) return "Elige la hora para recoger.";
-  }
   if(step===2 && canal==="domicilio"){
     if(form.lat==null || form.lng==null) return "Elige tu ubicación en el mapa (o usa “mi ubicación”).";
     if(!form.calle.trim()) return "Falta la calle.";
@@ -1403,6 +1388,7 @@ function stepValidate(){
     if(!r.ok) return "Tu domicilio está fuera del rango de envío (0–10 km).";
   }
   if(step===3){
+    if(!form.horaProgramada.trim()) return "Selecciona la hora programada del pedido.";
     const p = form.pagareCon.trim();
     if(p && isNaN(Number(p))) return "En 'Pagaré con' pon solo número (ej. 500).";
   }
@@ -1417,12 +1403,12 @@ function cleanWA(text){
     .trim();
 }
 
-function buildWhatsAppText(orderNo){
+function buildWhatsAppText(){
   const canal = getCanal();
   const canalTxt = canal==="recoger" ? "Pasar a recoger" : "Domicilio";
   const sub = cartSubTotal();
   const total = cartTotal();
-  orderNo = orderNo || String(Date.now()).slice(-6);
+  const orderNo = String(Date.now()).slice(-6);
 
   const lines = [];
   lines.push(`*${TAQUERIA_NOMBRE}*`);
@@ -1430,7 +1416,7 @@ function buildWhatsAppText(orderNo){
   lines.push(``);
   lines.push(`Número de pedido: *${orderNo}*`);
   lines.push(`Servicio: *${canalTxt}*`);
-  if(canal==="recoger") lines.push(`Pickup programado: *${fechaHumana(form.recogerFecha)} ${form.recogerHora}*`);
+  lines.push(`Hora programada: *${form.horaProgramada || "Por confirmar"}*`);
   lines.push(`Contacto: *+52${form.tel.replace(/\D/g,"")}*`);
 
   if(canal==="domicilio"){
@@ -1484,98 +1470,133 @@ function buildWhatsAppText(orderNo){
 }
 
 
-/** =========================
- *  TICKET 80MM / IMPRESIÓN LOCAL
- *  ========================= */
-function buildTicketText(orderNo){
+function buildTicketHTML(orderNo){
   const canal = getCanal();
+  const canalTxt = canal==="recoger" ? "PICKUP / PASAR A RECOGER" : "DOMICILIO";
   const sub = cartSubTotal();
   const total = cartTotal();
-  const now = new Date().toLocaleString("es-MX");
-  const lines = [];
-  lines.push("================================");
-  lines.push("   TACOS LOS CONQUISTADORES");
-  lines.push("================================");
-  lines.push(`PEDIDO: #${orderNo}`);
-  lines.push(`LEVANTADO: ${now}`);
-  lines.push(`CLIENTE: ${form.nombre}`);
-  lines.push(`TEL: ${form.tel}`);
-  lines.push(`SERVICIO: ${canal === "recoger" ? "PICKUP / RECOGER" : "DOMICILIO"}`);
-  if(canal === "recoger"){
-    lines.push(`PROGRAMADO: ${fechaHumana(form.recogerFecha)} ${form.recogerHora}`);
-  }else{
-    lines.push(`ENVIO: ${money(envioPrecio)}`);
-    lines.push(`DIR: ${form.calle} ${form.noext}, ${form.col}`);
-    lines.push(`REF: ${form.refs}`);
-  }
-  lines.push("--------------------------------");
-  cart.forEach(x=>{
-    lines.push(`${x.qty} x ${x.name}`);
-    lines.push(`    ${money(x.basePrice)} c/u = ${money(x.qty*x.basePrice)}`);
+  const fecha = new Date().toLocaleString("es-MX", { hour12:true });
+
+  const itemsHtml = cart.map(x=>{
     const mt = modsToText(x.mods);
-    if(mt) lines.push(`    ${mt}`);
-    if(x.note) lines.push(`    NOTA PROD: ${x.note}`);
-  });
-  lines.push("--------------------------------");
-  lines.push(`SUBTOTAL: ${money(sub)}`);
-  if(canal === "domicilio") lines.push(`ENVIO: ${money(envioPrecio)}`);
-  lines.push(`TOTAL: ${money(total)}`);
-  if(form.pagareCon.trim()) lines.push(`PAGA CON: $${Number(form.pagareCon).toFixed(2)}`);
-  if(form.notas.trim()){
-    lines.push("--------------------------------");
-    lines.push(`NOTAS: ${form.notas}`);
+    return `
+      <div class="item">
+        <div class="itemName">${x.qty} x ${escapeHtml(x.name)}</div>
+        <div class="itemPrice">${money(x.basePrice)} c/u — ${money(x.qty * x.basePrice)}</div>
+        ${mt ? `<div class="itemNote">${escapeHtml(mt)}</div>` : ``}
+        ${x.note ? `<div class="itemNote">Nota: ${escapeHtml(x.note)}</div>` : ``}
+      </div>
+    `;
+  }).join("");
+
+  const domicilioHtml = canal==="domicilio" ? `
+    <div class="block">
+      <b>DOMICILIO</b><br>
+      ${escapeHtml(form.calle)} ${escapeHtml(form.noext)}<br>
+      Col. ${escapeHtml(form.col)} CP ${escapeHtml(form.cp)}<br>
+      ${escapeHtml(form.ciudad)}, ${escapeHtml(form.estado)}<br>
+      Ref: ${escapeHtml(form.refs)}<br>
+      Ubicación: ${form.lat ? Number(form.lat).toFixed(5) : ""}, ${form.lng ? Number(form.lng).toFixed(5) : ""}
+    </div>
+  ` : "";
+
+  return `<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @page{ size:58mm auto; margin:1mm; }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0;
+    width:56mm;
+    font-family: Arial, sans-serif;
+    color:#000;
+    font-size:12px;
+    line-height:1.18;
   }
-  lines.push("================================");
-  lines.push("       PREPARAR PEDIDO");
-  lines.push("================================");
-  return lines.join("\n");
+  .ticket{ width:56mm; padding:2mm; }
+  .center{text-align:center}
+  .title{font-weight:900; font-size:16px; letter-spacing:.3px;}
+  .folio{font-weight:900; font-size:15px; margin-top:3px;}
+  .big{font-weight:900; font-size:18px;}
+  .line{border-top:1px dashed #000; margin:7px 0;}
+  .block{margin:5px 0;}
+  .item{padding:5px 0; border-bottom:1px dashed #000;}
+  .itemName{font-weight:900; font-size:14px;}
+  .itemPrice{font-weight:700; font-size:12px;}
+  .itemNote{font-size:11px; font-weight:700;}
+  .total{font-size:18px; font-weight:900; display:flex; justify-content:space-between;}
+</style>
+</head>
+<body>
+  <div class="ticket">
+    <div class="center">
+      <div class="title">${escapeHtml(TAQUERIA_NOMBRE)}</div>
+      <div class="folio">PEDIDO WEB</div>
+      <div class="big">${escapeHtml(canalTxt)}</div>
+      <div>Folio: <b>${escapeHtml(orderNo)}</b></div>
+      <div>${escapeHtml(fecha)}</div>
+    </div>
+
+    <div class="line"></div>
+
+    <div class="block">
+      Cliente: <b>${escapeHtml(form.nombre)}</b><br>
+      Tel: <b>${escapeHtml(form.tel)}</b><br>
+      Hora programada: <b>${escapeHtml(form.horaProgramada || "Por confirmar")}</b>
+    </div>
+
+    ${domicilioHtml}
+
+    <div class="line"></div>
+    ${itemsHtml}
+    <div class="line"></div>
+
+    <div class="block">
+      Subtotal: ${money(sub)}<br>
+      ${canal==="domicilio" ? `Envío: ${money(envioPrecio)}<br>` : ``}
+      Pago: ${escapeHtml(form.metodo || "efectivo")}
+      ${form.pagareCon ? `<br>Pagará con: $${Number(form.pagareCon).toFixed(2)}` : ``}
+    </div>
+
+    ${form.notas ? `<div class="block"><b>INDICACIONES:</b><br>${escapeHtml(form.notas)}</div>` : ``}
+
+    <div class="line"></div>
+    <div class="total"><span>TOTAL</span><span>${money(total)}</span></div>
+    <div class="line"></div>
+    <div class="center"><b>CONFIRMAR PEDIDO CON CLIENTE</b></div>
+  </div>
+</body>
+</html>`;
 }
 
-function ticketTextToHtml(ticket){
-  return `<!doctype html><html><head><meta charset="utf-8">
-  <title>Ticket pedido</title>
-  <style>
-    body{margin:0;font-family:ui-monospace,Menlo,Consolas,monospace;background:#fff;color:#000}
-    pre{width:80mm;box-sizing:border-box;margin:0;padding:3mm 2mm;font-size:12px;line-height:1.25;white-space:pre-wrap;word-break:break-word}
-    @media print{@page{size:80mm auto;margin:0} body{margin:0}}
-  </style></head><body><pre>${escapeHtml(ticket)}</pre>
-  <script>window.addEventListener('load',()=>setTimeout(()=>window.print(),250));<\/script>
-  </body></html>`;
-}
-
-function imprimirTicketNavegador(ticket){
-  const win = window.open("", "_blank", "width=420,height=650");
-  if(!win) return false;
-  win.document.open();
-  win.document.write(ticketTextToHtml(ticket));
-  win.document.close();
-  win.focus();
-  return true;
-}
-
-async function imprimirPedidoLocal(orderNo){
-  const ticket = buildTicketText(orderNo);
-  const payloads = [
-    { ticket, text: ticket, raw: ticket, width: 80, printer: "taqueria" },
-    { texto: ticket, ancho: 80, impresora: "taqueria" }
-  ];
-
-  for(const url of LOCAL_PRINT_URLS){
-    for(const body of payloads){
-      try{
-        const res = await fetch(url, {
-          method:"POST",
-          headers:{"Content-Type":"application/json"},
-          body: JSON.stringify(body)
-        });
-        if(res && res.ok) return true;
-      }catch(e){}
-    }
+async function enviarTicketACola(orderNo){
+  if(!supabaseReady || !supabase){
+    throw new Error("Supabase no está conectado. Revisa internet o la configuración.");
   }
 
-  // Respaldo: si el servidor local no está encendido, abre vista de impresión del navegador.
-  imprimirTicketNavegador(ticket);
-  return false;
+  const html = buildTicketHTML(orderNo);
+  const payload = {
+    html,
+    tipo: "pedido_web_pickup",
+    estado: "pendiente",
+    origen_dispositivo: "CLIENTE WEB | " + (navigator.userAgent || ""),
+    origen_device_id: getDeviceId(),
+    mesa: getCanal()==="recoger" ? "PEDIDO WEB PICKUP " + (form.horaProgramada || "") : "PEDIDO WEB DOMICILIO " + (form.horaProgramada || ""),
+    mesero: "CLIENTE WEB",
+    total: Number(cartTotal() || 0),
+    created_at: new Date().toISOString()
+  };
+
+  const { data, error } = await supabase
+    .from(IMPRESION_QUEUE_TABLE)
+    .insert(payload)
+    .select("id")
+    .single();
+
+  if(error) throw error;
+  return data;
 }
 
 /** =========================
@@ -1628,11 +1649,30 @@ btnNext.addEventListener("click", async ()=>{
   }
 
   const orderNo = String(Date.now()).slice(-6);
-  await imprimirPedidoLocal(orderNo);
-  const text = cleanWA(buildWhatsAppText(orderNo));
-  const url = `https://wa.me/${WHATSAPP_TAQ}?text=${encodeURIComponent(text)}`;
-  window.open(url, "_blank");
-  closeSteps();
+
+  try{
+    btnNext.disabled = true;
+    btnNext.textContent = "ENVIANDO...";
+    await enviarTicketACola(orderNo);
+
+    alert("✅ Pedido recibido. Folio: " + orderNo + "\nTu pedido se mandó a la taquería para impresión.");
+
+    // WhatsApp queda como respaldo opcional para el cliente/taquería.
+    const text = cleanWA(buildWhatsAppText());
+    const url = `https://wa.me/${WHATSAPP_TAQ}?text=${encodeURIComponent(text)}`;
+    // Descomenta esta línea si también quieres abrir WhatsApp automáticamente:
+    // window.open(url, "_blank");
+
+    cart = [];
+    renderCart();
+    closeSteps();
+  }catch(err){
+    console.error("Error enviando pedido web:", err);
+    alert("No se pudo enviar el pedido a la taquería. Error: " + (err?.message || err));
+  }finally{
+    btnNext.disabled = false;
+    btnNext.textContent = "ENVIAR PEDIDO";
+  }
 }, {passive:true});
 
 document.getElementById("btnClear").addEventListener("click", ()=>{
@@ -1650,7 +1690,6 @@ renderItems();
 renderCart();
 
 window.addEventListener("load", ()=>{
-  if(!form.recogerHora) form.recogerHora = suggestedPickupTime();
   setCanal("recoger");
   serviceChosen = false;
   openSteps(0);
