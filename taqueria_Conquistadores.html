@@ -2109,8 +2109,7 @@ btnNext.addEventListener("click", async ()=>{
     btnNext.textContent = "ENVIANDO...";
     await enviarTicketACola(orderNo);
 
-    alert("✅ Pedido recibido. Folio: " + orderNo + "
-Tu pedido se mandó a la taquería para impresión.");
+alert("✅ Pedido recibido. Folio: " + orderNo + "\nTu pedido se mandó a la taquería para impresión.");
 
     cart = [];
     renderCart();
